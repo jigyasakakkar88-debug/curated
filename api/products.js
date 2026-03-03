@@ -130,7 +130,7 @@ async function fetchBrand(brand) {
         price,
         comparePrice: comparePrice > price ? comparePrice : null,
         category: product.product_type || "Clothing",
-        tags: product.tags ? product.tags.split(", ").slice(0, 5) : [],
+        tags: Array.isArray(product.tags) ? product.tags.slice(0, 5) : (product.tags ? product.tags.split(", ").slice(0, 5) : []),
         publishedAt: product.published_at,
         availableSizes: (product.variants || [])
           .filter(v => v.available)
