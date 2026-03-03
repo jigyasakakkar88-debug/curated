@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — CURATED</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Jost:wght@200;300;400;500&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#1A1714; --paper:#F7F3ED; --warm:#EDE8DF; --border:#DDD7CC;
+  --muted:#9A9289; --accent:#8B6F5E; --card:#FDFAF6;
+  --ok:#3D6B5A; --err:#9B3A2A; --warn:#8B6F2A;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Jost',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
+
+/* LOGIN */
+#loginScreen {
+  position:fixed;inset:0;background:var(--ink);z-index:999;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;
+}
+.login-box { background:var(--card); padding:48px; width:380px; }
+.login-logo { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; letter-spacing:6px; margin-bottom:4px; }
+.login-sub { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:2px; margin-bottom:32px; }
+.login-box input {
+  width:100%; padding:12px 14px; border:1px solid var(--border); background:var(--warm);
+  font-family:'Jost',sans-serif; font-size:14px; outline:none; margin-bottom:12px;
+}
+.login-box input:focus { border-color:var(--accent); }
+.btn-primary {
+  width:100%; padding:14px; background:var(--ink); color:var(--paper);
+  border:none; font-family:'Jost',sans-serif; font-size:12px;
+  letter-spacing:3px; text-transform:uppercase; cursor:pointer; transition:background 0.2s;
+}
+.btn-primary:hover { background:var(--accent); }
+.login-err { font-size:12px; color:var(--err); display:none; margin-top:8px; }
+
+/* HEADER */
+header {
+  background:var(--ink); color:var(--paper);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 48px; height:68px;
+}
+.logo { font-family:'Cormorant Garamond',serif; font-size:20px; letter-spacing:8px; font-weight:300; }
+.logo em { color:var(--accent); font-style:normal; }
+.header-right { display:flex; align-items:center; gap:20px; }
+.back-link { font-family:'DM Mono',monospace; font-size:10px; color:#666; letter-spacing:1px; text-decoration:none; }
+.back-link:hover { color:var(--accent); }
+.logout-btn { background:none; border:1px solid #444; color:#999; padding:6px 14px; font-size:10px; letter-spacing:1px; cursor:pointer; font-family:'DM Mono',monospace; }
+.logout-btn:hover { border-color:var(--err); color:var(--err); }
+
+/* LAYOUT */
+.container { max-width:1100px; margin:0 auto; padding:48px 48px 80px; display:grid; grid-template-columns:1fr 380px; gap:40px; }
+
+/* PANELS */
+.panel { background:var(--card); border:1px solid var(--border); }
+.panel-head { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; align-items:baseline; gap:12px; }
+.panel-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; }
+.panel-meta { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); }
+.panel-body { padding:24px; }
+
+/* BRAND LIST */
+.brand-row {
+  display:flex; align-items:center; gap:12px; padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+.brand-row:last-child { border-bottom:none; }
+.brand-dot { width:8px; height:8px; border-radius:50%; background:var(--ok); flex-shrink:0; }
+.brand-dot.err { background:var(--err); }
+.brand-info { flex:1; min-width:0; }
+.brand-name { font-size:14px; font-weight:400; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.brand-url { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.brand-count { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); flex-shrink:0; }
+.btn-remove { background:none; border:1px solid var(--border); color:var(--muted); padding:5px 10px; font-size:10px; cursor:pointer; letter-spacing:1px; font-family:'DM Mono',monospace; flex-shrink:0; }
+.btn-remove:hover { border-color:var(--err); color:var(--err); }
+.empty-brands { padding:32px; text-align:center; color:var(--muted); font-size:13px; }
+
+/* FORM */
+label { display:block; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; margin-top:20px; }
+label:first-child { margin-top:0; }
+input[type=text], input[type=url] {
+  width:100%; padding:11px 14px; border:1px solid var(--border);
+  background:var(--warm); font-family:'Jost',sans-serif; font-size:14px; outline:none;
+}
+input:focus { border-color:var(--accent); }
+
+.test-result { margin-top:12px; padding:12px 14px; font-size:12px; border-radius:1px; display:none; font-family:'DM Mono',monospace; line-height:1.6; }
+.test-result.ok { background:#f0f7f4; border:1px solid #b8d8cd; color:var(--ok); }
+.test-result.err { background:#fdf1ef; border:1px solid #f0c4bc; color:var(--err); }
+
+.btn-row { display:flex; gap:8px; margin-top:16px; }
+.btn-test { flex:1; padding:11px; border:1px solid var(--border); background:var(--warm); font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.btn-test:hover { border-color:var(--accent); }
+.btn-add { flex:2; padding:11px; background:var(--ink); color:var(--paper); border:none; font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.btn-add:hover { background:var(--accent); }
+.btn-add:disabled { opacity:0.4; cursor:not-allowed; }
+
+/* SETTINGS */
+.setting-row { display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--border); }
+.setting-row:last-child { border-bottom:none; }
+.setting-label { font-size:13px; }
+.setting-sub { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-top:2px; }
+.setting-row select, .setting-row input[type=number] { padding:7px 10px; border:1px solid var(--border); background:var(--warm); font-family:'Jost',sans-serif; font-size:13px; width:120px; outline:none; }
+
+/* REFRESH */
+.refresh-section { margin-top:0; }
+.btn-big-refresh { width:100%; padding:14px; background:var(--ok); color:white; border:none; font-family:'Jost',sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; margin-bottom:12px; }
+.btn-big-refresh:hover { opacity:0.9; }
+.cron-info { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); line-height:1.8; }
+
+/* ENV NOTICE */
+.env-notice { background:#fff8f0; border:1px solid #f0d8b8; padding:16px; margin-top:16px; font-size:12px; line-height:1.7; color:var(--warn); display:none; }
+.env-notice code { background:#f5ece0; padding:2px 6px; font-family:'DM Mono',monospace; font-size:11px; word-break:break-all; display:block; margin-top:8px; user-select:all; cursor:text; }
+.copy-btn { margin-top:8px; padding:6px 12px; background:var(--warn); color:white; border:none; font-size:10px; letter-spacing:1px; cursor:pointer; font-family:'DM Mono',monospace; }
+
+/* TOAST */
+.toast { position:fixed; bottom:24px; right:24px; background:var(--ink); color:var(--paper); padding:14px 20px; font-size:12px; border-left:3px solid var(--accent); z-index:500; opacity:0; transform:translateY(8px); transition:all 0.3s; pointer-events:none; font-family:'Jost',sans-serif; }
+.toast.show { opacity:1; transform:translateY(0); }
+
+@media(max-width:900px) {
+  .container { grid-template-columns:1fr; padding:24px 20px 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">CURATED</div>
+    <div class="login-sub">Admin Panel</div>
+    <input type="password" id="pwInput" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-primary" onclick="doLogin()">Enter</button>
+    <div class="login-err" id="loginErr">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">CURATED<em>.</em> <span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:3px;color:#555">ADMIN</span></div>
+  <div class="header-right">
+    <a class="back-link" href="/">← Back to Site</a>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- LEFT: BRAND LIST + SETTINGS -->
+  <div style="display:flex;flex-direction:column;gap:24px">
+
+    <!-- BRAND LIST -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Your Brands</div>
+        <div class="panel-meta" id="brandCount">Loading…</div>
+      </div>
+      <div class="panel-body" id="brandList">
+        <div class="empty-brands">Loading brands…</div>
+      </div>
+    </div>
+
+    <!-- ENV NOTICE -->
+    <div class="env-notice" id="envNotice">
+      <strong>Action required:</strong> To save your changes permanently, copy the value below and set it as the <strong>BRANDS_JSON</strong> environment variable in your Vercel dashboard.<br>
+      <a href="https://vercel.com/docs/environment-variables" target="_blank" style="color:var(--warn)">How to set env vars in Vercel →</a>
+      <code id="envValue"></code>
+      <button class="copy-btn" onclick="copyEnv()">Copy Value</button>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Settings</div>
+      </div>
+      <div class="panel-body">
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Sale threshold</div>
+            <div class="setting-sub">Minimum discount % to show in sale section</div>
+          </div>
+          <select onchange="updateSetting('saleThreshold', this.value)">
+            <option value="10" selected>10% off</option>
+            <option value="20">20% off</option>
+            <option value="30">30% off</option>
+            <option value="50">50% off</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">New arrivals window</div>
+            <div class="setting-sub">Days old to still count as "new"</div>
+          </div>
+          <select onchange="updateSetting('newWindow', this.value)">
+            <option value="7" selected>7 days</option>
+            <option value="14">14 days</option>
+            <option value="30">30 days</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <div>
+            <div class="setting-label">Refresh schedule</div>
+            <div class="setting-sub">How often to fetch new products</div>
+          </div>
+          <select onchange="updateSetting('schedule', this.value)">
+            <option value="weekly" selected>Weekly</option>
+            <option value="daily">Daily</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: ADD BRAND + REFRESH -->
+  <div style="display:flex;flex-direction:column;gap:24px">
+
+    <!-- ADD BRAND -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Add a Brand</div>
+      </div>
+      <div class="panel-body">
+        <label>Brand Name</label>
+        <input type="text" id="newName" placeholder="e.g. Fabindia">
+
+        <label>Store URL</label>
+        <input type="url" id="newUrl" placeholder="e.g. https://fabindia.com">
+
+        <div class="test-result" id="testResult"></div>
+
+        <div class="btn-row">
+          <button class="btn-test" onclick="testUrl()">Test URL</button>
+          <button class="btn-add" id="addBtn" onclick="addBrand()" disabled>Add Brand</button>
+        </div>
+
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:16px;line-height:1.8">
+          Only Shopify-based stores are supported.<br>
+          Click "Test URL" to verify before adding.
+        </div>
+      </div>
+    </div>
+
+    <!-- REFRESH -->
+    <div class="panel refresh-section">
+      <div class="panel-head">
+        <div class="panel-title">Refresh Feed</div>
+      </div>
+      <div class="panel-body">
+        <button class="btn-big-refresh" onclick="triggerRefresh()">↻ Refresh All Brands Now</button>
+        <div class="cron-info">
+          Automatic refresh: <strong>Every Monday at 6am UTC</strong><br>
+          Last manual refresh: <span id="lastRefresh">—</span><br>
+          <br>
+          Refresh fetches the latest products, prices, and sale items from all your brands.
+        </div>
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="panel">
+      <div class="panel-head"><div class="panel-title">How it works</div></div>
+      <div class="panel-body" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);line-height:2">
+        1. Add Shopify brand URLs here<br>
+        2. The site fetches live products from each store<br>
+        3. Products refresh automatically every Monday<br>
+        4. Sale items = 10%+ discount on compare price<br>
+        5. New items = published in the last 7 days<br>
+        <br>
+        <a href="/" style="color:var(--accent)">← View your style feed</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let password = '';
+let currentBrands = [];
+let testPassed = false;
+
+// ── AUTH ──────────────────────────────────────────────────
+function doLogin() {
+  const pw = document.getElementById('pwInput').value;
+  if (!pw) return;
+  password = pw;
+  // Try loading brands to verify password
+  loadBrands().then(ok => {
+    if (ok) {
+      document.getElementById('loginScreen').style.display = 'none';
+    } else {
+      document.getElementById('loginErr').style.display = 'block';
+      password = '';
+    }
+  });
+}
+
+function logout() {
+  password = '';
+  location.reload();
+}
+
+// ── API CALLS ─────────────────────────────────────────────
+async function api(method, body, query = '') {
+  const res = await fetch(`/api/admin${query}`, {
+    method,
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${password}` },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  return res;
+}
+
+async function loadBrands() {
+  try {
+    const res = await api('GET');
+    if (res.status === 401) return false;
+    const data = await res.json();
+    currentBrands = data.brands || [];
+    renderBrandList();
+    document.getElementById('brandCount').textContent = `${currentBrands.length} brand${currentBrands.length !== 1 ? 's' : ''}`;
+    return true;
+  } catch { return false; }
+}
+
+async function testUrl() {
+  const url = document.getElementById('newUrl').value.trim();
+  if (!url) return;
+
+  const tr = document.getElementById('testResult');
+  tr.style.display = 'block';
+  tr.className = 'test-result';
+  tr.textContent = 'Testing…';
+
+  try {
+    const res = await api('POST', { url }, '?action=test');
+    const data = await res.json();
+    if (data.valid) {
+      tr.className = 'test-result ok';
+      tr.textContent = `✓ Valid Shopify store — found products. Ready to add!`;
+      testPassed = true;
+      document.getElementById('addBtn').disabled = false;
+    } else {
+      tr.className = 'test-result err';
+      tr.textContent = `✗ ${data.error || 'Not a valid Shopify store'}`;
+      testPassed = false;
+      document.getElementById('addBtn').disabled = true;
+    }
+  } catch (e) {
+    tr.className = 'test-result err';
+    tr.textContent = `✗ Could not connect: ${e.message}`;
+  }
+}
+
+async function addBrand() {
+  if (!testPassed) return;
+  const name = document.getElementById('newName').value.trim();
+  const url  = document.getElementById('newUrl').value.trim();
+  if (!name || !url) { showToast('Please fill in name and URL'); return; }
+
+  const res = await api('POST', { name, url });
+  const data = await res.json();
+
+  if (data.success) {
+    currentBrands = data.brands;
+    renderBrandList();
+    showEnvNotice(data.envValue);
+    showToast(`✓ ${name} added — update BRANDS_JSON in Vercel to save permanently`);
+    document.getElementById('newName').value = '';
+    document.getElementById('newUrl').value = '';
+    document.getElementById('testResult').style.display = 'none';
+    document.getElementById('addBtn').disabled = true;
+    testPassed = false;
+  } else {
+    showToast('Error: ' + (data.error || 'Unknown error'));
+  }
+}
+
+async function removeBrand(id, name) {
+  if (!confirm(`Remove ${name} from your feed?`)) return;
+  const res = await api('DELETE', { id });
+  const data = await res.json();
+  if (data.success) {
+    currentBrands = data.brands;
+    renderBrandList();
+    showEnvNotice(data.envValue);
+    showToast(`Removed ${name}`);
+  }
+}
+
+async function triggerRefresh() {
+  const btn = document.querySelector('.btn-big-refresh');
+  btn.textContent = 'Refreshing…';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/refresh', { headers: { Authorization: `Bearer ${password}` } });
+    const data = await res.json();
+    if (data.success) {
+      const now = new Date().toLocaleString();
+      document.getElementById('lastRefresh').textContent = now;
+      showToast(`✓ Refreshed — ${data.totalProducts} products loaded`);
+    } else {
+      showToast('Refresh failed: ' + (data.error || 'unknown'));
+    }
+  } catch (e) {
+    showToast('Error: ' + e.message);
+  }
+  btn.textContent = '↻ Refresh All Brands Now';
+  btn.disabled = false;
+}
+
+// ── RENDER ────────────────────────────────────────────────
+function renderBrandList() {
+  const el = document.getElementById('brandList');
+  document.getElementById('brandCount').textContent = `${currentBrands.length} brand${currentBrands.length !== 1 ? 's' : ''}`;
+  if (!currentBrands.length) {
+    el.innerHTML = '<div class="empty-brands">No brands yet. Add one →</div>';
+    return;
+  }
+  el.innerHTML = currentBrands.map(b => `
+    <div class="brand-row">
+      <div class="brand-dot"></div>
+      <div class="brand-info">
+        <div class="brand-name">${esc(b.name)}</div>
+        <div class="brand-url">${esc(b.url)}</div>
+      </div>
+      <button class="btn-remove" onclick="removeBrand('${b.id}','${esc(b.name)}')">Remove</button>
+    </div>
+  `).join('');
+}
+
+function showEnvNotice(val) {
+  document.getElementById('envValue').textContent = val;
+  document.getElementById('envNotice').style.display = 'block';
+}
+
+function copyEnv() {
+  const val = document.getElementById('envValue').textContent;
+  navigator.clipboard.writeText(val).then(() => showToast('Copied to clipboard'));
+}
+
+function updateSetting(key, val) {
+  showToast(`${key} set to ${val} — to persist, set env var SETTING_${key.toUpperCase()}=${val} in Vercel`);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>

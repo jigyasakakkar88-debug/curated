@@ -1,0 +1,11 @@
+{
+  "name": "style-aggregator",
+  "version": "1.0.0",
+  "description": "Personal style aggregator for Shopify brands",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}

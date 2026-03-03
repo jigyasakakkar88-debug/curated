@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CURATED — My Style Feed</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1A1714;
+  --paper: #F7F3ED;
+  --warm: #EDE8DF;
+  --border: #DDD7CC;
+  --muted: #9A9289;
+  --accent: #8B6F5E;
+  --sale-red: #9B3A2A;
+  --new-green: #3D6B5A;
+  --card: #FDFAF6;
+  --shadow: rgba(26,23,20,0.08);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body { font-family:'Jost',sans-serif; background:var(--paper); color:var(--ink); min-height:100vh; }
+
+/* LOADING */
+#loader {
+  position:fixed; inset:0; background:var(--ink); z-index:999;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px;
+  transition:opacity 0.6s;
+}
+#loader.hide { opacity:0; pointer-events:none; }
+.loader-title { font-family:'Cormorant Garamond',serif; font-size:40px; color:var(--paper); letter-spacing:8px; font-weight:300; }
+.loader-sub { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:2px; }
+.loader-track { width:180px; height:1px; background:#333; }
+.loader-fill { height:100%; background:var(--accent); width:0; transition:width 0.2s ease; }
+
+/* HEADER */
+header {
+  background:var(--ink); color:var(--paper);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 48px; height:68px;
+  position:sticky; top:0; z-index:100;
+}
+.logo { font-family:'Cormorant Garamond',serif; font-size:20px; letter-spacing:8px; font-weight:300; }
+.logo em { color:var(--accent); font-style:normal; }
+.header-actions { display:flex; align-items:center; gap:20px; }
+.meta-text { font-family:'DM Mono',monospace; font-size:10px; color:#666; letter-spacing:1px; }
+.btn-refresh {
+  background:transparent; border:1px solid #444; color:var(--paper);
+  padding:7px 18px; font-family:'Jost',sans-serif; font-size:11px;
+  letter-spacing:2px; text-transform:uppercase; cursor:pointer;
+  transition:all 0.2s;
+}
+.btn-refresh:hover { background:var(--accent); border-color:var(--accent); }
+.admin-link { font-size:10px; color:#555; letter-spacing:1px; font-family:'DM Mono',monospace; text-decoration:none; }
+.admin-link:hover { color:var(--accent); }
+
+/* TICKER */
+.ticker { background:var(--accent); overflow:hidden; white-space:nowrap; padding:9px 0; }
+.ticker-track { display:inline-block; animation:scroll-ticker 40s linear infinite; font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; color:rgba(255,255,255,0.9); }
+@keyframes scroll-ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* STATS */
+.stats { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border-bottom:1px solid var(--border); }
+.stat { background:var(--card); padding:20px 32px; }
+.stat-n { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; color:var(--accent); }
+.stat-l { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:2px; margin-top:2px; text-transform:uppercase; }
+
+/* CONTROLS */
+.controls { padding:24px 48px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--border); background:var(--card); }
+.filter-group { display:flex; gap:3px; }
+.ftab { padding:8px 18px; border:1px solid var(--border); background:transparent; font-family:'Jost',sans-serif; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; color:var(--muted); transition:all 0.18s; }
+.ftab:hover, .ftab.active { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.ftab.sale.active { background:var(--sale-red); border-color:var(--sale-red); }
+.ftab.new.active { background:var(--new-green); border-color:var(--new-green); }
+.spacer { flex:1; }
+.brand-chips { display:flex; gap:6px; flex-wrap:wrap; }
+.chip { padding:6px 14px; border:1px solid var(--border); background:var(--warm); font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; border-radius:100px; color:var(--muted); transition:all 0.18s; }
+.chip.active { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+.sort { padding:8px 14px; border:1px solid var(--border); background:var(--warm); font-family:'Jost',sans-serif; font-size:12px; color:var(--ink); cursor:pointer; outline:none; }
+
+/* MAIN */
+main { padding:0 48px 80px; }
+
+/* SECTION */
+.section { margin-top:48px; }
+.section-head { display:flex; align-items:baseline; gap:14px; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); }
+.section-title { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:300; }
+.section-title em { font-style:italic; color:var(--accent); }
+.section-meta { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; }
+.section-sale { background:linear-gradient(to bottom, #FDF5F3, var(--paper)); margin:48px -48px 0; padding:0 48px; border-top:2px solid var(--sale-red); }
+.section-sale .section-title em { color:var(--sale-red); }
+
+/* GRID */
+.grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:2px; }
+
+/* CARD */
+.card {
+  background:var(--card); cursor:pointer; position:relative;
+  transition:transform 0.3s, box-shadow 0.3s;
+  animation:fadeUp 0.4s ease both;
+}
+.card:hover { transform:translateY(-6px); box-shadow:0 24px 60px var(--shadow); z-index:2; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+.card-img {
+  width:100%; aspect-ratio:3/4; object-fit:cover; display:block;
+  background:var(--warm);
+}
+.card-img-placeholder {
+  width:100%; aspect-ratio:3/4; background:var(--warm);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px; color:var(--muted);
+}
+.card-img-placeholder svg { width:40px; height:40px; opacity:0.3; }
+.card-img-placeholder span { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; }
+
+.card-badges { position:absolute; top:10px; left:10px; display:flex; flex-direction:column; gap:4px; }
+.badge { display:inline-block; padding:3px 8px; font-size:9px; font-weight:500; letter-spacing:2px; text-transform:uppercase; }
+.badge-new { background:var(--new-green); color:white; }
+.badge-sale { background:var(--sale-red); color:white; }
+
+.card-wish {
+  position:absolute; top:10px; right:10px;
+  width:34px; height:34px; border-radius:50%; background:white;
+  border:none; cursor:pointer; font-size:15px;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity 0.2s;
+  box-shadow:0 2px 8px var(--shadow);
+}
+.card:hover .card-wish, .card-wish.on { opacity:1; }
+
+.card-info { padding:14px 16px 18px; border-top:1px solid var(--border); }
+.card-brand { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+.card-name { font-size:13px; font-weight:300; line-height:1.45; margin-bottom:10px; }
+.card-price { display:flex; align-items:center; gap:8px; }
+.price { font-size:14px; font-weight:400; }
+.price.sale { color:var(--sale-red); }
+.price-was { font-size:12px; text-decoration:line-through; color:var(--muted); }
+.price-off { font-size:9px; background:var(--sale-red); color:white; padding:2px 5px; letter-spacing:0.5px; }
+
+/* MODAL */
+.modal-bg {
+  position:fixed; inset:0; background:rgba(26,23,20,0.7); z-index:200;
+  display:flex; align-items:center; justify-content:center; padding:40px;
+  opacity:0; pointer-events:none; transition:opacity 0.3s;
+  backdrop-filter:blur(6px);
+}
+.modal-bg.open { opacity:1; pointer-events:all; }
+.modal {
+  background:var(--card); max-width:860px; width:100%;
+  display:grid; grid-template-columns:1fr 1fr; max-height:90vh; overflow-y:auto;
+  transform:scale(0.96); transition:transform 0.3s;
+}
+.modal-bg.open .modal { transform:scale(1); }
+.modal-img { position:sticky; top:0; height:fit-content; }
+.modal-img img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+.modal-img-placeholder {
+  width:100%; aspect-ratio:3/4; background:var(--warm);
+  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px; color:var(--muted);
+}
+.modal-body { padding:40px 36px; display:flex; flex-direction:column; }
+.modal-close { align-self:flex-end; background:none; border:none; font-size:22px; cursor:pointer; color:var(--muted); margin-bottom:24px; line-height:1; }
+.modal-brand { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+.modal-name { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:300; line-height:1.3; margin-bottom:20px; }
+.modal-price-row { display:flex; align-items:center; gap:12px; margin-bottom:20px; }
+.modal-price { font-size:22px; font-weight:300; }
+.modal-price.sale { color:var(--sale-red); }
+.modal-tags { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; }
+.modal-tag { padding:5px 12px; background:var(--warm); font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; color:var(--muted); border-radius:100px; }
+.modal-sizes { margin-bottom:24px; }
+.modal-sizes-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
+.modal-sizes-grid { display:flex; gap:6px; flex-wrap:wrap; }
+.size-pill { padding:5px 12px; border:1px solid var(--border); font-size:11px; font-family:'DM Mono',monospace; color:var(--ink); }
+.modal-cta {
+  display:block; background:var(--ink); color:var(--paper); text-align:center;
+  padding:14px; text-decoration:none; font-family:'Jost',sans-serif;
+  font-size:11px; letter-spacing:3px; text-transform:uppercase;
+  border:none; cursor:pointer; transition:background 0.2s; margin-top:auto;
+}
+.modal-cta:hover { background:var(--accent); }
+.modal-footer { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); line-height:2; margin-top:16px; }
+
+/* EMPTY */
+.empty { padding:80px 40px; text-align:center; color:var(--muted); }
+.empty h3 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; margin-bottom:10px; }
+.empty p { font-size:13px; line-height:1.7; }
+
+/* ERROR BANNER */
+.error-banner { background:#fff3f1; border:1px solid #f5c6bc; padding:12px 24px; font-size:13px; color:var(--sale-red); margin:16px 48px 0; border-radius:2px; display:none; }
+
+/* FOOTER */
+footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; border-top:1px solid var(--border); }
+
+/* TOAST */
+.toast {
+  position:fixed; bottom:28px; right:28px; background:var(--ink); color:var(--paper);
+  padding:14px 22px; font-size:12px; letter-spacing:1px; border-left:3px solid var(--accent);
+  z-index:500; opacity:0; transform:translateY(8px); transition:all 0.3s; pointer-events:none;
+  font-family:'Jost',sans-serif;
+}
+.toast.show { opacity:1; transform:translateY(0); }
+
+@media(max-width:768px){
+  header,main,.controls { padding-left:20px; padding-right:20px; }
+  .stats { grid-template-columns:repeat(2,1fr); }
+  .grid { grid-template-columns:repeat(2,1fr); }
+  .modal { grid-template-columns:1fr; }
+  .modal-img { position:static; }
+  .section-sale { margin-left:-20px; margin-right:-20px; padding-left:20px; padding-right:20px; }
+  .error-banner { margin-left:20px; margin-right:20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-title">CURATED</div>
+  <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+  <div class="loader-sub" id="loaderSub">Connecting to your brands...</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">CURATED<em>.</em></div>
+  <div class="header-actions">
+    <span class="meta-text" id="metaText"></span>
+    <button class="btn-refresh" onclick="loadProducts(true)">↻ Refresh</button>
+    <a class="admin-link" href="/admin">Admin ›</a>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker"><div class="ticker-track" id="tickerTrack">Loading sale items…&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Loading sale items…</div></div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-n" id="sTotal">—</div><div class="stat-l">Items Tracked</div></div>
+  <div class="stat"><div class="stat-n" id="sNew">—</div><div class="stat-l">New This Week</div></div>
+  <div class="stat"><div class="stat-n" id="sSale">—</div><div class="stat-l">On Sale (10%+ off)</div></div>
+  <div class="stat"><div class="stat-n" id="sBrands">—</div><div class="stat-l">Brands</div></div>
+</div>
+
+<!-- ERROR -->
+<div class="error-banner" id="errorBanner"></div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="filter-group">
+    <button class="ftab active" onclick="setFilter('all',this)">All</button>
+    <button class="ftab new" onclick="setFilter('new',this)">New</button>
+    <button class="ftab sale" onclick="setFilter('sale',this)">Sale</button>
+    <button class="ftab" onclick="setFilter('saved',this)">♥ Saved</button>
+  </div>
+  <div class="brand-chips" id="brandChips"></div>
+  <div class="spacer"></div>
+  <select class="sort" onchange="setSort(this.value)">
+    <option value="newest">Newest First</option>
+    <option value="price-asc">Price ↑</option>
+    <option value="price-desc">Price ↓</option>
+    <option value="discount">Biggest Sale</option>
+    <option value="az">A → Z</option>
+  </select>
+</div>
+
+<!-- MAIN -->
+<main>
+  <div id="newSection" class="section" style="display:none">
+    <div class="section-head">
+      <div class="section-title">New <em>Arrivals</em></div>
+      <div class="section-meta" id="newMeta"></div>
+    </div>
+    <div class="grid" id="newGrid"></div>
+  </div>
+
+  <div id="saleSection" class="section section-sale" style="display:none">
+    <div class="section-head" style="margin-top:48px">
+      <div class="section-title">On <em>Sale</em></div>
+      <div class="section-meta" id="saleMeta"></div>
+    </div>
+    <div class="grid" id="saleGrid"></div>
+  </div>
+
+  <div id="allSection" class="section">
+    <div class="section-head">
+      <div class="section-title">Full <em>Selection</em></div>
+      <div class="section-meta" id="allMeta"></div>
+    </div>
+    <div class="grid" id="allGrid"></div>
+  </div>
+</main>
+
+<footer id="footerText">—</footer>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modalBg" onclick="maybeClose(event)">
+  <div class="modal" id="modal">
+    <div class="modal-img" id="modalImg"></div>
+    <div class="modal-body">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-brand" id="mBrand"></div>
+      <div class="modal-name" id="mName"></div>
+      <div class="modal-price-row" id="mPriceRow"></div>
+      <div class="modal-tags" id="mTags"></div>
+      <div class="modal-sizes" id="mSizes"></div>
+      <a class="modal-cta" id="mCta" href="#" target="_blank" rel="noopener">View on Brand Site →</a>
+      <div class="modal-footer" id="mFooter"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ─────────────────────────────────────────────────
+let products = [];
+let wishlist = new Set(JSON.parse(localStorage.getItem('wishlist') || '[]'));
+let filter = 'all';
+let brandFilter = 'all';
+let sort = 'newest';
+let fetchedAt = null;
+let brands = [];
+
+// ── Fetch ─────────────────────────────────────────────────
+async function loadProducts(isRefresh = false) {
+  if (isRefresh) showToast('Refreshing your feed…');
+  setLoaderProgress(20, 'Connecting to your brands…');
+
+  try {
+    const url = `/api/products${isRefresh ? '?bust=' + Date.now() : ''}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Server error: ${res.status}`);
+    const data = await res.json();
+
+    products = data.products || [];
+    fetchedAt = data.meta?.fetchedAt;
+
+    // Collect unique brands
+    const brandMap = {};
+    products.forEach(p => { brandMap[p.brandId] = p.brandName; });
+    brands = Object.entries(brandMap).map(([id,name]) => ({id,name}));
+
+    // Show errors if any brand failed
+    if (data.meta?.errors?.length) {
+      const names = data.meta.errors.map(e => e.brand).join(', ');
+      showError(`Could not fetch from: ${names}. Other brands loaded fine.`);
+    }
+
+    // Stats
+    document.getElementById('sTotal').textContent = products.length;
+    document.getElementById('sNew').textContent = products.filter(p=>p.isNew).length;
+    document.getElementById('sSale').textContent = products.filter(p=>p.isSale).length;
+    document.getElementById('sBrands').textContent = brands.length;
+
+    buildBrandChips();
+    updateTicker();
+    render();
+
+    const ago = fetchedAt ? timeAgo(new Date(fetchedAt)) : 'just now';
+    document.getElementById('metaText').textContent = `Updated ${ago}`;
+    document.getElementById('footerText').textContent =
+      `CURATED · ${products.length} products across ${brands.length} brands · Refreshes every Monday · Last fetched: ${new Date(fetchedAt).toLocaleString()}`;
+
+    setLoaderProgress(100, 'Done!');
+    setTimeout(() => document.getElementById('loader').classList.add('hide'), 400);
+    if (isRefresh) showToast(`✓ Refreshed — ${products.filter(p=>p.isNew).length} new items`);
+
+  } catch (e) {
+    setLoaderProgress(100, 'Error');
+    setTimeout(() => document.getElementById('loader').classList.add('hide'), 400);
+    showError('Failed to load products: ' + e.message + '. Check your internet connection or try again.');
+    console.error(e);
+  }
+}
+
+// ── Render ────────────────────────────────────────────────
+function getFiltered() {
+  let list = [...products];
+
+  if (brandFilter !== 'all') list = list.filter(p => p.brandId === brandFilter);
+  if (filter === 'new')   list = list.filter(p => p.isNew);
+  if (filter === 'sale')  list = list.filter(p => p.isSale);
+  if (filter === 'saved') list = list.filter(p => wishlist.has(p.id));
+
+  if (sort === 'price-asc')  list.sort((a,b) => effectivePrice(a) - effectivePrice(b));
+  if (sort === 'price-desc') list.sort((a,b) => effectivePrice(b) - effectivePrice(a));
+  if (sort === 'newest')     list.sort((a,b) => new Date(b.publishedAt||0) - new Date(a.publishedAt||0));
+  if (sort === 'discount')   list.sort((a,b) => b.discountPct - a.discountPct);
+  if (sort === 'az')         list.sort((a,b) => a.name.localeCompare(b.name));
+
+  return list;
+}
+
+function effectivePrice(p) { return p.isSale && p.price ? p.price : (p.price || 9999); }
+
+function render() {
+  const list = getFiltered();
+  const showSections = filter === 'all';
+
+  const newItems  = showSections ? list.filter(p => p.isNew)  : [];
+  const saleItems = showSections ? list.filter(p => p.isSale) : [];
+  const restItems = showSections ? list.filter(p => !p.isNew && !p.isSale) : list;
+
+  document.getElementById('newSection').style.display  = showSections && newItems.length  ? '' : 'none';
+  document.getElementById('saleSection').style.display = showSections && saleItems.length ? '' : 'none';
+
+  document.getElementById('newMeta').textContent  = `${newItems.length} items added this week`;
+  document.getElementById('saleMeta').textContent = `${saleItems.length} items 10%+ off`;
+  document.getElementById('allMeta').textContent  = `${restItems.length} items`;
+
+  document.getElementById('newGrid').innerHTML  = newItems.map((p,i)  => card(p, i*25)).join('');
+  document.getElementById('saleGrid').innerHTML = saleItems.map((p,i) => card(p, i*25)).join('');
+
+  if (restItems.length === 0 && filter !== 'all') {
+    document.getElementById('allGrid').innerHTML = `
+      <div class="empty" style="grid-column:1/-1">
+        <h3>${filter === 'saved' ? 'No saved items yet' : 'No items match'}</h3>
+        <p>${filter === 'saved' ? 'Click the ♡ on any product to save it here.' : 'Try changing your filters.'}</p>
+      </div>`;
+  } else {
+    document.getElementById('allGrid').innerHTML = restItems.map((p,i) => card(p, i*20)).join('');
+  }
+}
+
+function card(p, delay = 0) {
+  const ep = effectivePrice(p);
+  const isWished = wishlist.has(p.id);
+  const imgHtml = p.image
+    ? `<img class="card-img" src="${p.image}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+    : '';
+  return `
+  <div class="card" style="animation-delay:${delay}ms" onclick="openModal('${p.id}')">
+    ${imgHtml}
+    <div class="card-img-placeholder" style="display:${p.image?'none':'flex'}">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg>
+      <span>${esc(p.brandName)}</span>
+    </div>
+    <div class="card-badges">
+      ${p.isNew  ? '<span class="badge badge-new">New</span>'            : ''}
+      ${p.isSale ? `<span class="badge badge-sale">−${p.discountPct}%</span>` : ''}
+    </div>
+    <button class="card-wish ${isWished?'on':''}" onclick="toggleWish(event,'${p.id}')">${isWished?'♥':'♡'}</button>
+    <div class="card-info">
+      <div class="card-brand">${esc(p.brandName)}</div>
+      <div class="card-name">${esc(p.name)}</div>
+      <div class="card-price">
+        <span class="price ${p.isSale?'sale':''}">₹${fmt(ep)}</span>
+        ${p.isSale && p.comparePrice ? `<span class="price-was">₹${fmt(p.comparePrice)}</span><span class="price-off">−${p.discountPct}%</span>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Modal ─────────────────────────────────────────────────
+function openModal(id) {
+  const p = products.find(x => x.id === id);
+  if (!p) return;
+
+  const imgHtml = p.image
+    ? `<img src="${p.image}" alt="${esc(p.name)}" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block">`
+    : `<div class="modal-img-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/></svg></div>`;
+
+  document.getElementById('modalImg').innerHTML = imgHtml;
+  document.getElementById('mBrand').textContent = p.brandName;
+  document.getElementById('mName').textContent  = p.name;
+
+  const ep = effectivePrice(p);
+  document.getElementById('mPriceRow').innerHTML = p.isSale
+    ? `<span class="modal-price sale">₹${fmt(ep)}</span><span class="price-was" style="font-size:16px">₹${fmt(p.comparePrice)}</span><span class="price-off">−${p.discountPct}%</span>`
+    : `<span class="modal-price">₹${fmt(ep)}</span>`;
+
+  const tags = [p.category, ...(p.tags||[])].filter(Boolean).slice(0,6);
+  document.getElementById('mTags').innerHTML = tags.map(t => `<span class="modal-tag">${esc(t)}</span>`).join('');
+
+  const sizes = p.availableSizes || [];
+  document.getElementById('mSizes').innerHTML = sizes.length
+    ? `<div class="modal-sizes-label">Available sizes</div><div class="modal-sizes-grid">${sizes.map(s=>`<span class="size-pill">${esc(s)}</span>`).join('')}</div>`
+    : '';
+
+  document.getElementById('mCta').href = p.productUrl || p.brandUrl;
+  document.getElementById('mFooter').innerHTML = `
+    Brand: ${esc(p.brandName)}<br>
+    Category: ${esc(p.category||'Clothing')}<br>
+    ${p.publishedAt ? `Published: ${new Date(p.publishedAt).toLocaleDateString('en-IN',{year:'numeric',month:'long',day:'numeric'})}` : ''}
+    ${p.isSale ? `<br><strong style="color:var(--sale-red)">SALE — Save ₹${fmt(p.comparePrice - ep)}</strong>` : ''}
+  `;
+
+  document.getElementById('modalBg').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalBg').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function maybeClose(e) {
+  if (e.target === document.getElementById('modalBg')) closeModal();
+}
+
+// ── Wishlist ──────────────────────────────────────────────
+function toggleWish(e, id) {
+  e.stopPropagation();
+  if (wishlist.has(id)) { wishlist.delete(id); showToast('Removed from saved'); }
+  else { wishlist.add(id); showToast('♥ Saved to your collection'); }
+  localStorage.setItem('wishlist', JSON.stringify([...wishlist]));
+  render();
+}
+
+// ── Controls ──────────────────────────────────────────────
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function setSort(v) { sort = v; render(); }
+
+function buildBrandChips() {
+  document.getElementById('brandChips').innerHTML =
+    `<button class="chip active" onclick="setBrand('all',this)">All</button>` +
+    brands.map(b => `<button class="chip" onclick="setBrand('${b.id}',this)">${esc(b.name)}</button>`).join('');
+}
+
+function setBrand(id, btn) {
+  brandFilter = id;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+// ── Ticker ────────────────────────────────────────────────
+function updateTicker() {
+  const saleItems = products.filter(p => p.isSale).slice(0, 15);
+  if (!saleItems.length) return;
+  const text = saleItems.map(p => `  ·  ${p.brandName}: ${p.name} — ₹${fmt(effectivePrice(p))} (was ₹${fmt(p.comparePrice)}, −${p.discountPct}%)`).join('  ') + '  ';
+  document.getElementById('tickerTrack').textContent = text + text;
+}
+
+// ── Utilities ─────────────────────────────────────────────
+function setLoaderProgress(pct, msg) {
+  document.getElementById('loaderFill').style.width = pct + '%';
+  document.getElementById('loaderSub').textContent = msg;
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+function showError(msg) {
+  const el = document.getElementById('errorBanner');
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 8000);
+}
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmt(n) { return Math.round(n||0).toLocaleString('en-IN'); }
+function timeAgo(date) {
+  const s = Math.floor((Date.now() - date) / 1000);
+  if (s < 60) return 'just now';
+  if (s < 3600) return `${Math.floor(s/60)}m ago`;
+  if (s < 86400) return `${Math.floor(s/3600)}h ago`;
+  return `${Math.floor(s/86400)}d ago`;
+}
+
+// ── Boot ──────────────────────────────────────────────────
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+loadProducts();
+</script>
+</body>
+</html>
