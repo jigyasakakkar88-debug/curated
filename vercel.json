@@ -7,10 +7,3 @@
     { "src": "^/$", "dest": "/public/index.html" }
   ]
 }
-```
-
-Click **Commit changes**, then **Redeploy on Vercel**.
-
-**But while you wait for that**, try accessing the admin directly via:
-```
-https://curated-jigyasakakkar88-debugs-projects.vercel.app/admin.html
