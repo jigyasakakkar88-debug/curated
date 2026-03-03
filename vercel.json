@@ -3,6 +3,14 @@
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/admin", "dest": "/public/admin.html" },
-    { "src": "/", "dest": "/public/index.html" }
+    { "src": "/admin.html", "dest": "/public/admin.html" },
+    { "src": "^/$", "dest": "/public/index.html" }
   ]
 }
+```
+
+Click **Commit changes**, then **Redeploy on Vercel**.
+
+**But while you wait for that**, try accessing the admin directly via:
+```
+https://curated-jigyasakakkar88-debugs-projects.vercel.app/admin.html
