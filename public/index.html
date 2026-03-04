@@ -17,14 +17,14 @@
   --new-green: #3D6B5A;
   --card: #FDFAF6;
   --shadow: rgba(26,23,20,0.08);
+  --nav-h: 48px;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
-
 body { font-family:'Jost',sans-serif; background:var(--paper); color:var(--ink); min-height:100vh; }
 
 /* LOADING */
 #loader {
-  position:fixed; inset:0; background:var(--ink); z-index:999;
+  position:fixed; inset:0; background:var(--ink); z-index:9999;
   display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px;
   transition:opacity 0.6s;
 }
@@ -34,12 +34,12 @@ body { font-family:'Jost',sans-serif; background:var(--paper); color:var(--ink);
 .loader-track { width:180px; height:1px; background:#333; }
 .loader-fill { height:100%; background:var(--accent); width:0; transition:width 0.2s ease; }
 
-/* HEADER */
+/* TOP HEADER */
 header {
   background:var(--ink); color:var(--paper);
   display:flex; align-items:center; justify-content:space-between;
   padding:0 48px; height:68px;
-  position:sticky; top:0; z-index:100;
+  position:sticky; top:0; z-index:500;
 }
 .logo { font-family:'Cormorant Garamond',serif; font-size:20px; letter-spacing:8px; font-weight:300; }
 .logo em { color:var(--accent); font-style:normal; }
@@ -48,12 +48,125 @@ header {
 .btn-refresh {
   background:transparent; border:1px solid #444; color:var(--paper);
   padding:7px 18px; font-family:'Jost',sans-serif; font-size:11px;
-  letter-spacing:2px; text-transform:uppercase; cursor:pointer;
-  transition:all 0.2s;
+  letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all 0.2s;
 }
 .btn-refresh:hover { background:var(--accent); border-color:var(--accent); }
 .admin-link { font-size:10px; color:#555; letter-spacing:1px; font-family:'DM Mono',monospace; text-decoration:none; }
 .admin-link:hover { color:var(--accent); }
+
+/* ── NAV BAR ── */
+.navbar {
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  position:sticky; top:68px; z-index:400;
+  display:flex; align-items:stretch;
+  padding:0 48px;
+  height:var(--nav-h);
+  user-select:none;
+}
+
+/* each top-level item */
+.nav-item {
+  position:relative;
+  display:flex; align-items:center;
+}
+
+.nav-item > .nav-label {
+  display:flex; align-items:center; gap:5px;
+  padding:0 18px; height:100%;
+  font-size:12px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--muted); cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:color 0.18s, border-color 0.18s;
+  white-space:nowrap;
+}
+.nav-item > .nav-label:hover,
+.nav-item.active > .nav-label {
+  color:var(--ink);
+  border-bottom-color:var(--accent);
+}
+.nav-item > .nav-label .caret {
+  font-size:8px; opacity:0.5; transition:transform 0.2s;
+}
+.nav-item:hover > .nav-label .caret { transform:rotate(180deg); }
+
+/* ALL tab (no dropdown) */
+.nav-all .nav-label { cursor:pointer; }
+.nav-all.active .nav-label { color:var(--ink); border-bottom-color:var(--accent); }
+
+/* SALE & NEW special tabs */
+.nav-sale.active .nav-label { color:var(--sale-red); border-bottom-color:var(--sale-red); }
+.nav-new.active  .nav-label { color:var(--new-green); border-bottom-color:var(--new-green); }
+.nav-saved.active .nav-label { color:var(--accent); border-bottom-color:var(--accent); }
+
+.nav-divider { width:1px; background:var(--border); margin:10px 4px; }
+
+.nav-right { margin-left:auto; display:flex; align-items:center; gap:8px; }
+.nav-sort {
+  padding:6px 12px; border:1px solid var(--border); background:var(--warm);
+  font-family:'Jost',sans-serif; font-size:11px; color:var(--ink); cursor:pointer; outline:none;
+  letter-spacing:0.5px;
+}
+
+/* ── MEGA DROPDOWN ── */
+.nav-dropdown {
+  position:absolute; top:100%; left:0;
+  background:var(--card); border:1px solid var(--border);
+  border-top:2px solid var(--accent);
+  min-width:520px;
+  opacity:0; pointer-events:none;
+  transform:translateY(8px);
+  transition:opacity 0.2s, transform 0.2s;
+  box-shadow:0 16px 48px var(--shadow);
+  display:flex; gap:0;
+}
+.nav-item:hover .nav-dropdown {
+  opacity:1; pointer-events:all; transform:translateY(0);
+}
+
+.dropdown-col {
+  padding:24px 28px; min-width:180px;
+  border-right:1px solid var(--border);
+}
+.dropdown-col:last-child { border-right:none; }
+
+.dropdown-group-title {
+  font-family:'DM Mono',monospace; font-size:9px; letter-spacing:3px;
+  text-transform:uppercase; color:var(--muted);
+  margin-bottom:14px; padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+
+.dropdown-link {
+  display:block; padding:7px 0;
+  font-size:13px; font-weight:300; color:var(--ink);
+  cursor:pointer; transition:color 0.15s;
+  border:none; background:none; text-align:left;
+  width:100%; font-family:'Jost',sans-serif;
+  letter-spacing:0.3px;
+}
+.dropdown-link:hover { color:var(--accent); padding-left:4px; transition:padding 0.15s, color 0.15s; }
+.dropdown-link.active { color:var(--accent); font-weight:400; }
+
+/* BRAND FILTER ROW */
+.brand-bar {
+  background:var(--warm); border-bottom:1px solid var(--border);
+  padding:10px 48px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+}
+.brand-bar-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-right:4px; }
+.chip { padding:5px 14px; border:1px solid var(--border); background:white; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; border-radius:100px; color:var(--muted); transition:all 0.18s; }
+.chip.active { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+/* ACTIVE FILTER BREADCRUMB */
+.breadcrumb {
+  padding:10px 48px; display:flex; align-items:center; gap:8px;
+  font-family:'DM Mono',monospace; font-size:10px; color:var(--muted);
+  letter-spacing:1px; display:none;
+}
+.breadcrumb.show { display:flex; }
+.breadcrumb-path { color:var(--ink); }
+.breadcrumb-clear { background:none; border:none; color:var(--muted); cursor:pointer; font-size:12px; margin-left:4px; }
+.breadcrumb-clear:hover { color:var(--sale-red); }
 
 /* TICKER */
 .ticker { background:var(--accent); overflow:hidden; white-space:nowrap; padding:9px 0; }
@@ -66,23 +179,9 @@ header {
 .stat-n { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; color:var(--accent); }
 .stat-l { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:2px; margin-top:2px; text-transform:uppercase; }
 
-/* CONTROLS */
-.controls { padding:24px 48px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; border-bottom:1px solid var(--border); background:var(--card); }
-.filter-group { display:flex; gap:3px; }
-.ftab { padding:8px 18px; border:1px solid var(--border); background:transparent; font-family:'Jost',sans-serif; font-size:12px; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; color:var(--muted); transition:all 0.18s; }
-.ftab:hover, .ftab.active { background:var(--ink); color:var(--paper); border-color:var(--ink); }
-.ftab.sale.active { background:var(--sale-red); border-color:var(--sale-red); }
-.ftab.new.active { background:var(--new-green); border-color:var(--new-green); }
-.spacer { flex:1; }
-.brand-chips { display:flex; gap:6px; flex-wrap:wrap; }
-.chip { padding:6px 14px; border:1px solid var(--border); background:var(--warm); font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; border-radius:100px; color:var(--muted); transition:all 0.18s; }
-.chip.active { background:var(--ink); color:var(--paper); border-color:var(--ink); }
-.sort { padding:8px 14px; border:1px solid var(--border); background:var(--warm); font-family:'Jost',sans-serif; font-size:12px; color:var(--ink); cursor:pointer; outline:none; }
-
 /* MAIN */
 main { padding:0 48px 80px; }
 
-/* SECTION */
 .section { margin-top:48px; }
 .section-head { display:flex; align-items:baseline; gap:14px; margin-bottom:24px; padding-bottom:16px; border-bottom:1px solid var(--border); }
 .section-title { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:300; }
@@ -95,23 +194,12 @@ main { padding:0 48px 80px; }
 .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:2px; }
 
 /* CARD */
-.card {
-  background:var(--card); cursor:pointer; position:relative;
-  transition:transform 0.3s, box-shadow 0.3s;
-  animation:fadeUp 0.4s ease both;
-}
+.card { background:var(--card); cursor:pointer; position:relative; transition:transform 0.3s, box-shadow 0.3s; animation:fadeUp 0.4s ease both; }
 .card:hover { transform:translateY(-6px); box-shadow:0 24px 60px var(--shadow); z-index:2; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 
-.card-img {
-  width:100%; aspect-ratio:3/4; object-fit:cover; display:block;
-  background:var(--warm);
-}
-.card-img-placeholder {
-  width:100%; aspect-ratio:3/4; background:var(--warm);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:10px; color:var(--muted);
-}
+.card-img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; background:var(--warm); }
+.card-img-placeholder { width:100%; aspect-ratio:3/4; background:var(--warm); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; color:var(--muted); }
 .card-img-placeholder svg { width:40px; height:40px; opacity:0.3; }
 .card-img-placeholder span { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; }
 
@@ -120,14 +208,7 @@ main { padding:0 48px 80px; }
 .badge-new { background:var(--new-green); color:white; }
 .badge-sale { background:var(--sale-red); color:white; }
 
-.card-wish {
-  position:absolute; top:10px; right:10px;
-  width:34px; height:34px; border-radius:50%; background:white;
-  border:none; cursor:pointer; font-size:15px;
-  display:flex; align-items:center; justify-content:center;
-  opacity:0; transition:opacity 0.2s;
-  box-shadow:0 2px 8px var(--shadow);
-}
+.card-wish { position:absolute; top:10px; right:10px; width:34px; height:34px; border-radius:50%; background:white; border:none; cursor:pointer; font-size:15px; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity 0.2s; box-shadow:0 2px 8px var(--shadow); }
 .card:hover .card-wish, .card-wish.on { opacity:1; }
 
 .card-info { padding:14px 16px 18px; border-top:1px solid var(--border); }
@@ -140,25 +221,13 @@ main { padding:0 48px 80px; }
 .price-off { font-size:9px; background:var(--sale-red); color:white; padding:2px 5px; letter-spacing:0.5px; }
 
 /* MODAL */
-.modal-bg {
-  position:fixed; inset:0; background:rgba(26,23,20,0.7); z-index:200;
-  display:flex; align-items:center; justify-content:center; padding:40px;
-  opacity:0; pointer-events:none; transition:opacity 0.3s;
-  backdrop-filter:blur(6px);
-}
+.modal-bg { position:fixed; inset:0; background:rgba(26,23,20,0.7); z-index:1000; display:flex; align-items:center; justify-content:center; padding:40px; opacity:0; pointer-events:none; transition:opacity 0.3s; backdrop-filter:blur(6px); }
 .modal-bg.open { opacity:1; pointer-events:all; }
-.modal {
-  background:var(--card); max-width:860px; width:100%;
-  display:grid; grid-template-columns:1fr 1fr; max-height:90vh; overflow-y:auto;
-  transform:scale(0.96); transition:transform 0.3s;
-}
+.modal { background:var(--card); max-width:860px; width:100%; display:grid; grid-template-columns:1fr 1fr; max-height:90vh; overflow-y:auto; transform:scale(0.96); transition:transform 0.3s; }
 .modal-bg.open .modal { transform:scale(1); }
 .modal-img { position:sticky; top:0; height:fit-content; }
 .modal-img img { width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
-.modal-img-placeholder {
-  width:100%; aspect-ratio:3/4; background:var(--warm);
-  display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px; color:var(--muted);
-}
+.modal-img-placeholder { width:100%; aspect-ratio:3/4; background:var(--warm); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px; color:var(--muted); }
 .modal-body { padding:40px 36px; display:flex; flex-direction:column; }
 .modal-close { align-self:flex-end; background:none; border:none; font-size:22px; cursor:pointer; color:var(--muted); margin-bottom:24px; line-height:1; }
 .modal-brand { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
@@ -172,12 +241,7 @@ main { padding:0 48px 80px; }
 .modal-sizes-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:8px; }
 .modal-sizes-grid { display:flex; gap:6px; flex-wrap:wrap; }
 .size-pill { padding:5px 12px; border:1px solid var(--border); font-size:11px; font-family:'DM Mono',monospace; color:var(--ink); }
-.modal-cta {
-  display:block; background:var(--ink); color:var(--paper); text-align:center;
-  padding:14px; text-decoration:none; font-family:'Jost',sans-serif;
-  font-size:11px; letter-spacing:3px; text-transform:uppercase;
-  border:none; cursor:pointer; transition:background 0.2s; margin-top:auto;
-}
+.modal-cta { display:block; background:var(--ink); color:var(--paper); text-align:center; padding:14px; text-decoration:none; font-family:'Jost',sans-serif; font-size:11px; letter-spacing:3px; text-transform:uppercase; border:none; cursor:pointer; transition:background 0.2s; margin-top:auto; }
 .modal-cta:hover { background:var(--accent); }
 .modal-footer { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); line-height:2; margin-top:16px; }
 
@@ -186,53 +250,157 @@ main { padding:0 48px 80px; }
 .empty h3 { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; margin-bottom:10px; }
 .empty p { font-size:13px; line-height:1.7; }
 
-/* ERROR BANNER */
-.error-banner { background:#fff3f1; border:1px solid #f5c6bc; padding:12px 24px; font-size:13px; color:var(--sale-red); margin:16px 48px 0; border-radius:2px; display:none; }
+/* ERROR */
+.error-banner { background:#fff3f1; border:1px solid #f5c6bc; padding:12px 24px; font-size:13px; color:var(--sale-red); margin:16px 48px 0; display:none; }
 
 /* FOOTER */
 footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; border-top:1px solid var(--border); }
 
 /* TOAST */
-.toast {
-  position:fixed; bottom:28px; right:28px; background:var(--ink); color:var(--paper);
-  padding:14px 22px; font-size:12px; letter-spacing:1px; border-left:3px solid var(--accent);
-  z-index:500; opacity:0; transform:translateY(8px); transition:all 0.3s; pointer-events:none;
-  font-family:'Jost',sans-serif;
-}
+.toast { position:fixed; bottom:28px; right:28px; background:var(--ink); color:var(--paper); padding:14px 22px; font-size:12px; letter-spacing:1px; border-left:3px solid var(--accent); z-index:5000; opacity:0; transform:translateY(8px); transition:all 0.3s; pointer-events:none; font-family:'Jost',sans-serif; }
 .toast.show { opacity:1; transform:translateY(0); }
 
+/* RESPONSIVE */
 @media(max-width:768px){
-  header,main,.controls { padding-left:20px; padding-right:20px; }
+  header { padding:0 20px; height:56px; }
+  .navbar { padding:0 12px; top:56px; overflow-x:auto; }
+  .nav-item > .nav-label { padding:0 12px; font-size:11px; }
+  .nav-dropdown { min-width:280px; flex-direction:column; }
+  .dropdown-col { border-right:none; border-bottom:1px solid var(--border); padding:16px 20px; }
+  main { padding:0 20px 60px; }
   .stats { grid-template-columns:repeat(2,1fr); }
   .grid { grid-template-columns:repeat(2,1fr); }
   .modal { grid-template-columns:1fr; }
   .modal-img { position:static; }
   .section-sale { margin-left:-20px; margin-right:-20px; padding-left:20px; padding-right:20px; }
+  .brand-bar,.breadcrumb { padding-left:20px; padding-right:20px; }
   .error-banner { margin-left:20px; margin-right:20px; }
 }
 </style>
 </head>
 <body>
 
-<!-- LOADER -->
 <div id="loader">
   <div class="loader-title">CURATED</div>
   <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
   <div class="loader-sub" id="loaderSub">Connecting to your brands...</div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- HEADER -->
+<!-- TOP HEADER -->
 <header>
   <div class="logo">CURATED<em>.</em></div>
   <div class="header-actions">
     <span class="meta-text" id="metaText"></span>
     <button class="btn-refresh" onclick="loadProducts(true)">↻ Refresh</button>
-    <a class="admin-link" href="/admin">Admin ›</a>
+    <a class="admin-link" href="/admin.html">Admin ›</a>
   </div>
 </header>
+
+<!-- NAV BAR -->
+<nav class="navbar" id="navbar">
+
+  <!-- ALL -->
+  <div class="nav-item nav-all active" id="navAll" onclick="navSelect('all', null, null, this)">
+    <div class="nav-label">All</div>
+  </div>
+
+  <div class="nav-divider"></div>
+
+  <!-- WOMEN'S WEAR -->
+  <div class="nav-item" id="navWomen">
+    <div class="nav-label">
+      Women's Wear <span class="caret">▾</span>
+    </div>
+    <div class="nav-dropdown">
+      <div class="dropdown-col">
+        <div class="dropdown-group-title">Ethnic</div>
+        <button class="dropdown-link" onclick="navSelect('women', 'ethnic', 'Sarees', this)">Sarees</button>
+        <button class="dropdown-link" onclick="navSelect('women', 'ethnic', 'Kurtas & Kurta Sets', this)">Kurtas & Kurta Sets</button>
+        <button class="dropdown-link" onclick="navSelect('women', 'ethnic', 'Salwar Suits', this)">Salwar Suits</button>
+        <button class="dropdown-link" onclick="navSelect('women', 'ethnic', 'Dupattas & Stoles', this)">Dupattas & Stoles</button>
+      </div>
+      <div class="dropdown-col">
+        <div class="dropdown-group-title">Western & Fusion</div>
+        <button class="dropdown-link" onclick="navSelect('women', 'western', 'Co-ords & Sets', this)">Co-ords & Sets</button>
+        <button class="dropdown-link" onclick="navSelect('women', 'western', 'Dresses', this)">Dresses</button>
+        <button class="dropdown-link" onclick="navSelect('women', 'western', 'Tops & Tunics', this)">Tops & Tunics</button>
+        <button class="dropdown-link" onclick="navSelect('women', 'western', 'Trousers & Palazzos', this)">Trousers & Palazzos</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MEN'S WEAR -->
+  <div class="nav-item" id="navMen">
+    <div class="nav-label">
+      Men's Wear <span class="caret">▾</span>
+    </div>
+    <div class="nav-dropdown">
+      <div class="dropdown-col">
+        <div class="dropdown-group-title">All Men's</div>
+        <button class="dropdown-link" onclick="navSelect('men', null, 'Kurtas & Kurta Sets', this)">Kurtas & Kurta Sets</button>
+        <button class="dropdown-link" onclick="navSelect('men', null, 'Shirts', this)">Shirts</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCESSORIES -->
+  <div class="nav-item" id="navAcc">
+    <div class="nav-label">
+      Accessories <span class="caret">▾</span>
+    </div>
+    <div class="nav-dropdown">
+      <div class="dropdown-col">
+        <div class="dropdown-group-title">All Accessories</div>
+        <button class="dropdown-link" onclick="navSelect('acc', null, 'Jewellery', this)">Jewellery</button>
+        <button class="dropdown-link" onclick="navSelect('acc', null, 'Footwear', this)">Footwear</button>
+        <button class="dropdown-link" onclick="navSelect('acc', null, 'Belts & Wallets', this)">Belts & Wallets</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-divider"></div>
+
+  <!-- SALE -->
+  <div class="nav-item nav-sale" id="navSale" onclick="navSelect('sale', null, null, this)">
+    <div class="nav-label">Sale 🏷</div>
+  </div>
+
+  <!-- NEW -->
+  <div class="nav-item nav-new" id="navNew" onclick="navSelect('new', null, null, this)">
+    <div class="nav-label">New In ✦</div>
+  </div>
+
+  <!-- SAVED -->
+  <div class="nav-item nav-saved" id="navSaved" onclick="navSelect('saved', null, null, this)">
+    <div class="nav-label">♥ Saved</div>
+  </div>
+
+  <!-- RIGHT: SORT -->
+  <div class="nav-right">
+    <select class="nav-sort" onchange="setSort(this.value)">
+      <option value="newest">Newest First</option>
+      <option value="price-asc">Price ↑</option>
+      <option value="price-desc">Price ↓</option>
+      <option value="discount">Biggest Sale</option>
+      <option value="az">A → Z</option>
+    </select>
+  </div>
+</nav>
+
+<!-- BRAND FILTER BAR -->
+<div class="brand-bar" id="brandBar">
+  <span class="brand-bar-label">Brand</span>
+  <div id="brandChips"></div>
+</div>
+
+<!-- ACTIVE FILTER BREADCRUMB -->
+<div class="breadcrumb" id="breadcrumb">
+  <span>Showing:</span>
+  <span class="breadcrumb-path" id="breadcrumbPath"></span>
+  <button class="breadcrumb-clear" onclick="navSelect('all',null,null,document.getElementById('navAll'))" title="Clear filter">✕ Clear</button>
+</div>
 
 <!-- TICKER -->
 <div class="ticker"><div class="ticker-track" id="tickerTrack">Loading sale items…&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Loading sale items…</div></div>
@@ -245,29 +413,8 @@ footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-
   <div class="stat"><div class="stat-n" id="sBrands">—</div><div class="stat-l">Brands</div></div>
 </div>
 
-<!-- ERROR -->
 <div class="error-banner" id="errorBanner"></div>
 
-<!-- CONTROLS -->
-<div class="controls">
-  <div class="filter-group">
-    <button class="ftab active" onclick="setFilter('all',this)">All</button>
-    <button class="ftab new" onclick="setFilter('new',this)">New</button>
-    <button class="ftab sale" onclick="setFilter('sale',this)">Sale</button>
-    <button class="ftab" onclick="setFilter('saved',this)">♥ Saved</button>
-  </div>
-  <div class="brand-chips" id="brandChips"></div>
-  <div class="spacer"></div>
-  <select class="sort" onchange="setSort(this.value)">
-    <option value="newest">Newest First</option>
-    <option value="price-asc">Price ↑</option>
-    <option value="price-desc">Price ↓</option>
-    <option value="discount">Biggest Sale</option>
-    <option value="az">A → Z</option>
-  </select>
-</div>
-
-<!-- MAIN -->
 <main>
   <div id="newSection" class="section" style="display:none">
     <div class="section-head">
@@ -287,7 +434,7 @@ footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-
 
   <div id="allSection" class="section">
     <div class="section-head">
-      <div class="section-title">Full <em>Selection</em></div>
+      <div class="section-title" id="allTitle">Full <em>Selection</em></div>
       <div class="section-meta" id="allMeta"></div>
     </div>
     <div class="grid" id="allGrid"></div>
@@ -314,78 +461,147 @@ footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-
 </div>
 
 <script>
+// ── Category taxonomy ─────────────────────────────────────
+// Maps nav selections to keywords we search for in product
+// name, category field, and tags
+const CATEGORY_KEYWORDS = {
+  // Women ethnic
+  'Sarees':               ['saree','sari','sarees'],
+  'Kurtas & Kurta Sets':  ['kurta','kurti','kurta set','kurta-set','top'],
+  'Salwar Suits':         ['salwar','suit','salwar suit','churidar','anarkali'],
+  'Dupattas & Stoles':    ['dupatta','stole','scarf','odhni'],
+  // Women western
+  'Co-ords & Sets':       ['co-ord','coord','set','matching set','twin set'],
+  'Dresses':              ['dress','maxi','midi','mini dress','frock'],
+  'Tops & Tunics':        ['top','tunic','blouse','shirt','tee','tank'],
+  'Trousers & Palazzos':  ['trouser','palazzo','pant','legging','bottom'],
+  // Men
+  'Shirts':               ['shirt','casual shirt','formal shirt'],
+  // Accessories
+  'Jewellery':            ['jewellery','jewelry','necklace','earring','bracelet','ring','bangle'],
+  'Footwear':             ['footwear','shoe','sandal','heel','flat','boot','kolhapuri','jutti'],
+  'Belts & Wallets':      ['belt','wallet','clutch','purse'],
+};
+
+// Gender signals — helps disambiguate "Kurtas" between men & women
+const GENDER_KEYWORDS = {
+  women: ['women','woman','ladies','girl','female','her','she'],
+  men:   ['men','man','male','boy','gents','his','he'],
+};
+
 // ── State ─────────────────────────────────────────────────
-let products = [];
-let wishlist = new Set(JSON.parse(localStorage.getItem('wishlist') || '[]'));
-let filter = 'all';
+let products    = [];
+let wishlist    = new Set(JSON.parse(localStorage.getItem('wishlist') || '[]'));
+let navFilter   = 'all';   // 'all' | 'sale' | 'new' | 'saved' | 'women' | 'men' | 'acc'
+let navGender   = null;    // 'ethnic' | 'western' | null
+let navSubcat   = null;    // e.g. 'Sarees' | null
 let brandFilter = 'all';
-let sort = 'newest';
-let fetchedAt = null;
-let brands = [];
+let sort        = 'newest';
+let brands      = [];
 
-// ── Fetch ─────────────────────────────────────────────────
-async function loadProducts(isRefresh = false) {
-  if (isRefresh) showToast('Refreshing your feed…');
-  setLoaderProgress(20, 'Connecting to your brands…');
+// ── NAV SELECTION ─────────────────────────────────────────
+function navSelect(filter, group, subcat, el) {
+  navFilter = filter;
+  navGender = group;
+  navSubcat = subcat;
 
-  try {
-    const url = `/api/products${isRefresh ? '?bust=' + Date.now() : ''}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`Server error: ${res.status}`);
-    const data = await res.json();
+  // Highlight active top-level nav item
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const map = { all:'navAll', sale:'navSale', new:'navNew', saved:'navSaved', women:'navWomen', men:'navMen', acc:'navAcc' };
+  if (map[filter]) document.getElementById(map[filter]).classList.add('active');
 
-    products = data.products || [];
-    fetchedAt = data.meta?.fetchedAt;
+  // Highlight active dropdown link
+  document.querySelectorAll('.dropdown-link').forEach(l => l.classList.remove('active'));
+  if (el && el.classList.contains('dropdown-link')) el.classList.add('active');
 
-    // Collect unique brands
-    const brandMap = {};
-    products.forEach(p => { brandMap[p.brandId] = p.brandName; });
-    brands = Object.entries(brandMap).map(([id,name]) => ({id,name}));
+  // Breadcrumb
+  updateBreadcrumb();
 
-    // Show errors if any brand failed
-    if (data.meta?.errors?.length) {
-      const names = data.meta.errors.map(e => e.brand).join(', ');
-      showError(`Could not fetch from: ${names}. Other brands loaded fine.`);
-    }
+  // Section title
+  updateSectionTitle();
 
-    // Stats
-    document.getElementById('sTotal').textContent = products.length;
-    document.getElementById('sNew').textContent = products.filter(p=>p.isNew).length;
-    document.getElementById('sSale').textContent = products.filter(p=>p.isSale).length;
-    document.getElementById('sBrands').textContent = brands.length;
+  render();
+}
 
-    buildBrandChips();
-    updateTicker();
-    render();
+function updateBreadcrumb() {
+  const bc = document.getElementById('breadcrumb');
+  const bp = document.getElementById('breadcrumbPath');
+  if (navFilter === 'all' && !navSubcat) {
+    bc.classList.remove('show'); return;
+  }
+  bc.classList.add('show');
+  const parts = [];
+  if (navFilter === 'women') parts.push("Women's Wear");
+  if (navFilter === 'men')   parts.push("Men's Wear");
+  if (navFilter === 'acc')   parts.push("Accessories");
+  if (navFilter === 'sale')  parts.push("On Sale");
+  if (navFilter === 'new')   parts.push("New Arrivals");
+  if (navFilter === 'saved') parts.push("Saved Items");
+  if (navGender === 'ethnic')  parts.push("Ethnic");
+  if (navGender === 'western') parts.push("Western & Fusion");
+  if (navSubcat) parts.push(navSubcat);
+  bp.textContent = parts.join(' › ');
+}
 
-    const ago = fetchedAt ? timeAgo(new Date(fetchedAt)) : 'just now';
-    document.getElementById('metaText').textContent = `Updated ${ago}`;
-    document.getElementById('footerText').textContent =
-      `CURATED · ${products.length} products across ${brands.length} brands · Refreshes every Monday · Last fetched: ${new Date(fetchedAt).toLocaleString()}`;
-
-    setLoaderProgress(100, 'Done!');
-    setTimeout(() => document.getElementById('loader').classList.add('hide'), 400);
-    if (isRefresh) showToast(`✓ Refreshed — ${products.filter(p=>p.isNew).length} new items`);
-
-  } catch (e) {
-    setLoaderProgress(100, 'Error');
-    setTimeout(() => document.getElementById('loader').classList.add('hide'), 400);
-    showError('Failed to load products: ' + e.message + '. Check your internet connection or try again.');
-    console.error(e);
+function updateSectionTitle() {
+  const el = document.getElementById('allTitle');
+  if (navSubcat) {
+    el.innerHTML = `<em>${navSubcat}</em>`;
+  } else if (navFilter === 'women') {
+    el.innerHTML = `Women's <em>Wear</em>`;
+  } else if (navFilter === 'men') {
+    el.innerHTML = `Men's <em>Wear</em>`;
+  } else if (navFilter === 'acc') {
+    el.innerHTML = `<em>Accessories</em>`;
+  } else {
+    el.innerHTML = `Full <em>Selection</em>`;
   }
 }
 
-// ── Render ────────────────────────────────────────────────
+// ── FILTERING ─────────────────────────────────────────────
+function matchesNav(p) {
+  if (navFilter === 'all')   return true;
+  if (navFilter === 'sale')  return p.isSale;
+  if (navFilter === 'new')   return p.isNew;
+  if (navFilter === 'saved') return wishlist.has(p.id);
+
+  // For category filters, search product name + category + tags
+  const haystack = [p.name, p.category, ...(p.tags||[])].join(' ').toLowerCase();
+
+  // Gender filter
+  if (navFilter === 'women' || navFilter === 'men') {
+    const genderKey = navFilter === 'women' ? 'women' : 'men';
+    const oppositeKey = navFilter === 'women' ? 'men' : 'women';
+    const hasGender = GENDER_KEYWORDS[genderKey].some(k => haystack.includes(k));
+    const hasOpposite = GENDER_KEYWORDS[oppositeKey].some(k => haystack.includes(k));
+    // If product explicitly says opposite gender, exclude
+    if (hasOpposite && !hasGender) return false;
+  }
+
+  if (navFilter === 'acc') {
+    // Accessories: match any accessories keyword
+    const accKeywords = [...CATEGORY_KEYWORDS['Jewellery'], ...CATEGORY_KEYWORDS['Footwear'], ...CATEGORY_KEYWORDS['Belts & Wallets']];
+    if (!accKeywords.some(k => haystack.includes(k))) return false;
+    if (!navSubcat) return true;
+  }
+
+  // Subcategory filter
+  if (navSubcat) {
+    const keywords = CATEGORY_KEYWORDS[navSubcat] || [];
+    return keywords.some(k => haystack.includes(k));
+  }
+
+  return true;
+}
+
 function getFiltered() {
-  let list = [...products];
+  let list = products.filter(p => {
+    if (brandFilter !== 'all' && p.brandId !== brandFilter) return false;
+    return matchesNav(p);
+  });
 
-  if (brandFilter !== 'all') list = list.filter(p => p.brandId === brandFilter);
-  if (filter === 'new')   list = list.filter(p => p.isNew);
-  if (filter === 'sale')  list = list.filter(p => p.isSale);
-  if (filter === 'saved') list = list.filter(p => wishlist.has(p.id));
-
-  if (sort === 'price-asc')  list.sort((a,b) => effectivePrice(a) - effectivePrice(b));
-  if (sort === 'price-desc') list.sort((a,b) => effectivePrice(b) - effectivePrice(a));
+  if (sort === 'price-asc')  list.sort((a,b) => ep(a) - ep(b));
+  if (sort === 'price-desc') list.sort((a,b) => ep(b) - ep(a));
   if (sort === 'newest')     list.sort((a,b) => new Date(b.publishedAt||0) - new Date(a.publishedAt||0));
   if (sort === 'discount')   list.sort((a,b) => b.discountPct - a.discountPct);
   if (sort === 'az')         list.sort((a,b) => a.name.localeCompare(b.name));
@@ -393,11 +609,12 @@ function getFiltered() {
   return list;
 }
 
-function effectivePrice(p) { return p.isSale && p.price ? p.price : (p.price || 9999); }
+function ep(p) { return p.isSale && p.price ? p.price : (p.price || 9999); }
 
+// ── RENDER ────────────────────────────────────────────────
 function render() {
   const list = getFiltered();
-  const showSections = filter === 'all';
+  const showSections = (navFilter === 'all');
 
   const newItems  = showSections ? list.filter(p => p.isNew)  : [];
   const saleItems = showSections ? list.filter(p => p.isSale) : [];
@@ -406,26 +623,32 @@ function render() {
   document.getElementById('newSection').style.display  = showSections && newItems.length  ? '' : 'none';
   document.getElementById('saleSection').style.display = showSections && saleItems.length ? '' : 'none';
 
-  document.getElementById('newMeta').textContent  = `${newItems.length} items added this week`;
-  document.getElementById('saleMeta').textContent = `${saleItems.length} items 10%+ off`;
+  document.getElementById('newMeta').textContent  = `${newItems.length} items`;
+  document.getElementById('saleMeta').textContent = `${saleItems.length} items`;
   document.getElementById('allMeta').textContent  = `${restItems.length} items`;
 
   document.getElementById('newGrid').innerHTML  = newItems.map((p,i)  => card(p, i*25)).join('');
   document.getElementById('saleGrid').innerHTML = saleItems.map((p,i) => card(p, i*25)).join('');
 
-  if (restItems.length === 0 && filter !== 'all') {
+  if (restItems.length === 0) {
     document.getElementById('allGrid').innerHTML = `
       <div class="empty" style="grid-column:1/-1">
-        <h3>${filter === 'saved' ? 'No saved items yet' : 'No items match'}</h3>
-        <p>${filter === 'saved' ? 'Click the ♡ on any product to save it here.' : 'Try changing your filters.'}</p>
+        <h3>${navFilter === 'saved' ? 'No saved items yet' : 'No items found'}</h3>
+        <p>${navFilter === 'saved'
+          ? 'Click ♡ on any product to save it here.'
+          : navSubcat
+          ? `No products matched "${navSubcat}" — the brands may not carry this category yet, or try browsing All.`
+          : 'Try a different filter or refresh the feed.'
+        }</p>
       </div>`;
   } else {
     document.getElementById('allGrid').innerHTML = restItems.map((p,i) => card(p, i*20)).join('');
   }
 }
 
+// ── CARD ──────────────────────────────────────────────────
 function card(p, delay = 0) {
-  const ep = effectivePrice(p);
+  const price = ep(p);
   const isWished = wishlist.has(p.id);
   const imgHtml = p.image
     ? `<img class="card-img" src="${p.image}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
@@ -438,7 +661,7 @@ function card(p, delay = 0) {
       <span>${esc(p.brandName)}</span>
     </div>
     <div class="card-badges">
-      ${p.isNew  ? '<span class="badge badge-new">New</span>'            : ''}
+      ${p.isNew  ? '<span class="badge badge-new">New</span>' : ''}
       ${p.isSale ? `<span class="badge badge-sale">−${p.discountPct}%</span>` : ''}
     </div>
     <button class="card-wish ${isWished?'on':''}" onclick="toggleWish(event,'${p.id}')">${isWished?'♥':'♡'}</button>
@@ -446,14 +669,14 @@ function card(p, delay = 0) {
       <div class="card-brand">${esc(p.brandName)}</div>
       <div class="card-name">${esc(p.name)}</div>
       <div class="card-price">
-        <span class="price ${p.isSale?'sale':''}">₹${fmt(ep)}</span>
+        <span class="price ${p.isSale?'sale':''}">₹${fmt(price)}</span>
         ${p.isSale && p.comparePrice ? `<span class="price-was">₹${fmt(p.comparePrice)}</span><span class="price-off">−${p.discountPct}%</span>` : ''}
       </div>
     </div>
   </div>`;
 }
 
-// ── Modal ─────────────────────────────────────────────────
+// ── MODAL ─────────────────────────────────────────────────
 function openModal(id) {
   const p = products.find(x => x.id === id);
   if (!p) return;
@@ -466,10 +689,10 @@ function openModal(id) {
   document.getElementById('mBrand').textContent = p.brandName;
   document.getElementById('mName').textContent  = p.name;
 
-  const ep = effectivePrice(p);
+  const price = ep(p);
   document.getElementById('mPriceRow').innerHTML = p.isSale
-    ? `<span class="modal-price sale">₹${fmt(ep)}</span><span class="price-was" style="font-size:16px">₹${fmt(p.comparePrice)}</span><span class="price-off">−${p.discountPct}%</span>`
-    : `<span class="modal-price">₹${fmt(ep)}</span>`;
+    ? `<span class="modal-price sale">₹${fmt(price)}</span><span class="price-was" style="font-size:16px">₹${fmt(p.comparePrice)}</span><span class="price-off">−${p.discountPct}%</span>`
+    : `<span class="modal-price">₹${fmt(price)}</span>`;
 
   const tags = [p.category, ...(p.tags||[])].filter(Boolean).slice(0,6);
   document.getElementById('mTags').innerHTML = tags.map(t => `<span class="modal-tag">${esc(t)}</span>`).join('');
@@ -484,7 +707,7 @@ function openModal(id) {
     Brand: ${esc(p.brandName)}<br>
     Category: ${esc(p.category||'Clothing')}<br>
     ${p.publishedAt ? `Published: ${new Date(p.publishedAt).toLocaleDateString('en-IN',{year:'numeric',month:'long',day:'numeric'})}` : ''}
-    ${p.isSale ? `<br><strong style="color:var(--sale-red)">SALE — Save ₹${fmt(p.comparePrice - ep)}</strong>` : ''}
+    ${p.isSale ? `<br><strong style="color:var(--sale-red)">SALE — Save ₹${fmt(p.comparePrice - price)}</strong>` : ''}
   `;
 
   document.getElementById('modalBg').classList.add('open');
@@ -495,30 +718,18 @@ function closeModal() {
   document.getElementById('modalBg').classList.remove('open');
   document.body.style.overflow = '';
 }
+function maybeClose(e) { if (e.target === document.getElementById('modalBg')) closeModal(); }
 
-function maybeClose(e) {
-  if (e.target === document.getElementById('modalBg')) closeModal();
-}
-
-// ── Wishlist ──────────────────────────────────────────────
+// ── WISHLIST ──────────────────────────────────────────────
 function toggleWish(e, id) {
   e.stopPropagation();
   if (wishlist.has(id)) { wishlist.delete(id); showToast('Removed from saved'); }
-  else { wishlist.add(id); showToast('♥ Saved to your collection'); }
+  else                  { wishlist.add(id);    showToast('♥ Saved to your collection'); }
   localStorage.setItem('wishlist', JSON.stringify([...wishlist]));
   render();
 }
 
-// ── Controls ──────────────────────────────────────────────
-function setFilter(f, btn) {
-  filter = f;
-  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  render();
-}
-
-function setSort(v) { sort = v; render(); }
-
+// ── BRAND CHIPS ───────────────────────────────────────────
 function buildBrandChips() {
   document.getElementById('brandChips').innerHTML =
     `<button class="chip active" onclick="setBrand('all',this)">All</button>` +
@@ -532,16 +743,63 @@ function setBrand(id, btn) {
   render();
 }
 
-// ── Ticker ────────────────────────────────────────────────
+function setSort(v) { sort = v; render(); }
+
+// ── TICKER ────────────────────────────────────────────────
 function updateTicker() {
   const saleItems = products.filter(p => p.isSale).slice(0, 15);
   if (!saleItems.length) return;
-  const text = saleItems.map(p => `  ·  ${p.brandName}: ${p.name} — ₹${fmt(effectivePrice(p))} (was ₹${fmt(p.comparePrice)}, −${p.discountPct}%)`).join('  ') + '  ';
+  const text = saleItems.map(p => `  ·  ${p.brandName}: ${p.name} — ₹${fmt(ep(p))} (was ₹${fmt(p.comparePrice)}, −${p.discountPct}%)`).join('  ') + '  ';
   document.getElementById('tickerTrack').textContent = text + text;
 }
 
-// ── Utilities ─────────────────────────────────────────────
-function setLoaderProgress(pct, msg) {
+// ── FETCH ─────────────────────────────────────────────────
+async function loadProducts(isRefresh = false) {
+  if (isRefresh) showToast('Refreshing your feed…');
+  setLoader(20, 'Connecting to your brands…');
+
+  try {
+    const res = await fetch(`/api/products${isRefresh ? '?bust=' + Date.now() : ''}`);
+    if (!res.ok) throw new Error(`Server error: ${res.status}`);
+    const data = await res.json();
+
+    products = data.products || [];
+
+    const brandMap = {};
+    products.forEach(p => { brandMap[p.brandId] = p.brandName; });
+    brands = Object.entries(brandMap).map(([id,name]) => ({id,name}));
+
+    if (data.meta?.errors?.length) {
+      showError(`Could not fetch from: ${data.meta.errors.map(e=>e.brand).join(', ')}`);
+    }
+
+    document.getElementById('sTotal').textContent  = products.length;
+    document.getElementById('sNew').textContent    = products.filter(p=>p.isNew).length;
+    document.getElementById('sSale').textContent   = products.filter(p=>p.isSale).length;
+    document.getElementById('sBrands').textContent = brands.length;
+
+    buildBrandChips();
+    updateTicker();
+    render();
+
+    const ago = data.meta?.fetchedAt ? timeAgo(new Date(data.meta.fetchedAt)) : 'just now';
+    document.getElementById('metaText').textContent = `Updated ${ago}`;
+    document.getElementById('footerText').textContent =
+      `CURATED · ${products.length} products · ${brands.length} brands · Refreshes every Monday`;
+
+    setLoader(100, 'Done!');
+    setTimeout(() => document.getElementById('loader').classList.add('hide'), 400);
+    if (isRefresh) showToast(`✓ Refreshed — ${products.filter(p=>p.isNew).length} new items`);
+
+  } catch(e) {
+    setLoader(100, 'Error loading products');
+    setTimeout(() => document.getElementById('loader').classList.add('hide'), 400);
+    showError('Failed to load: ' + e.message);
+  }
+}
+
+// ── UTILS ─────────────────────────────────────────────────
+function setLoader(pct, msg) {
   document.getElementById('loaderFill').style.width = pct + '%';
   document.getElementById('loaderSub').textContent = msg;
 }
@@ -557,16 +815,15 @@ function showError(msg) {
 }
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function fmt(n) { return Math.round(n||0).toLocaleString('en-IN'); }
-function timeAgo(date) {
-  const s = Math.floor((Date.now() - date) / 1000);
-  if (s < 60) return 'just now';
-  if (s < 3600) return `${Math.floor(s/60)}m ago`;
-  if (s < 86400) return `${Math.floor(s/3600)}h ago`;
+function timeAgo(d) {
+  const s = Math.floor((Date.now()-d)/1000);
+  if(s<60) return 'just now';
+  if(s<3600) return `${Math.floor(s/60)}m ago`;
+  if(s<86400) return `${Math.floor(s/3600)}h ago`;
   return `${Math.floor(s/86400)}d ago`;
 }
 
-// ── Boot ──────────────────────────────────────────────────
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 loadProducts();
 </script>
 </body>
