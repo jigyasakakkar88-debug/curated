@@ -1,0 +1,328 @@
+const https = require('https');
+
+const GITHUB_TOKEN   = process.env.GITHUB_TOKEN      || "";
+const GITHUB_REPO    = process.env.GITHUB_REPO       || "";
+const GOOGLE_KEY     = process.env.GOOGLE_SEARCH_KEY || "";
+const GOOGLE_CX      = process.env.GOOGLE_CX         || "";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD    || "changeme123";
+const GITHUB_BRANCH  = "main";
+
+module.exports = async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  if (req.method === "OPTIONS") return res.status(200).end();
+
+  if (req.headers["authorization"] !== `Bearer ${ADMIN_PASSWORD}`) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  if (!GOOGLE_KEY || !GOOGLE_CX) {
+    return res.status(500).json({ error: "Google Search not configured. Set GOOGLE_SEARCH_KEY and GOOGLE_CX in Vercel." });
+  }
+
+  try {
+    // 1. Load brands + existing recommendations in parallel
+    const [brands, recData] = await Promise.all([
+      readFromGitHub('brands.json').catch(() => []),
+      readFromGitHub('recommendations.json').catch(() => ({ pending: [], rejected: [] })),
+    ]);
+
+    const existingUrls = new Set(brands.map(b => rootDomain(b.url)).filter(Boolean));
+    const rejectedIds  = new Set(recData.rejected || []);
+    const pendingUrls  = new Set((recData.pending || []).map(r => rootDomain(r.url)).filter(Boolean));
+
+    // 2. Sample products from each brand to build style fingerprint
+    const samples = await Promise.allSettled(
+      brands.map(b => fetchJson(`${b.url.replace(/\/$/, '')}/products.json?limit=20`))
+    );
+
+    const tagFreq = {}, catFreq = {};
+    let priceSum = 0, priceN = 0;
+
+    samples.forEach(r => {
+      if (r.status !== 'fulfilled' || !r.value?.products) return;
+      r.value.products.forEach(p => {
+        const tags = Array.isArray(p.tags) ? p.tags : (p.tags || '').split(', ');
+        tags.forEach(t => {
+          const k = t.toLowerCase().trim();
+          if (k.length > 2) tagFreq[k] = (tagFreq[k] || 0) + 1;
+        });
+        if (p.product_type) catFreq[p.product_type] = (catFreq[p.product_type] || 0) + 1;
+        const price = parseFloat(p.variants?.[0]?.price || 0);
+        if (price > 0) { priceSum += price; priceN++; }
+      });
+    });
+
+    const topTags = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([t]) => t);
+    const topCats = Object.entries(catFreq).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([c]) => c);
+    const avgPrice = priceN > 0 ? Math.round(priceSum / priceN) : 0;
+
+    // 3. Build search queries based on style fingerprint
+    const queries = buildQueries(brands, topTags, topCats);
+
+    // 4. Run all Google searches in parallel
+    const searchResults = await Promise.allSettled(queries.map(q => googleSearch(q.query)));
+
+    // 5. Collect unique candidate URLs with the reason that surfaced them
+    const candidates = new Map();
+    searchResults.forEach((r, i) => {
+      if (r.status !== 'fulfilled') return;
+      (r.value.items || []).forEach(item => {
+        const url = rootDomain(item.link);
+        if (!url) return;
+        if (existingUrls.has(url) || pendingUrls.has(url)) return;
+        if (!candidates.has(url)) {
+          candidates.set(url, {
+            query:   queries[i].query,
+            reason:  queries[i].reason,
+            title:   item.title,
+            snippet: item.snippet || '',
+          });
+        }
+      });
+    });
+
+    // 6. Test candidates for Shopify — cap at 12 to stay within function timeout
+    const candidateList = [...candidates.entries()].slice(0, 12);
+    const shopifyTests  = await Promise.allSettled(candidateList.map(([url]) => testShopify(url)));
+
+    // 7. Build new recommendation objects
+    const newRecs = [];
+    shopifyTests.forEach((r, i) => {
+      if (r.status !== 'fulfilled' || !r.value.valid) return;
+      const [url, meta] = candidateList[i];
+      const id = makeId(url);
+      if (rejectedIds.has(id)) return;
+
+      newRecs.push({
+        id,
+        name:          guessName(meta.title, url),
+        url,
+        reason:        meta.reason,
+        searchQuery:   meta.query,
+        sampleProduct: r.value.sampleProduct,
+        productCount:  r.value.productCount,
+        discoveredAt:  new Date().toISOString(),
+      });
+    });
+
+    // 8. Merge with existing pending, avoid duplicates
+    const existingPendingIds = new Set((recData.pending || []).map(r => r.id));
+    const merged = [
+      ...(recData.pending || []),
+      ...newRecs.filter(r => !existingPendingIds.has(r.id)),
+    ];
+
+    const updated = { pending: merged, rejected: recData.rejected || [] };
+    let sha = null;
+    try { sha = await getFileSha('recommendations.json'); } catch {}
+    await writeToGitHub('recommendations.json', updated, sha, `Discover: +${newRecs.length} recommendations`);
+
+    return res.status(200).json({
+      success: true,
+      newFound:      newRecs.length,
+      totalPending:  merged.length,
+      pending:       merged,
+      styleFingerprint: { topTags, topCats, avgPrice },
+    });
+
+  } catch (e) {
+    return res.status(500).json({ success: false, error: e.message });
+  }
+};
+
+// ── Query builder ─────────────────────────────────────────
+
+function buildQueries(brands, topTags, topCats) {
+  const queries = [];
+
+  // Similarity to existing brands
+  brands.slice(0, 2).forEach(b => {
+    queries.push({
+      query:  `brands similar to "${b.name}" india clothing online store`,
+      reason: `Similar in style to ${b.name}, one of your favourite brands`,
+    });
+  });
+
+  // Style tag based
+  const styleTags = topTags.filter(t => t.length > 3).slice(0, 3);
+  if (styleTags.length >= 2) {
+    queries.push({
+      query:  `${styleTags.slice(0, 2).join(' ')} india clothing brand online store`,
+      reason: `Matches your style tags: ${styleTags.slice(0, 2).join(', ')}`,
+    });
+  }
+
+  // Category based
+  topCats.slice(0, 2).forEach(cat => {
+    queries.push({
+      query:  `${cat} india artisan brand online store`,
+      reason: `Matches your favourite category: ${cat}`,
+    });
+  });
+
+  // Always-on broad queries
+  queries.push({
+    query:  'indie indian sustainable fashion brand ethnic wear online store',
+    reason: 'Independent Indian sustainable fashion brand matching your aesthetic',
+  });
+  queries.push({
+    query:  'handloom india clothing label artisan craft online store',
+    reason: 'Handloom Indian clothing brand matching your taste',
+  });
+
+  return queries.slice(0, 8); // cap at 8 to stay within free tier (100/day)
+}
+
+// ── Google Custom Search ──────────────────────────────────
+
+function googleSearch(query) {
+  return new Promise((resolve, reject) => {
+    const qs = `key=${encodeURIComponent(GOOGLE_KEY)}&cx=${encodeURIComponent(GOOGLE_CX)}&num=10&q=${encodeURIComponent(query)}`;
+    const req = https.get(
+      `https://www.googleapis.com/customsearch/v1?${qs}`,
+      { headers: { 'Accept': 'application/json' }, timeout: 10000 },
+      (resp) => {
+        let data = '';
+        resp.on('data', c => data += c);
+        resp.on('end', () => {
+          try { resolve(JSON.parse(data)); }
+          catch { reject(new Error('Invalid JSON from Google')); }
+        });
+      }
+    );
+    req.on('error', reject);
+    req.on('timeout', () => { req.destroy(); reject(new Error('Google search timed out')); });
+  });
+}
+
+// ── Shopify tester ────────────────────────────────────────
+
+function testShopify(url) {
+  return new Promise((resolve) => {
+    const testUrl = `${url}/products.json?limit=3`;
+    const req = https.get(testUrl, {
+      headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' },
+      timeout: 8000,
+    }, (resp) => {
+      if (resp.statusCode >= 300 && resp.statusCode < 400 && resp.headers.location) {
+        resolve({ valid: false }); return;
+      }
+      let data = '';
+      resp.on('data', c => data += c);
+      resp.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          if (!parsed.products || !Array.isArray(parsed.products)) {
+            resolve({ valid: false }); return;
+          }
+          resolve({
+            valid:         true,
+            productCount:  parsed.products.length,
+            sampleProduct: parsed.products[0]?.title || null,
+          });
+        } catch { resolve({ valid: false }); }
+      });
+    });
+    req.on('error', () => resolve({ valid: false }));
+    req.on('timeout', () => { req.destroy(); resolve({ valid: false }); });
+  });
+}
+
+// ── Utils ─────────────────────────────────────────────────
+
+function rootDomain(urlStr) {
+  try {
+    const u = new URL(urlStr);
+    return `${u.protocol}//${u.hostname}`;
+  } catch { return null; }
+}
+
+function makeId(url) {
+  return (rootDomain(url) || url)
+    .replace(/https?:\/\/(www\.)?/, '')
+    .replace(/[^a-z0-9]/gi, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase();
+}
+
+function guessName(title, url) {
+  if (title) {
+    const clean = title.replace(/\s*[|–—\-:]\s*.*/,'').trim();
+    if (clean.length > 1 && clean.length < 60) return clean;
+  }
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, '').split('.')[0];
+    return host.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  } catch { return url; }
+}
+
+function fetchJson(urlStr) {
+  return new Promise((resolve, reject) => {
+    const req = https.get(urlStr, {
+      headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' },
+      timeout: 10000,
+    }, (resp) => {
+      let data = '';
+      resp.on('data', c => data += c);
+      resp.on('end', () => {
+        try { resolve(JSON.parse(data)); }
+        catch { reject(new Error('Invalid JSON')); }
+      });
+    });
+    req.on('error', reject);
+    req.on('timeout', () => { req.destroy(); reject(new Error('Timed out')); });
+  });
+}
+
+// ── GitHub helpers ────────────────────────────────────────
+
+function githubRequest(method, path, body) {
+  return new Promise((resolve, reject) => {
+    const bodyStr = body ? JSON.stringify(body) : null;
+    const options = {
+      hostname: 'api.github.com',
+      path,
+      method,
+      headers: {
+        'Authorization': `token ${GITHUB_TOKEN}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'curated-style-aggregator',
+        'Content-Type': 'application/json',
+        ...(bodyStr ? { 'Content-Length': Buffer.byteLength(bodyStr) } : {}),
+      },
+    };
+    const req = https.request(options, (resp) => {
+      let data = '';
+      resp.on('data', c => data += c);
+      resp.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          if (resp.statusCode >= 400) reject(new Error(parsed.message || `GitHub ${resp.statusCode}`));
+          else resolve(parsed);
+        } catch { reject(new Error('Invalid GitHub response')); }
+      });
+    });
+    req.on('error', reject);
+    if (bodyStr) req.write(bodyStr);
+    req.end();
+  });
+}
+
+async function readFromGitHub(filename) {
+  const resp = await githubRequest('GET', `/repos/${GITHUB_REPO}/contents/${filename}?ref=${GITHUB_BRANCH}`);
+  return JSON.parse(Buffer.from(resp.content, 'base64').toString('utf8'));
+}
+
+async function getFileSha(filename) {
+  const resp = await githubRequest('GET', `/repos/${GITHUB_REPO}/contents/${filename}?ref=${GITHUB_BRANCH}`);
+  return resp.sha;
+}
+
+async function writeToGitHub(filename, data, sha, message) {
+  const content = Buffer.from(JSON.stringify(data, null, 2)).toString('base64');
+  return githubRequest('PUT', `/repos/${GITHUB_REPO}/contents/${filename}`, {
+    message, content, branch: GITHUB_BRANCH, ...(sha ? { sha } : {}),
+  });
+}

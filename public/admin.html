@@ -94,6 +94,23 @@ input:focus { border-color:var(--accent); }
 /* CONFIG WARNING */
 .config-warn { background:#fff8f0; border:1px solid #f0d8b8; padding:16px; font-size:12px; line-height:1.8; color:var(--warn); font-family:'DM Mono',monospace; display:none; margin-bottom:16px; }
 
+/* DISCOVER */
+.btn-discover { width:100%; padding:12px; background:var(--ink); color:var(--paper); border:none; font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.btn-discover:hover { background:var(--accent); }
+.btn-discover:disabled { opacity:0.5; cursor:not-allowed; }
+.discover-status { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); line-height:1.8; padding:10px 0; border-bottom:1px solid var(--border); margin-bottom:4px; }
+.rec-card { border:1px solid var(--border); padding:16px; margin-top:10px; background:white; }
+.rec-name { font-size:14px; font-weight:500; margin-bottom:2px; }
+.rec-url { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.rec-reason { font-size:12px; color:var(--ink); margin-bottom:6px; line-height:1.5; background:var(--warm); padding:8px 10px; border-left:2px solid var(--accent); }
+.rec-meta { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:10px; }
+.rec-actions { display:flex; gap:8px; }
+.btn-accept { padding:7px 16px; background:var(--ok); color:white; border:none; font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; font-family:'DM Mono',monospace; }
+.btn-accept:hover { opacity:0.85; }
+.btn-dismiss { padding:7px 14px; background:none; border:1px solid var(--border); color:var(--muted); font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; font-family:'DM Mono',monospace; }
+.btn-dismiss:hover { border-color:var(--err); color:var(--err); }
+.rec-empty { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); padding:16px 0; line-height:1.8; }
+
 /* TOAST */
 .toast { position:fixed; bottom:24px; right:24px; background:var(--ink); color:var(--paper); padding:14px 20px; font-size:12px; border-left:3px solid var(--accent); z-index:500; opacity:0; transform:translateY(8px); transition:all 0.3s; pointer-events:none; font-family:'Jost',sans-serif; }
 .toast.show { opacity:1; transform:translateY(0); }
@@ -142,6 +159,19 @@ input:focus { border-color:var(--accent); }
       </div>
       <div class="panel-body" id="brandList">
         <div class="empty-brands">Loading brands…</div>
+      </div>
+    </div>
+
+    <!-- DISCOVER -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Discover Brands</div>
+        <div class="panel-meta" id="recCount"></div>
+      </div>
+      <div class="panel-body">
+        <button class="btn-discover" id="discoverBtn" onclick="runDiscovery()">✦ Find New Brands</button>
+        <div class="discover-status" id="discoverStatus" style="display:none"></div>
+        <div id="recList"></div>
       </div>
     </div>
 
@@ -253,6 +283,7 @@ function doLogin() {
     if (ok) {
       document.getElementById('loginScreen').style.display = 'none';
       loadSettings();
+      loadRecommendations();
     } else {
       document.getElementById('loginErr').style.display = 'block';
       password = '';
@@ -425,6 +456,106 @@ function renderBrandList() {
     </div>
   `).join('');
 }
+
+// ── Discover ──────────────────────────────────────────────
+
+async function loadRecommendations() {
+  try {
+    const res  = await fetch('/api/recommendations', { headers: { 'Authorization': `Bearer ${password}` } });
+    const data = await res.json();
+    renderRecommendations(data.pending || []);
+  } catch {}
+}
+
+async function runDiscovery() {
+  const btn    = document.getElementById('discoverBtn');
+  const status = document.getElementById('discoverStatus');
+  btn.disabled = true;
+  btn.textContent = 'Searching…';
+  status.style.display = 'block';
+  status.textContent = 'Analysing your style and searching for similar brands… (this takes ~15 seconds)';
+
+  try {
+    const res  = await fetch('/api/discover', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${password}`, 'Content-Type': 'application/json' },
+    });
+    const data = await res.json();
+    if (data.success) {
+      const msg = data.newFound > 0
+        ? `Found ${data.newFound} new brand${data.newFound !== 1 ? 's' : ''}!`
+        : 'No new brands found this time — try again later.';
+      status.textContent = msg;
+      renderRecommendations(data.pending || []);
+    } else {
+      status.textContent = 'Error: ' + (data.error || 'unknown');
+    }
+  } catch (e) {
+    status.textContent = 'Error: ' + e.message;
+  }
+
+  btn.disabled = false;
+  btn.textContent = '✦ Find New Brands';
+}
+
+async function acceptRec(id) {
+  const res  = await fetch('/api/recommendations', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${password}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, action: 'accept' }),
+  });
+  const data = await res.json();
+  if (data.success) {
+    currentBrands = data.brands || currentBrands;
+    renderBrandList();
+    renderRecommendations(data.pending || []);
+    showToast('✓ Brand added to your feed — site updates in ~1 minute');
+  } else {
+    showToast('Error: ' + (data.error || 'unknown'));
+  }
+}
+
+async function dismissRec(id) {
+  const res  = await fetch('/api/recommendations', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${password}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id, action: 'reject' }),
+  });
+  const data = await res.json();
+  if (data.success) {
+    renderRecommendations(data.pending || []);
+    showToast('Dismissed');
+  }
+}
+
+function renderRecommendations(recs) {
+  const listEl  = document.getElementById('recList');
+  const countEl = document.getElementById('recCount');
+  countEl.textContent = recs.length ? `${recs.length} pending` : '';
+
+  if (!recs.length) {
+    listEl.innerHTML = `<div class="rec-empty">No recommendations yet.<br>Click "Find New Brands" to discover brands that match your style.</div>`;
+    return;
+  }
+
+  listEl.innerHTML = recs.map(r => `
+    <div class="rec-card">
+      <div class="rec-name">${esc(r.name)}</div>
+      <div class="rec-url"><a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:var(--muted)">${esc(r.url)}</a></div>
+      <div class="rec-reason">💡 ${esc(r.reason)}</div>
+      <div class="rec-meta">
+        ${r.productCount ? `${r.productCount}+ products` : ''}
+        ${r.sampleProduct ? ` &nbsp;·&nbsp; e.g. "${esc(r.sampleProduct)}"` : ''}
+      </div>
+      <div class="rec-actions">
+        <button class="btn-accept" onclick="acceptRec('${esc(r.id)}')">+ Add Brand</button>
+        <button class="btn-dismiss" onclick="dismissRec('${esc(r.id)}')">Dismiss</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── Toast + utils ─────────────────────────────────────────
 
 function showToast(msg) {
   const t = document.getElementById('toast');
