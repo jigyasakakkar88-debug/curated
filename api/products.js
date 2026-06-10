@@ -1,18 +1,15 @@
-// api/products.js
-// Reads brands list from GitHub repo (brands.json), falls back to defaults
 const https = require('https');
 const http  = require('http');
 
 const GITHUB_TOKEN  = process.env.GITHUB_TOKEN || "";
 const GITHUB_REPO   = process.env.GITHUB_REPO  || "";
 const GITHUB_BRANCH = "main";
-const BRANDS_FILE   = "brands.json";
-const SALE_THRESHOLD = 10;
 
-const DEFAULT_BRANDS = [
+const DEFAULT_BRANDS   = [
   { id: "gangafashions", name: "Ganga Fashions", url: "https://gangafashions.com" },
-  { id: "kharakapas",    name: "Khara Kapas",    url: "https://kharakapas.com"    }
+  { id: "kharakapas",    name: "Khara Kapas",    url: "https://kharakapas.com"    },
 ];
+const DEFAULT_SETTINGS = { saleThreshold: 10, newDays: 7 };
 
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -21,18 +18,26 @@ module.exports = async function handler(req, res) {
 
   if (req.method === "OPTIONS") return res.status(200).end();
 
-  // Load brands from GitHub, fall back to defaults
-  let brands = DEFAULT_BRANDS;
-  try {
-    if (GITHUB_TOKEN && GITHUB_REPO) {
-      brands = await readBrandsFromGitHub();
-    } else if (process.env.BRANDS_JSON) {
+  // Load brands + settings in parallel
+  let brands   = DEFAULT_BRANDS;
+  let settings = DEFAULT_SETTINGS;
+
+  if (GITHUB_TOKEN && GITHUB_REPO) {
+    const [b, s] = await Promise.all([
+      readFromGitHub('brands.json').catch(() => null),
+      readFromGitHub('settings.json').catch(() => null),
+    ]);
+    if (b) brands   = b;
+    if (s) settings = { ...DEFAULT_SETTINGS, ...s };
+  } else if (process.env.BRANDS_JSON) {
+    try {
       const parsed = JSON.parse(process.env.BRANDS_JSON);
       if (Array.isArray(parsed) && parsed.length > 0) brands = parsed;
-    }
-  } catch(e) {
-    console.error('Could not load brands from GitHub, using defaults:', e.message);
+    } catch {}
   }
+
+  const SALE_THRESHOLD = settings.saleThreshold ?? 10;
+  const NEW_MS         = (settings.newDays ?? 7) * 24 * 60 * 60 * 1000;
 
   const results = await Promise.allSettled(brands.map(brand => fetchBrand(brand)));
 
@@ -45,11 +50,10 @@ module.exports = async function handler(req, res) {
   });
 
   const now = Date.now();
-  const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
 
   const enriched = allProducts.map(p => ({
     ...p,
-    isNew: p.publishedAt ? (now - new Date(p.publishedAt).getTime()) < SEVEN_DAYS : false,
+    isNew:  p.publishedAt ? (now - new Date(p.publishedAt).getTime()) < NEW_MS : false,
     isSale: p.comparePrice && p.comparePrice > p.price
       ? ((p.comparePrice - p.price) / p.comparePrice * 100) >= SALE_THRESHOLD
       : false,
@@ -61,23 +65,24 @@ module.exports = async function handler(req, res) {
   return res.status(200).json({
     products: enriched,
     meta: {
-      fetchedAt: new Date().toISOString(),
+      fetchedAt:     new Date().toISOString(),
       totalProducts: enriched.length,
-      newProducts: enriched.filter(p => p.isNew).length,
-      saleProducts: enriched.filter(p => p.isSale).length,
-      brands: brands.length,
-      errors: errors.length > 0 ? errors : undefined,
+      newProducts:   enriched.filter(p => p.isNew).length,
+      saleProducts:  enriched.filter(p => p.isSale).length,
+      brands:        brands.length,
+      settings:      { saleThreshold: SALE_THRESHOLD, newDays: settings.newDays ?? 7 },
+      errors:        errors.length > 0 ? errors : undefined,
     }
   });
 };
 
-// ── GitHub brand reader ───────────────────────────────────
+// ── GitHub helpers ────────────────────────────────────────
 
-async function readBrandsFromGitHub() {
+function readFromGitHub(filename) {
   return new Promise((resolve, reject) => {
     const options = {
       hostname: 'api.github.com',
-      path: `/repos/${GITHUB_REPO}/contents/${BRANDS_FILE}?ref=${GITHUB_BRANCH}`,
+      path: `/repos/${GITHUB_REPO}/contents/${filename}?ref=${GITHUB_BRANCH}`,
       method: 'GET',
       headers: {
         'Authorization': `token ${GITHUB_TOKEN}`,
@@ -85,17 +90,15 @@ async function readBrandsFromGitHub() {
         'User-Agent': 'curated-style-aggregator',
       },
     };
-
     const req = https.request(options, (resp) => {
       let data = '';
       resp.on('data', c => data += c);
       resp.on('end', () => {
         try {
           const parsed = JSON.parse(data);
-          if (resp.statusCode === 404) return resolve(DEFAULT_BRANDS);
+          if (resp.statusCode === 404) return resolve(null);
           if (resp.statusCode >= 400) return reject(new Error(parsed.message));
-          const content = Buffer.from(parsed.content, 'base64').toString('utf8');
-          resolve(JSON.parse(content));
+          resolve(JSON.parse(Buffer.from(parsed.content, 'base64').toString('utf8')));
         } catch(e) { reject(e); }
       });
     });
@@ -124,7 +127,7 @@ function fetchUrl(urlStr) {
       resp.on('data', c => data += c);
       resp.on('end', () => {
         try { resolve(JSON.parse(data)); }
-        catch(e) { reject(new Error('Invalid JSON response')); }
+        catch { reject(new Error('Invalid JSON response')); }
       });
     });
     req.on('error', reject);
@@ -133,7 +136,7 @@ function fetchUrl(urlStr) {
 }
 
 async function fetchBrand(brand) {
-  const baseUrl = brand.url.replace(/\/$/, "");
+  const baseUrl  = brand.url.replace(/\/$/, "");
   const products = [];
   let page = 1;
 
@@ -145,12 +148,12 @@ async function fetchBrand(brand) {
       const type = (product.product_type || "").toLowerCase();
       if (["gift card", "gift-card", "giftcard"].includes(type)) continue;
 
-      const variant = product.variants && product.variants[0];
+      const variant      = product.variants && product.variants[0];
       if (!variant) continue;
 
-      const price       = parseFloat(variant.price || 0);
+      const price        = parseFloat(variant.price || 0);
       const comparePrice = parseFloat(variant.compare_at_price || 0);
-      const image       = product.images && product.images[0] ? product.images[0].src : null;
+      const image        = product.images && product.images[0] ? product.images[0].src : null;
 
       products.push({
         id:             `${brand.id}-${product.id}`,

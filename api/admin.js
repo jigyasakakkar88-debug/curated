@@ -1,13 +1,8 @@
-// api/admin.js
-// Admin panel backend — reads/writes brands.json directly to GitHub repo
-// No redeployment needed for reads; writes trigger auto-redeploy via GitHub
-
 const https = require('https');
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "changeme123";
 const GITHUB_TOKEN   = process.env.GITHUB_TOKEN   || "";
-const GITHUB_REPO    = process.env.GITHUB_REPO    || ""; // e.g. "yourusername/curated"
-const BRANDS_FILE    = "brands.json";
+const GITHUB_REPO    = process.env.GITHUB_REPO    || "";
 const GITHUB_BRANCH  = "main";
 
 module.exports = async function handler(req, res) {
@@ -17,43 +12,69 @@ module.exports = async function handler(req, res) {
 
   if (req.method === "OPTIONS") return res.status(200).end();
 
-  // Auth
   const auth = req.headers["authorization"];
   if (auth !== `Bearer ${ADMIN_PASSWORD}`) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  // Check GitHub is configured
   if (!GITHUB_TOKEN || !GITHUB_REPO) {
     return res.status(500).json({
       error: "GitHub not configured. Please set GITHUB_TOKEN and GITHUB_REPO in Vercel environment variables."
     });
   }
 
-  // GET — return current brands
+  const resource = req.query.resource || "brands";
+
+  // ── Settings ──────────────────────────────────────────────
+
+  if (resource === "settings") {
+    if (req.method === "GET") {
+      try {
+        const { data } = await readFileFromGitHub('settings.json');
+        return res.status(200).json({ settings: data });
+      } catch {
+        return res.status(200).json({ settings: { saleThreshold: 10, newDays: 7 } });
+      }
+    }
+    if (req.method === "POST") {
+      try {
+        const newSettings = req.body;
+        if (typeof newSettings.saleThreshold !== 'number' || typeof newSettings.newDays !== 'number') {
+          return res.status(400).json({ error: "saleThreshold and newDays must be numbers" });
+        }
+        let sha = null;
+        try { ({ sha } = await readFileFromGitHub('settings.json')); } catch {}
+        await writeFileToGitHub('settings.json', newSettings, sha, 'Update settings');
+        return res.status(200).json({ success: true, settings: newSettings });
+      } catch (e) {
+        return res.status(500).json({ error: e.message });
+      }
+    }
+  }
+
+  // ── Brands ────────────────────────────────────────────────
+
   if (req.method === "GET") {
     try {
-      const { brands } = await readBrandsFromGitHub();
+      const { data: brands } = await readFileFromGitHub('brands.json');
       return res.status(200).json({ brands });
-    } catch(e) {
+    } catch (e) {
       return res.status(500).json({ error: e.message });
     }
   }
 
-  // POST ?action=test — test a Shopify URL
   if (req.method === "POST" && req.query.action === "test") {
     const { url } = req.body;
     const result = await testShopifyStore(url);
     return res.status(200).json(result);
   }
 
-  // POST — add a brand
   if (req.method === "POST") {
     const { url, name } = req.body;
     if (!url || !name) return res.status(400).json({ error: "url and name are required" });
 
     try {
-      const { brands, sha } = await readBrandsFromGitHub();
+      const { data: brands, sha } = await readFileFromGitHub('brands.json');
       const id = url.replace(/https?:\/\//, "").replace(/\//g, "").replace(/\./g, "-").toLowerCase();
 
       if (brands.find(b => b.url === url.replace(/\/$/, ""))) {
@@ -61,24 +82,23 @@ module.exports = async function handler(req, res) {
       }
 
       brands.push({ id, name, url: url.replace(/\/$/, "") });
-      await writeBrandsToGitHub(brands, sha, `Add brand: ${name}`);
+      await writeFileToGitHub('brands.json', brands, sha, `Add brand: ${name}`);
 
       return res.status(200).json({ success: true, brands, message: `${name} added! Your site will update in ~1 minute.` });
-    } catch(e) {
+    } catch (e) {
       return res.status(500).json({ error: e.message });
     }
   }
 
-  // DELETE — remove a brand
   if (req.method === "DELETE") {
     const { id } = req.body;
     try {
-      const { brands, sha } = await readBrandsFromGitHub();
+      const { data: brands, sha } = await readFileFromGitHub('brands.json');
       const updated = brands.filter(b => b.id !== id);
       const removed = brands.find(b => b.id === id);
-      await writeBrandsToGitHub(updated, sha, `Remove brand: ${removed?.name || id}`);
+      await writeFileToGitHub('brands.json', updated, sha, `Remove brand: ${removed?.name || id}`);
       return res.status(200).json({ success: true, brands: updated, message: `Brand removed. Site will update in ~1 minute.` });
-    } catch(e) {
+    } catch (e) {
       return res.status(500).json({ error: e.message });
     }
   }
@@ -103,60 +123,40 @@ function githubRequest(method, path, body) {
         ...(bodyStr ? { 'Content-Length': Buffer.byteLength(bodyStr) } : {}),
       },
     };
-
     const req = https.request(options, (resp) => {
       let data = '';
       resp.on('data', c => data += c);
       resp.on('end', () => {
         try {
           const parsed = JSON.parse(data);
-          if (resp.statusCode >= 400) {
-            reject(new Error(parsed.message || `GitHub API error ${resp.statusCode}`));
-          } else {
-            resolve(parsed);
-          }
-        } catch(e) {
+          if (resp.statusCode >= 400) reject(new Error(parsed.message || `GitHub API error ${resp.statusCode}`));
+          else resolve(parsed);
+        } catch (e) {
           reject(new Error('Invalid response from GitHub'));
         }
       });
     });
-
     req.on('error', reject);
     if (bodyStr) req.write(bodyStr);
     req.end();
   });
 }
 
-async function readBrandsFromGitHub() {
-  try {
-    const data = await githubRequest('GET', `/repos/${GITHUB_REPO}/contents/${BRANDS_FILE}?ref=${GITHUB_BRANCH}`);
-    const content = Buffer.from(data.content, 'base64').toString('utf8');
-    const brands = JSON.parse(content);
-    return { brands, sha: data.sha };
-  } catch(e) {
-    // File doesn't exist yet — return defaults
-    if (e.message && e.message.includes('Not Found')) {
-      return {
-        brands: [
-          { id: "gangafashions", name: "Ganga Fashions", url: "https://gangafashions.com" },
-          { id: "kharakapas",    name: "Khara Kapas",    url: "https://kharakapas.com"    }
-        ],
-        sha: null
-      };
-    }
-    throw e;
-  }
+async function readFileFromGitHub(filename) {
+  const resp = await githubRequest('GET', `/repos/${GITHUB_REPO}/contents/${filename}?ref=${GITHUB_BRANCH}`);
+  const content = Buffer.from(resp.content, 'base64').toString('utf8');
+  return { data: JSON.parse(content), sha: resp.sha };
 }
 
-async function writeBrandsToGitHub(brands, sha, commitMessage) {
-  const content = Buffer.from(JSON.stringify(brands, null, 2)).toString('base64');
+async function writeFileToGitHub(filename, data, sha, commitMessage) {
+  const content = Buffer.from(JSON.stringify(data, null, 2)).toString('base64');
   const body = {
     message: commitMessage,
     content,
     branch: GITHUB_BRANCH,
-    ...(sha ? { sha } : {}), // sha required for updates, omit for new file
+    ...(sha ? { sha } : {}),
   };
-  return githubRequest('PUT', `/repos/${GITHUB_REPO}/contents/${BRANDS_FILE}`, body);
+  return githubRequest('PUT', `/repos/${GITHUB_REPO}/contents/${filename}`, body);
 }
 
 // ── Shopify store tester ──────────────────────────────────
@@ -189,7 +189,7 @@ function fetchUrl(urlStr) {
 async function testShopifyStore(url) {
   try {
     const baseUrl = url.replace(/\/$/, "");
-    const result = await fetchUrl(`${baseUrl}/products.json?limit=3`);
+    const result  = await fetchUrl(`${baseUrl}/products.json?limit=3`);
     if (!result.body || !result.body.products) {
       return { valid: false, error: "Not a Shopify store — no products.json found" };
     }
@@ -198,7 +198,7 @@ async function testShopifyStore(url) {
       productCount: result.body.products.length,
       sampleProduct: result.body.products[0]?.title || null,
     };
-  } catch(e) {
+  } catch (e) {
     return { valid: false, error: e.message };
   }
 }

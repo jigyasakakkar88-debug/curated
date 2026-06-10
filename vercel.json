@@ -5,5 +5,11 @@
     { "src": "/admin", "dest": "/public/admin.html" },
     { "src": "/admin.html", "dest": "/public/admin.html" },
     { "src": "^/$", "dest": "/public/index.html" }
+  ],
+  "crons": [
+    {
+      "path": "/api/refresh",
+      "schedule": "0 6 * * 1"
+    }
   ]
 }
