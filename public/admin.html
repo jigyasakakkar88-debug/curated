@@ -487,10 +487,11 @@ async function runDiscovery() {
     });
     const data = await res.json();
     if (data.success) {
+      const d = data.debug || {};
       const msg = data.newFound > 0
         ? `Found ${data.newFound} new brand${data.newFound !== 1 ? 's' : ''}!`
-        : 'No new brands found this time — try again later.';
-      status.textContent = msg;
+        : 'No new brands found this time.';
+      status.textContent = `${msg} | Queries run: ${d.queriesRun ?? '?'} · URLs collected: ${d.candidatesFound ?? '?'} · Shopify tested: ${d.shopifyTested ?? '?'} · Passed: ${d.shopifyPassed ?? '?'}`;
       renderRecommendations(data.pending || []);
     } else {
       status.textContent = 'Error: ' + (data.error || 'unknown');
