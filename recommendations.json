@@ -1,4 +1,225 @@
 {
-  "pending": [],
+  "pending": [
+    {
+      "id": "agashestore-com",
+      "name": "Ganga Fashions",
+      "url": "https://www.agashestore.com",
+      "reason": "Similar in style to Ganga Fashions, one of your favourite brands",
+      "searchQuery": "india fashion brand similar to Ganga Fashions clothing online store",
+      "isShopify": true,
+      "sampleProduct": "SAAYA PRE DRAPED SAREE",
+      "productCount": 3,
+      "discoveredAt": "2026-06-11T08:53:36.270Z"
+    },
+    {
+      "id": "byshree-com",
+      "name": "Top 10 Indian Ethnic Wear Brands Shipping Worldwide",
+      "url": "https://byshree.com",
+      "reason": "Similar in style to Ganga Fashions, one of your favourite brands",
+      "searchQuery": "india fashion brand similar to Ganga Fashions clothing online store",
+      "isShopify": true,
+      "sampleProduct": "Women Liva Pink Floral Print Co-Ord Set",
+      "productCount": 3,
+      "discoveredAt": "2026-06-11T08:53:36.270Z"
+    },
+    {
+      "id": "kalkifashion-com",
+      "name": "Buy Traditional Indian Clothing for Wedding & Special ...",
+      "url": "https://www.kalkifashion.com",
+      "reason": "Similar in style to Ganga Fashions, one of your favourite brands",
+      "searchQuery": "india fashion brand similar to Ganga Fashions clothing online store",
+      "isShopify": true,
+      "sampleProduct": "Minimal Beige Tissue Suit Set",
+      "productCount": 3,
+      "discoveredAt": "2026-06-11T08:53:36.270Z"
+    },
+    {
+      "id": "shauryasanadhya-com",
+      "name": "26 Top and Best Clothing Brands for Women in India for 2026",
+      "url": "https://www.shauryasanadhya.com",
+      "reason": "Similar in style to Ganga Fashions, one of your favourite brands",
+      "searchQuery": "india fashion brand similar to Ganga Fashions clothing online store",
+      "isShopify": true,
+      "sampleProduct": "Red Long Slit Embroidered Dress",
+      "productCount": 3,
+      "discoveredAt": "2026-06-11T08:53:36.270Z"
+    },
+    {
+      "id": "ecocult-com",
+      "name": "22 Sustainable and Ethical South Asian Fashion Brands ...",
+      "url": "https://ecocult.com",
+      "reason": "Similar in style to Khara Kapas, one of your favourite brands",
+      "searchQuery": "india fashion brand similar to Khara Kapas clothing online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.270Z"
+    },
+    {
+      "id": "so-city",
+      "name": "9 Best Local Indie Fashion Brands In India To Check Out",
+      "url": "https://so.city",
+      "reason": "Similar in style to Khara Kapas, one of your favourite brands",
+      "searchQuery": "india fashion brand similar to Khara Kapas clothing online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.270Z"
+    },
+    {
+      "id": "nilamind-com",
+      "name": "Top 10 Brands Like Fabindia For Handcrafted & ...",
+      "url": "https://www.nilamind.com",
+      "reason": "Similar in style to Khara Kapas, one of your favourite brands",
+      "searchQuery": "india fashion brand similar to Khara Kapas clothing online store",
+      "isShopify": true,
+      "sampleProduct": "Hand Block Printed Yellow Skater Dress",
+      "productCount": 3,
+      "discoveredAt": "2026-06-11T08:53:36.270Z"
+    },
+    {
+      "id": "ogaan-com",
+      "name": "Buy KHARAKAPAS designer Womenswear Clothing & ...",
+      "url": "https://www.ogaan.com",
+      "reason": "Similar in style to Khara Kapas, one of your favourite brands",
+      "searchQuery": "india fashion brand similar to Khara Kapas clothing online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.270Z"
+    },
+    {
+      "id": "nykaafashion-com",
+      "name": "Nykaa Fashion",
+      "url": "https://www.nykaafashion.com",
+      "reason": "Similar in style to Khara Kapas, one of your favourite brands",
+      "searchQuery": "india fashion brand similar to Khara Kapas clothing online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.271Z"
+    },
+    {
+      "id": "andaazfashion-com",
+      "name": "Indian Dresses",
+      "url": "https://www.andaazfashion.com",
+      "reason": "Matches your style tags: cotton, casual",
+      "searchQuery": "cotton casual india clothing brand online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.271Z"
+    },
+    {
+      "id": "cbazaar-com",
+      "name": "Buy Casual Indian Ethnic Wear for Women Online",
+      "url": "https://www.cbazaar.com",
+      "reason": "Matches your style tags: cotton, casual",
+      "searchQuery": "cotton casual india clothing brand online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.271Z"
+    },
+    {
+      "id": "trendia-co",
+      "name": "Indian Clothes for Women",
+      "url": "https://trendia.co",
+      "reason": "Matches your style tags: cotton, casual",
+      "searchQuery": "cotton casual india clothing brand online store",
+      "isShopify": true,
+      "sampleProduct": "Women's Guttupusalu Design Long Necklace Set",
+      "productCount": 3,
+      "discoveredAt": "2026-06-11T08:53:36.271Z"
+    },
+    {
+      "id": "utsavfashion-com",
+      "name": "Utsav Fashion",
+      "url": "https://www.utsavfashion.com",
+      "reason": "Matches your style tags: cotton, casual",
+      "searchQuery": "cotton casual india clothing brand online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.271Z"
+    },
+    {
+      "id": "houseofindya-com",
+      "name": "Indian Designer Wear",
+      "url": "https://www.houseofindya.com",
+      "reason": "Matches your style tags: cotton, casual",
+      "searchQuery": "cotton casual india clothing brand online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.271Z"
+    },
+    {
+      "id": "indianclothstore-com",
+      "name": "Indian Dresses Online",
+      "url": "https://www.indianclothstore.com",
+      "reason": "Matches your style tags: cotton, casual",
+      "searchQuery": "cotton casual india clothing brand online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.271Z"
+    },
+    {
+      "id": "azafashions-com",
+      "name": "Aza Fashions",
+      "url": "https://www.azafashions.com",
+      "reason": "Matches your style tags: cotton, casual",
+      "searchQuery": "cotton casual india clothing brand online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.271Z"
+    },
+    {
+      "id": "soch-com",
+      "name": "Indian Ethnic Wear Online",
+      "url": "https://www.soch.com",
+      "reason": "Matches your style tags: cotton, casual",
+      "searchQuery": "cotton casual india clothing brand online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.271Z"
+    },
+    {
+      "id": "inddus-com",
+      "name": "Inddus",
+      "url": "https://www.inddus.com",
+      "reason": "Matches your style tags: cotton, casual",
+      "searchQuery": "cotton casual india clothing brand online store",
+      "isShopify": true,
+      "sampleProduct": "Peach Pure Cotton Lilan Tulip Kurta Set",
+      "productCount": 3,
+      "discoveredAt": "2026-06-11T08:53:36.271Z"
+    },
+    {
+      "id": "us-anitadongre-com",
+      "name": "Luxury Couture by Anita Dongre in USA",
+      "url": "https://us.anitadongre.com",
+      "reason": "Matches your favourite category: Co-ord Set",
+      "searchQuery": "Co-ord Set india artisan clothing brand online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.271Z"
+    },
+    {
+      "id": "aashniandco-com",
+      "name": "AASHNI + CO",
+      "url": "https://aashniandco.com",
+      "reason": "Matches your favourite category: Co-ord Set",
+      "searchQuery": "Co-ord Set india artisan clothing brand online store",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-11T08:53:36.271Z"
+    }
+  ],
   "rejected": []
 }
