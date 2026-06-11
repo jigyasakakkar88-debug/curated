@@ -86,17 +86,18 @@ module.exports = async function handler(req, res) {
       });
     });
 
-    // 6. Test candidates for Shopify — cap at 12 to stay within function timeout
-    const candidateList = [...candidates.entries()].slice(0, 12);
+    // 6. Test candidates for Shopify — cap at 20
+    const candidateList = [...candidates.entries()].slice(0, 20);
     const shopifyTests  = await Promise.allSettled(candidateList.map(([url]) => testShopify(url)));
 
-    // 7. Build new recommendation objects
+    // 7. Build new recommendation objects — include ALL candidates, marked by Shopify status
     const newRecs = [];
     shopifyTests.forEach((r, i) => {
-      if (r.status !== 'fulfilled' || !r.value.valid) return;
       const [url, meta] = candidateList[i];
       const id = makeId(url);
       if (rejectedIds.has(id)) return;
+
+      const isShopify = r.status === 'fulfilled' && r.value.valid;
 
       newRecs.push({
         id,
@@ -104,8 +105,9 @@ module.exports = async function handler(req, res) {
         url,
         reason:        meta.reason,
         searchQuery:   meta.query,
-        sampleProduct: r.value.sampleProduct,
-        productCount:  r.value.productCount,
+        isShopify,
+        sampleProduct: isShopify ? r.value.sampleProduct : null,
+        productCount:  isShopify ? r.value.productCount  : null,
         discoveredAt:  new Date().toISOString(),
       });
     });

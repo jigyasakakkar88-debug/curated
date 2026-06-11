@@ -53,6 +53,9 @@ module.exports = async function handler(req, res) {
       }
 
       if (action === 'accept') {
+        if (!rec.isShopify) {
+          return res.status(400).json({ error: "Only Shopify brands can be added directly. Visit the site manually to confirm it supports Shopify." });
+        }
         const brands = brandsFile.data;
         // Avoid duplicate
         if (!brands.find(b => b.url === rec.url)) {

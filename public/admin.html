@@ -104,11 +104,16 @@ input:focus { border-color:var(--accent); }
 .rec-url { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .rec-reason { font-size:12px; color:var(--ink); margin-bottom:6px; line-height:1.5; background:var(--warm); padding:8px 10px; border-left:2px solid var(--accent); }
 .rec-meta { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-bottom:10px; }
-.rec-actions { display:flex; gap:8px; }
+.rec-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 .btn-accept { padding:7px 16px; background:var(--ok); color:white; border:none; font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; font-family:'DM Mono',monospace; }
 .btn-accept:hover { opacity:0.85; }
+.btn-visit { padding:7px 16px; background:none; border:1px solid var(--accent); color:var(--accent); font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; font-family:'DM Mono',monospace; text-decoration:none; display:inline-block; }
+.btn-visit:hover { background:var(--accent); color:white; }
 .btn-dismiss { padding:7px 14px; background:none; border:1px solid var(--border); color:var(--muted); font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; font-family:'DM Mono',monospace; }
 .btn-dismiss:hover { border-color:var(--err); color:var(--err); }
+.shopify-badge { display:inline-block; padding:3px 8px; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; }
+.shopify-badge.yes { background:#e8f4f0; color:var(--ok); border:1px solid #b8d8cd; }
+.shopify-badge.no  { background:#fdf1ef; color:var(--err); border:1px solid #f0c4bc; }
 .rec-empty { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); padding:16px 0; line-height:1.8; }
 
 /* TOAST */
@@ -540,6 +545,9 @@ function renderRecommendations(recs) {
 
   listEl.innerHTML = recs.map(r => `
     <div class="rec-card">
+      <span class="shopify-badge ${r.isShopify ? 'yes' : 'no'}">
+        ${r.isShopify ? '✓ Shopify — can add directly' : '✗ Not Shopify — visit to check'}
+      </span>
       <div class="rec-name">${esc(r.name)}</div>
       <div class="rec-url"><a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:var(--muted)">${esc(r.url)}</a></div>
       <div class="rec-reason">💡 ${esc(r.reason)}</div>
@@ -548,7 +556,10 @@ function renderRecommendations(recs) {
         ${r.sampleProduct ? ` &nbsp;·&nbsp; e.g. "${esc(r.sampleProduct)}"` : ''}
       </div>
       <div class="rec-actions">
-        <button class="btn-accept" onclick="acceptRec('${esc(r.id)}')">+ Add Brand</button>
+        ${r.isShopify
+          ? `<button class="btn-accept" onclick="acceptRec('${esc(r.id)}')">+ Add Brand</button>`
+          : `<a class="btn-visit" href="${esc(r.url)}" target="_blank" rel="noopener">Visit Site →</a>`
+        }
         <button class="btn-dismiss" onclick="dismissRec('${esc(r.id)}')">Dismiss</button>
       </div>
     </div>
