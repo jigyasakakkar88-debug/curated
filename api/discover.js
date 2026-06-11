@@ -154,15 +154,13 @@ const SKIP_DOMAINS = new Set([
 
 // ── Query builder ─────────────────────────────────────────
 
-const EXCLUDE = '-site:myntra.com -site:amazon.in -site:flipkart.com -site:nykaa.com -site:instagram.com -site:pinterest.com -site:ajio.com -site:meesho.com';
-
 function buildQueries(brands, topTags, topCats) {
   const queries = [];
 
   // Brand similarity
   brands.slice(0, 2).forEach(b => {
     queries.push({
-      query:  `"similar to ${b.name}" OR "like ${b.name}" india clothing brand ${EXCLUDE}`,
+      query:  `india fashion brand similar to ${b.name} clothing online store`,
       reason: `Similar in style to ${b.name}, one of your favourite brands`,
     });
   });
@@ -171,7 +169,7 @@ function buildQueries(brands, topTags, topCats) {
   const styleTags = topTags.filter(t => t.length > 3).slice(0, 3);
   if (styleTags.length >= 2) {
     queries.push({
-      query:  `${styleTags.slice(0, 2).join(' ')} india clothing brand "shop now" OR "buy online" ${EXCLUDE}`,
+      query:  `${styleTags.slice(0, 2).join(' ')} india clothing brand online store`,
       reason: `Matches your style tags: ${styleTags.slice(0, 2).join(', ')}`,
     });
   }
@@ -179,22 +177,22 @@ function buildQueries(brands, topTags, topCats) {
   // Category based
   topCats.slice(0, 2).forEach(cat => {
     queries.push({
-      query:  `${cat} india independent brand online store ${EXCLUDE}`,
+      query:  `${cat} india artisan clothing brand online store`,
       reason: `Matches your favourite category: ${cat}`,
     });
   });
 
   // Always-on targeted queries
   queries.push({
-    query:  `indie indian sustainable handloom fashion brand online store ${EXCLUDE}`,
+    query:  'indie indian sustainable handloom fashion brand online store',
     reason: 'Independent Indian sustainable fashion brand matching your aesthetic',
   });
   queries.push({
-    query:  `"natural dyes" OR "hand block print" india clothing brand online store ${EXCLUDE}`,
+    query:  'natural dyes hand block print india clothing brand online',
     reason: 'Natural dye or block print Indian clothing brand',
   });
   queries.push({
-    query:  `slow fashion india ethnic wear label direct website ${EXCLUDE}`,
+    query:  'slow fashion india ethnic wear label online store',
     reason: 'Slow fashion Indian ethnic wear label matching your values',
   });
 
