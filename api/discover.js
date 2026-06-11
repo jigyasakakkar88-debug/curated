@@ -63,6 +63,14 @@ module.exports = async function handler(req, res) {
     const searchResults = await Promise.allSettled(queries.map(q => googleSearch(q.query)));
 
     // 5. Collect unique candidate URLs, skipping known non-brand domains
+    const searchErrors = searchResults
+      .map((r, i) => r.status === 'rejected'
+        ? `Q${i+1} failed: ${r.reason?.message}`
+        : r.value?.error
+          ? `Q${i+1} error: ${r.value.error}`
+          : `Q${i+1} ok: ${(r.value?.items||[]).length} results`)
+      .join(' | ');
+
     const candidates = new Map();
     searchResults.forEach((r, i) => {
       if (r.status !== 'fulfilled') return;
@@ -134,6 +142,7 @@ module.exports = async function handler(req, res) {
         candidatesFound: candidates.size,
         shopifyTested:   candidateList.length,
         shopifyPassed:   newRecs.length,
+        searchErrors,
       },
     });
 

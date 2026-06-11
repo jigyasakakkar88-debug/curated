@@ -491,7 +491,8 @@ async function runDiscovery() {
       const msg = data.newFound > 0
         ? `Found ${data.newFound} new brand${data.newFound !== 1 ? 's' : ''}!`
         : 'No new brands found this time.';
-      status.textContent = `${msg} | Queries run: ${d.queriesRun ?? '?'} · URLs collected: ${d.candidatesFound ?? '?'} · Shopify tested: ${d.shopifyTested ?? '?'} · Passed: ${d.shopifyPassed ?? '?'}`;
+      status.textContent = `${msg} | Queries: ${d.queriesRun ?? '?'} · URLs: ${d.candidatesFound ?? '?'} · Shopify tested: ${d.shopifyTested ?? '?'} · Passed: ${d.shopifyPassed ?? '?'}`;
+      if (d.searchErrors) status.textContent += ` | ${d.searchErrors}`;
       renderRecommendations(data.pending || []);
     } else {
       status.textContent = 'Error: ' + (data.error || 'unknown');
