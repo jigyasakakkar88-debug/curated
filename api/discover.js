@@ -65,10 +65,8 @@ module.exports = async function handler(req, res) {
     // 5. Collect unique candidate URLs, skipping known non-brand domains
     const searchErrors = searchResults
       .map((r, i) => r.status === 'rejected'
-        ? `Q${i+1} failed: ${r.reason?.message}`
-        : r.value?.error
-          ? `Q${i+1} error: ${r.value.error}`
-          : `Q${i+1} ok: ${(r.value?.items||[]).length} results`)
+        ? `Q${i+1} FAILED: ${r.reason?.message}`
+        : `Q${i+1}: ${r.value?._raw ?? (r.value?.items||[]).length + ' results'}`)
       .join(' | ');
 
     const candidates = new Map();
@@ -227,7 +225,7 @@ function googleSearch(query) {
               link:    r.link,
               snippet: r.snippet || '',
             }));
-            resolve({ items });
+            resolve({ items, _raw: parsed.error || parsed.search_metadata?.status || `${items.length} results` });
           } catch { reject(new Error('Invalid JSON from SerpAPI')); }
         });
       }
