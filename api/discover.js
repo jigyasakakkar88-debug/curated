@@ -63,13 +63,17 @@ module.exports = async function handler(req, res) {
     // 4. Run all Google searches in parallel
     const searchResults = await Promise.allSettled(queries.map(q => googleSearch(q.query)));
 
-    // 5. Collect unique candidate URLs with the reason that surfaced them
+    // 5. Collect unique candidate URLs, skipping known non-brand domains
     const candidates = new Map();
     searchResults.forEach((r, i) => {
       if (r.status !== 'fulfilled') return;
       (r.value.items || []).forEach(item => {
         const url = rootDomain(item.link);
         if (!url) return;
+        try {
+          const hostname = new URL(url).hostname.replace(/^www\./, '');
+          if (SKIP_DOMAINS.has(hostname)) return;
+        } catch { return; }
         if (existingUrls.has(url) || pendingUrls.has(url)) return;
         if (!candidates.has(url)) {
           candidates.set(url, {
@@ -120,10 +124,16 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
-      newFound:      newRecs.length,
-      totalPending:  merged.length,
-      pending:       merged,
+      newFound:         newRecs.length,
+      totalPending:     merged.length,
+      pending:          merged,
       styleFingerprint: { topTags, topCats, avgPrice },
+      debug: {
+        queriesRun:      queries.length,
+        candidatesFound: candidates.size,
+        shopifyTested:   candidateList.length,
+        shopifyPassed:   newRecs.length,
+      },
     });
 
   } catch (e) {
@@ -131,15 +141,26 @@ module.exports = async function handler(req, res) {
   }
 };
 
+// Domains to skip — marketplaces, social media, publications
+const SKIP_DOMAINS = new Set([
+  'instagram.com','pinterest.com','facebook.com','twitter.com','youtube.com','linkedin.com',
+  'myntra.com','amazon.in','amazon.com','flipkart.com','nykaa.com','ajio.com','meesho.com',
+  'indiamart.com','snapdeal.com','tatacliq.com','craftsvilla.com',
+  'vogue.in','elle.in','harpersbazaar.in','femina.in','grazia.in',
+  'wikipedia.org','reddit.com','quora.com','medium.com','blogspot.com','wordpress.com',
+]);
+
 // ── Query builder ─────────────────────────────────────────
+
+const EXCLUDE = '-site:myntra.com -site:amazon.in -site:flipkart.com -site:nykaa.com -site:instagram.com -site:pinterest.com -site:ajio.com -site:meesho.com';
 
 function buildQueries(brands, topTags, topCats) {
   const queries = [];
 
-  // Similarity to existing brands
+  // Brand similarity
   brands.slice(0, 2).forEach(b => {
     queries.push({
-      query:  `brands similar to "${b.name}" india clothing online store`,
+      query:  `"similar to ${b.name}" OR "like ${b.name}" india clothing brand ${EXCLUDE}`,
       reason: `Similar in style to ${b.name}, one of your favourite brands`,
     });
   });
@@ -148,7 +169,7 @@ function buildQueries(brands, topTags, topCats) {
   const styleTags = topTags.filter(t => t.length > 3).slice(0, 3);
   if (styleTags.length >= 2) {
     queries.push({
-      query:  `${styleTags.slice(0, 2).join(' ')} india clothing brand online store`,
+      query:  `${styleTags.slice(0, 2).join(' ')} india clothing brand "shop now" OR "buy online" ${EXCLUDE}`,
       reason: `Matches your style tags: ${styleTags.slice(0, 2).join(', ')}`,
     });
   }
@@ -156,22 +177,26 @@ function buildQueries(brands, topTags, topCats) {
   // Category based
   topCats.slice(0, 2).forEach(cat => {
     queries.push({
-      query:  `${cat} india artisan brand online store`,
+      query:  `${cat} india independent brand online store ${EXCLUDE}`,
       reason: `Matches your favourite category: ${cat}`,
     });
   });
 
-  // Always-on broad queries
+  // Always-on targeted queries
   queries.push({
-    query:  'indie indian sustainable fashion brand ethnic wear online store',
+    query:  `indie indian sustainable handloom fashion brand online store ${EXCLUDE}`,
     reason: 'Independent Indian sustainable fashion brand matching your aesthetic',
   });
   queries.push({
-    query:  'handloom india clothing label artisan craft online store',
-    reason: 'Handloom Indian clothing brand matching your taste',
+    query:  `"natural dyes" OR "hand block print" india clothing brand online store ${EXCLUDE}`,
+    reason: 'Natural dye or block print Indian clothing brand',
+  });
+  queries.push({
+    query:  `slow fashion india ethnic wear label direct website ${EXCLUDE}`,
+    reason: 'Slow fashion Indian ethnic wear label matching your values',
   });
 
-  return queries.slice(0, 8); // cap at 8 to stay within free tier (100/day)
+  return queries.slice(0, 8);
 }
 
 // ── Google Custom Search ──────────────────────────────────
