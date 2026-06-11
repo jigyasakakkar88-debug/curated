@@ -1,10 +1,9 @@
 const https = require('https');
 
-const GITHUB_TOKEN   = process.env.GITHUB_TOKEN      || "";
-const GITHUB_REPO    = process.env.GITHUB_REPO       || "";
-const GOOGLE_KEY     = process.env.GOOGLE_SEARCH_KEY || "";
-const GOOGLE_CX      = process.env.GOOGLE_CX         || "";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD    || "changeme123";
+const GITHUB_TOKEN   = process.env.GITHUB_TOKEN   || "";
+const GITHUB_REPO    = process.env.GITHUB_REPO    || "";
+const SERPAPI_KEY    = process.env.SERPAPI_KEY    || "";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "changeme123";
 const GITHUB_BRANCH  = "main";
 
 module.exports = async function handler(req, res) {
@@ -16,8 +15,8 @@ module.exports = async function handler(req, res) {
   if (req.headers["authorization"] !== `Bearer ${ADMIN_PASSWORD}`) {
     return res.status(401).json({ error: "Unauthorized" });
   }
-  if (!GOOGLE_KEY || !GOOGLE_CX) {
-    return res.status(500).json({ error: "Google Search not configured. Set GOOGLE_SEARCH_KEY and GOOGLE_CX in Vercel." });
+  if (!SERPAPI_KEY) {
+    return res.status(500).json({ error: "SerpAPI not configured. Set SERPAPI_KEY in Vercel environment variables." });
   }
 
   try {
@@ -199,25 +198,33 @@ function buildQueries(brands, topTags, topCats) {
   return queries.slice(0, 8);
 }
 
-// ── Google Custom Search ──────────────────────────────────
+// ── SerpAPI search ───────────────────────────────────────
 
 function googleSearch(query) {
   return new Promise((resolve, reject) => {
-    const qs = `key=${encodeURIComponent(GOOGLE_KEY)}&cx=${encodeURIComponent(GOOGLE_CX)}&num=10&q=${encodeURIComponent(query)}`;
+    const qs = `api_key=${encodeURIComponent(SERPAPI_KEY)}&q=${encodeURIComponent(query)}&num=10&engine=google`;
     const req = https.get(
-      `https://www.googleapis.com/customsearch/v1?${qs}`,
+      `https://serpapi.com/search.json?${qs}`,
       { headers: { 'Accept': 'application/json' }, timeout: 10000 },
       (resp) => {
         let data = '';
         resp.on('data', c => data += c);
         resp.on('end', () => {
-          try { resolve(JSON.parse(data)); }
-          catch { reject(new Error('Invalid JSON from Google')); }
+          try {
+            const parsed = JSON.parse(data);
+            // Normalise to the same shape the rest of the code expects: { items: [...] }
+            const items = (parsed.organic_results || []).map(r => ({
+              title:   r.title,
+              link:    r.link,
+              snippet: r.snippet || '',
+            }));
+            resolve({ items });
+          } catch { reject(new Error('Invalid JSON from SerpAPI')); }
         });
       }
     );
     req.on('error', reject);
-    req.on('timeout', () => { req.destroy(); reject(new Error('Google search timed out')); });
+    req.on('timeout', () => { req.destroy(); reject(new Error('SerpAPI timed out')); });
   });
 }
 
