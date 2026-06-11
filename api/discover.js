@@ -1,10 +1,12 @@
 const https = require('https');
 
-const GITHUB_TOKEN   = process.env.GITHUB_TOKEN   || "";
-const GITHUB_REPO    = process.env.GITHUB_REPO    || "";
-const SERPAPI_KEY    = process.env.SERPAPI_KEY    || "";
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "changeme123";
+const GITHUB_TOKEN   = process.env.GITHUB_TOKEN       || "";
+const GITHUB_REPO    = process.env.GITHUB_REPO        || "";
+const SERPAPI_KEY    = process.env.SERPAPI_KEY         || "";
+const ANTHROPIC_KEY  = process.env.ANTHROPIC_API_KEY  || "";
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD      || "changeme123";
 const GITHUB_BRANCH  = "main";
+const MAX_TURNS      = 12;
 
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -16,108 +18,179 @@ module.exports = async function handler(req, res) {
     return res.status(401).json({ error: "Unauthorized" });
   }
   if (!SERPAPI_KEY) {
-    return res.status(500).json({ error: "SerpAPI not configured. Set SERPAPI_KEY in Vercel environment variables." });
+    return res.status(500).json({ error: "SERPAPI_KEY not configured in Vercel environment variables." });
+  }
+  if (!ANTHROPIC_KEY) {
+    return res.status(500).json({ error: "ANTHROPIC_API_KEY not configured in Vercel environment variables." });
   }
 
+  const { brief = '' } = req.body || {};
+
   try {
-    // 1. Load brands + existing recommendations in parallel
+    // Load existing data
     const [brands, recData] = await Promise.all([
       readFromGitHub('brands.json').catch(() => []),
       readFromGitHub('recommendations.json').catch(() => ({ pending: [], rejected: [] })),
     ]);
 
     const existingUrls = new Set(brands.map(b => rootDomain(b.url)).filter(Boolean));
-    const rejectedIds  = new Set(recData.rejected || []);
     const pendingUrls  = new Set((recData.pending || []).map(r => rootDomain(r.url)).filter(Boolean));
+    const rejectedIds  = new Set(recData.rejected || []);
+    const existingBrandList = brands.map(b => b.name).join(', ') || 'none yet';
 
-    // 2. Sample products from each brand to build style fingerprint
-    const samples = await Promise.allSettled(
-      brands.map(b => fetchJson(`${b.url.replace(/\/$/, '')}/products.json?limit=20`))
-    );
-
-    const tagFreq = {}, catFreq = {};
-    let priceSum = 0, priceN = 0;
-
-    samples.forEach(r => {
-      if (r.status !== 'fulfilled' || !r.value?.products) return;
-      r.value.products.forEach(p => {
-        const tags = Array.isArray(p.tags) ? p.tags : (p.tags || '').split(', ');
-        tags.forEach(t => {
-          const k = t.toLowerCase().trim();
-          if (k.length > 2) tagFreq[k] = (tagFreq[k] || 0) + 1;
-        });
-        if (p.product_type) catFreq[p.product_type] = (catFreq[p.product_type] || 0) + 1;
-        const price = parseFloat(p.variants?.[0]?.price || 0);
-        if (price > 0) { priceSum += price; priceN++; }
-      });
-    });
-
-    const topTags = Object.entries(tagFreq).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([t]) => t);
-    const topCats = Object.entries(catFreq).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([c]) => c);
-    const avgPrice = priceN > 0 ? Math.round(priceSum / priceN) : 0;
-
-    // 3. Build search queries based on style fingerprint
-    const queries = buildQueries(brands, topTags, topCats);
-
-    // 4. Run all Google searches in parallel
-    const searchResults = await Promise.allSettled(queries.map(q => googleSearch(q.query)));
-
-    // 5. Collect unique candidate URLs, skipping known non-brand domains
-    const searchErrors = searchResults
-      .map((r, i) => r.status === 'rejected'
-        ? `Q${i+1} FAILED: ${r.reason?.message}`
-        : `Q${i+1}: ${r.value?._raw ?? (r.value?.items||[]).length + ' results'}`)
-      .join(' | ');
-
-    const candidates = new Map();
-    searchResults.forEach((r, i) => {
-      if (r.status !== 'fulfilled') return;
-      (r.value.items || []).forEach(item => {
-        const url = rootDomain(item.link);
-        if (!url) return;
-        try {
-          const hostname = new URL(url).hostname.replace(/^www\./, '');
-          if (SKIP_DOMAINS.has(hostname)) return;
-        } catch { return; }
-        if (existingUrls.has(url) || pendingUrls.has(url)) return;
-        if (!candidates.has(url)) {
-          candidates.set(url, {
-            query:   queries[i].query,
-            reason:  queries[i].reason,
-            title:   item.title,
-            snippet: item.snippet || '',
-          });
+    // Tool definitions
+    const tools = [
+      {
+        name: "search_web",
+        description: "Search Google for Indian fashion brands. Returns up to 10 results with title, URL, and snippet. Run 4-8 targeted searches before saving.",
+        input_schema: {
+          type: "object",
+          properties: {
+            query: { type: "string", description: "Search query to find brand websites" }
+          },
+          required: ["query"]
         }
+      },
+      {
+        name: "save_recommendations",
+        description: "Save your final curated list of brand website URLs. Call this once you have found 3-8 high-quality brand websites. Each recommendation needs a URL, name, and reason.",
+        input_schema: {
+          type: "object",
+          properties: {
+            recommendations: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  url:    { type: "string", description: "Full URL of the brand website, e.g. https://anokhi.com" },
+                  name:   { type: "string", description: "Brand name" },
+                  reason: { type: "string", description: "Why this brand matches the style brief (1-2 sentences)" }
+                },
+                required: ["url", "name", "reason"]
+              }
+            }
+          },
+          required: ["recommendations"]
+        }
+      }
+    ];
+
+    const systemPrompt = `You are a fashion brand discovery agent for Curated, a personal Indian fashion aggregator. Your job is to discover new Indian fashion brands that match the user's style.
+
+You have two tools:
+- search_web: run a Google search and get back 10 results
+- save_recommendations: save your final curated list of brand URLs (call this to finish)
+
+Rules:
+1. Run 4-8 targeted searches, exploring different angles (aesthetics, techniques, price points, regions)
+2. Only recommend direct BRAND STOREFRONTS — e.g. anokhi.com, fabindia.com — not blogs, magazines, or marketplaces
+3. Never recommend: Myntra, Nykaa, Amazon, Flipkart, Ajio, Meesho, Instagram pages, Pinterest, Vogue, Elle, Harper's Bazaar, Wikipedia, Reddit, Quora, Medium
+4. Only recommend brands you can confirm are real fashion brand storefronts based on title and snippet
+5. Do NOT recommend any of the existing brands listed below
+6. Find 3-8 genuinely new brand websites, then call save_recommendations
+
+Existing brands already on Curated (skip these): ${existingBrandList}`;
+
+    const userMsg = brief.trim()
+      ? `Style brief: "${brief.trim()}"\n\nDiscover 3-8 new Indian fashion brand websites that match this brief. Explore the brief from multiple angles — search for different aesthetics, materials, occasions, and regional traditions that fit it.`
+      : `Discover 3-8 new Indian fashion brand websites to add to Curated. Focus on: handloom, block print, natural dyes, sustainable fashion, artisan labels, slow fashion, indie Indian labels. Search from multiple angles.`;
+
+    // Agentic loop
+    let messages   = [{ role: 'user', content: userMsg }];
+    let finalRecs  = null;
+    let turns      = 0;
+    const searchLog = [];
+
+    while (turns < MAX_TURNS && !finalRecs) {
+      turns++;
+
+      const response = await callClaude(systemPrompt, messages, tools);
+      messages.push({ role: 'assistant', content: response.content });
+
+      if (response.stop_reason === 'end_turn') break;
+
+      if (response.stop_reason === 'tool_use') {
+        const toolResults = [];
+
+        for (const block of response.content) {
+          if (block.type !== 'tool_use') continue;
+
+          if (block.name === 'search_web') {
+            const query = block.input.query || '';
+            searchLog.push(query);
+            let resultText;
+            try {
+              const results = await googleSearch(query);
+              const filtered = (results.items || []).filter(item => {
+                const domain = rootDomain(item.link);
+                if (!domain) return false;
+                try {
+                  const hostname = new URL(domain).hostname.replace(/^www\./, '');
+                  if (SKIP_DOMAINS.has(hostname)) return false;
+                } catch { return false; }
+                if (existingUrls.has(domain) || pendingUrls.has(domain)) return false;
+                return true;
+              });
+              const top = filtered.slice(0, 10).map(r => ({
+                title:   r.title,
+                url:     r.link,
+                snippet: r.snippet || '',
+              }));
+              resultText = top.length
+                ? JSON.stringify(top)
+                : 'No relevant results found for this query. Try a different search.';
+            } catch (e) {
+              resultText = `Search error: ${e.message}`;
+            }
+            toolResults.push({ type: 'tool_result', tool_use_id: block.id, content: resultText });
+          }
+
+          if (block.name === 'save_recommendations') {
+            finalRecs = block.input.recommendations || [];
+            toolResults.push({ type: 'tool_result', tool_use_id: block.id, content: 'Saved.' });
+          }
+        }
+
+        if (toolResults.length > 0) {
+          messages.push({ role: 'user', content: toolResults });
+        }
+      }
+    }
+
+    if (!finalRecs || finalRecs.length === 0) {
+      return res.status(200).json({
+        success:      true,
+        newFound:     0,
+        totalPending: (recData.pending || []).length,
+        pending:      recData.pending || [],
+        debug:        { turns, searchLog },
       });
-    });
+    }
 
-    // 6. Test candidates for Shopify — cap at 20
-    const candidateList = [...candidates.entries()].slice(0, 20);
-    const shopifyTests  = await Promise.allSettled(candidateList.map(([url]) => testShopify(url)));
+    // Test Shopify for each recommendation in parallel
+    const urlsToTest = finalRecs.map(r => rootDomain(r.url) || r.url);
+    const shopifyTests = await Promise.allSettled(urlsToTest.map(u => testShopify(u)));
 
-    // 7. Build new recommendation objects — include ALL candidates, marked by Shopify status
     const newRecs = [];
-    shopifyTests.forEach((r, i) => {
-      const [url, meta] = candidateList[i];
-      const id = makeId(url);
+    finalRecs.forEach((r, i) => {
+      const url = urlsToTest[i];
+      const id  = makeId(url);
       if (rejectedIds.has(id)) return;
-
-      const isShopify = r.status === 'fulfilled' && r.value.valid;
-
+      const st       = shopifyTests[i];
+      const isShopify = st.status === 'fulfilled' && st.value.valid;
       newRecs.push({
         id,
-        name:          guessName(meta.title, url),
+        name:          r.name,
         url,
-        reason:        meta.reason,
-        searchQuery:   meta.query,
+        reason:        r.reason,
         isShopify,
-        sampleProduct: isShopify ? r.value.sampleProduct : null,
-        productCount:  isShopify ? r.value.productCount  : null,
+        sampleProduct: isShopify ? st.value.sampleProduct : null,
+        productCount:  isShopify ? st.value.productCount  : null,
         discoveredAt:  new Date().toISOString(),
       });
     });
 
-    // 8. Merge with existing pending, avoid duplicates
+    // Merge with existing pending, avoiding duplicates
     const existingPendingIds = new Set((recData.pending || []).map(r => r.id));
     const merged = [
       ...(recData.pending || []),
@@ -130,18 +203,11 @@ module.exports = async function handler(req, res) {
     await writeToGitHub('recommendations.json', updated, sha, `Discover: +${newRecs.length} recommendations`);
 
     return res.status(200).json({
-      success: true,
-      newFound:         newRecs.length,
-      totalPending:     merged.length,
-      pending:          merged,
-      styleFingerprint: { topTags, topCats, avgPrice },
-      debug: {
-        queriesRun:      queries.length,
-        candidatesFound: candidates.size,
-        shopifyTested:   candidateList.length,
-        shopifyPassed:   newRecs.length,
-        searchErrors,
-      },
+      success:      true,
+      newFound:     newRecs.length,
+      totalPending: merged.length,
+      pending:      merged,
+      debug:        { turns, searchLog },
     });
 
   } catch (e) {
@@ -149,83 +215,79 @@ module.exports = async function handler(req, res) {
   }
 };
 
-// Domains to skip — marketplaces, social media, publications
+// ── Anthropic API ─────────────────────────────────────────
+
+function callClaude(system, messages, tools) {
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify({
+      model:      'claude-sonnet-4-6',
+      max_tokens: 4096,
+      system,
+      messages,
+      tools,
+    });
+    const req = https.request({
+      hostname: 'api.anthropic.com',
+      path:     '/v1/messages',
+      method:   'POST',
+      headers:  {
+        'Content-Type':      'application/json',
+        'x-api-key':         ANTHROPIC_KEY,
+        'anthropic-version': '2023-06-01',
+        'Content-Length':    Buffer.byteLength(body),
+      },
+    }, (resp) => {
+      let data = '';
+      resp.on('data', c => data += c);
+      resp.on('end', () => {
+        try {
+          const parsed = JSON.parse(data);
+          if (resp.statusCode >= 400) {
+            reject(new Error(parsed.error?.message || `Anthropic ${resp.statusCode}`));
+          } else {
+            resolve(parsed);
+          }
+        } catch { reject(new Error('Invalid Anthropic response')); }
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(30000, () => { req.destroy(); reject(new Error('Anthropic request timed out')); });
+    req.write(body);
+    req.end();
+  });
+}
+
+// ── Domains to skip — passed to Claude as context and used to filter results ──
+
 const SKIP_DOMAINS = new Set([
-  'instagram.com','pinterest.com','facebook.com','twitter.com','youtube.com','linkedin.com',
+  'instagram.com','pinterest.com','facebook.com','twitter.com','x.com','youtube.com','linkedin.com',
   'myntra.com','amazon.in','amazon.com','flipkart.com','nykaa.com','ajio.com','meesho.com',
   'indiamart.com','snapdeal.com','tatacliq.com','craftsvilla.com',
   'vogue.in','elle.in','harpersbazaar.in','femina.in','grazia.in',
   'wikipedia.org','reddit.com','quora.com','medium.com','blogspot.com','wordpress.com',
+  'zara.com','hm.com','uniqlo.com','shein.com',
 ]);
 
-// ── Query builder ─────────────────────────────────────────
-
-function buildQueries(brands, topTags, topCats) {
-  const queries = [];
-
-  // Brand similarity
-  brands.slice(0, 2).forEach(b => {
-    queries.push({
-      query:  `india fashion brand similar to ${b.name} clothing online store`,
-      reason: `Similar in style to ${b.name}, one of your favourite brands`,
-    });
-  });
-
-  // Style tag based
-  const styleTags = topTags.filter(t => t.length > 3).slice(0, 3);
-  if (styleTags.length >= 2) {
-    queries.push({
-      query:  `${styleTags.slice(0, 2).join(' ')} india clothing brand online store`,
-      reason: `Matches your style tags: ${styleTags.slice(0, 2).join(', ')}`,
-    });
-  }
-
-  // Category based
-  topCats.slice(0, 2).forEach(cat => {
-    queries.push({
-      query:  `${cat} india artisan clothing brand online store`,
-      reason: `Matches your favourite category: ${cat}`,
-    });
-  });
-
-  // Always-on targeted queries
-  queries.push({
-    query:  'indie indian sustainable handloom fashion brand online store',
-    reason: 'Independent Indian sustainable fashion brand matching your aesthetic',
-  });
-  queries.push({
-    query:  'natural dyes hand block print india clothing brand online',
-    reason: 'Natural dye or block print Indian clothing brand',
-  });
-  queries.push({
-    query:  'slow fashion india ethnic wear label online store',
-    reason: 'Slow fashion Indian ethnic wear label matching your values',
-  });
-
-  return queries.slice(0, 8);
-}
-
-// ── SerpAPI search ───────────────────────────────────────
+// ── SerpAPI search ────────────────────────────────────────
 
 function googleSearch(query) {
   return new Promise((resolve, reject) => {
-    const qs = `api_key=${encodeURIComponent(SERPAPI_KEY)}&q=${encodeURIComponent(query)}&num=10&engine=google`;
+    const qs  = `api_key=${encodeURIComponent(SERPAPI_KEY)}&q=${encodeURIComponent(query)}&num=10&engine=google`;
     const req = https.get(
       `https://serpapi.com/search.json?${qs}`,
-      { headers: { 'Accept': 'application/json' }, timeout: 10000 },
+      { headers: { 'Accept': 'application/json' }, timeout: 12000 },
       (resp) => {
         let data = '';
         resp.on('data', c => data += c);
         resp.on('end', () => {
           try {
             const parsed = JSON.parse(data);
-            // Normalise to the same shape the rest of the code expects: { items: [...] }
-            const items = (parsed.organic_results || []).map(r => ({
+            const items  = (parsed.organic_results || []).map(r => ({
               title:   r.title,
               link:    r.link,
               snippet: r.snippet || '',
             }));
-            resolve({ items, _raw: parsed.error || parsed.search_metadata?.status || `${items.length} results` });
+            resolve({ items });
           } catch { reject(new Error('Invalid JSON from SerpAPI')); }
         });
       }
@@ -239,12 +301,11 @@ function googleSearch(query) {
 
 function testShopify(url) {
   return new Promise((resolve) => {
-    const testUrl = `${url}/products.json?limit=3`;
-    const req = https.get(testUrl, {
+    const req = https.get(`${url}/products.json?limit=3`, {
       headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' },
       timeout: 8000,
     }, (resp) => {
-      if (resp.statusCode >= 300 && resp.statusCode < 400 && resp.headers.location) {
+      if (resp.statusCode >= 300 && resp.statusCode < 400) {
         resolve({ valid: false }); return;
       }
       let data = '';
@@ -286,35 +347,6 @@ function makeId(url) {
     .toLowerCase();
 }
 
-function guessName(title, url) {
-  if (title) {
-    const clean = title.replace(/\s*[|–—\-:]\s*.*/,'').trim();
-    if (clean.length > 1 && clean.length < 60) return clean;
-  }
-  try {
-    const host = new URL(url).hostname.replace(/^www\./, '').split('.')[0];
-    return host.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-  } catch { return url; }
-}
-
-function fetchJson(urlStr) {
-  return new Promise((resolve, reject) => {
-    const req = https.get(urlStr, {
-      headers: { 'User-Agent': 'Mozilla/5.0', 'Accept': 'application/json' },
-      timeout: 10000,
-    }, (resp) => {
-      let data = '';
-      resp.on('data', c => data += c);
-      resp.on('end', () => {
-        try { resolve(JSON.parse(data)); }
-        catch { reject(new Error('Invalid JSON')); }
-      });
-    });
-    req.on('error', reject);
-    req.on('timeout', () => { req.destroy(); reject(new Error('Timed out')); });
-  });
-}
-
 // ── GitHub helpers ────────────────────────────────────────
 
 function githubRequest(method, path, body) {
@@ -325,10 +357,10 @@ function githubRequest(method, path, body) {
       path,
       method,
       headers: {
-        'Authorization': `token ${GITHUB_TOKEN}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'curated-style-aggregator',
-        'Content-Type': 'application/json',
+        'Authorization':  `token ${GITHUB_TOKEN}`,
+        'Accept':         'application/vnd.github.v3+json',
+        'User-Agent':     'curated-style-aggregator',
+        'Content-Type':   'application/json',
         ...(bodyStr ? { 'Content-Length': Buffer.byteLength(bodyStr) } : {}),
       },
     };

@@ -174,6 +174,7 @@ input:focus { border-color:var(--accent); }
         <div class="panel-meta" id="recCount"></div>
       </div>
       <div class="panel-body">
+        <textarea id="styleBrief" placeholder="Describe the style you're looking for… e.g. handloom cotton, natural dyes, earthy tones, slow fashion Indian labels" style="width:100%;box-sizing:border-box;min-height:72px;resize:vertical;padding:10px 12px;font-family:inherit;font-size:13px;border:1px solid var(--border);border-radius:4px;background:var(--warm);color:var(--ink);margin-bottom:10px;line-height:1.5;outline:none;"></textarea>
         <button class="btn-discover" id="discoverBtn" onclick="runDiscovery()">✦ Find New Brands</button>
         <div class="discover-status" id="discoverStatus" style="display:none"></div>
         <div id="recList"></div>
@@ -475,24 +476,26 @@ async function loadRecommendations() {
 async function runDiscovery() {
   const btn    = document.getElementById('discoverBtn');
   const status = document.getElementById('discoverStatus');
+  const brief  = (document.getElementById('styleBrief').value || '').trim();
   btn.disabled = true;
   btn.textContent = 'Searching…';
   status.style.display = 'block';
-  status.textContent = 'Analysing your style and searching for similar brands… (this takes ~15 seconds)';
+  status.textContent = 'Claude is searching for brands that match your style… (this takes ~30–60 seconds)';
 
   try {
     const res  = await fetch('/api/discover', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${password}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ brief }),
     });
     const data = await res.json();
     if (data.success) {
-      const d = data.debug || {};
+      const d   = data.debug || {};
       const msg = data.newFound > 0
         ? `Found ${data.newFound} new brand${data.newFound !== 1 ? 's' : ''}!`
-        : 'No new brands found this time.';
-      status.textContent = `${msg} | Queries: ${d.queriesRun ?? '?'} · URLs: ${d.candidatesFound ?? '?'} · Shopify tested: ${d.shopifyTested ?? '?'} · Passed: ${d.shopifyPassed ?? '?'}`;
-      if (d.searchErrors) status.textContent += ` | ${d.searchErrors}`;
+        : 'No new brands found this time. Try a more specific style brief.';
+      const searches = d.searchLog ? `Searches: ${d.searchLog.length}` : '';
+      status.textContent = `${msg}${searches ? '  ·  ' + searches : ''}  ·  Turns: ${d.turns ?? '?'}`;
       renderRecommendations(data.pending || []);
     } else {
       status.textContent = 'Error: ' + (data.error || 'unknown');
