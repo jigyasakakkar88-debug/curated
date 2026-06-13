@@ -113,7 +113,10 @@ input:focus { border-color:var(--accent); }
 .btn-dismiss:hover { border-color:var(--err); color:var(--err); }
 .shopify-badge { display:inline-block; padding:3px 8px; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px; }
 .shopify-badge.yes { background:#e8f4f0; color:var(--ok); border:1px solid #b8d8cd; }
-.shopify-badge.no  { background:#fdf1ef; color:var(--err); border:1px solid #f0c4bc; }
+.shopify-badge.no  { background:#fdf8f0; color:var(--warn); border:1px solid #e8d8b0; }
+.rec-note { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-top:6px; line-height:1.6; }
+.btn-visit-primary { padding:7px 16px; background:var(--ink); color:var(--paper); border:none; font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; font-family:'DM Mono',monospace; text-decoration:none; display:inline-block; }
+.btn-visit-primary:hover { background:var(--accent); }
 .rec-empty { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); padding:16px 0; line-height:1.8; }
 
 /* TOAST */
@@ -551,7 +554,7 @@ function renderRecommendations(recs) {
   listEl.innerHTML = recs.map(r => `
     <div class="rec-card">
       <span class="shopify-badge ${r.isShopify ? 'yes' : 'no'}">
-        ${r.isShopify ? '✓ Shopify — can add directly' : '✗ Not Shopify — visit to check'}
+        ${r.isShopify ? '✓ Shopify' : '◆ Non-Shopify'}
       </span>
       <div class="rec-name">${esc(r.name)}</div>
       <div class="rec-url"><a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:var(--muted)">${esc(r.url)}</a></div>
@@ -562,11 +565,13 @@ function renderRecommendations(recs) {
       </div>
       <div class="rec-actions">
         ${r.isShopify
-          ? `<button class="btn-accept" onclick="acceptRec('${esc(r.id)}')">+ Add Brand</button>`
-          : `<a class="btn-visit" href="${esc(r.url)}" target="_blank" rel="noopener">Visit Site →</a>`
+          ? `<button class="btn-accept" onclick="acceptRec('${esc(r.id)}')">+ Add to Feed</button>
+             <a class="btn-visit" href="${esc(r.url)}" target="_blank" rel="noopener">Visit Site →</a>`
+          : `<a class="btn-visit-primary" href="${esc(r.url)}" target="_blank" rel="noopener">Visit Site →</a>`
         }
         <button class="btn-dismiss" onclick="dismissRec('${esc(r.id)}')">Dismiss</button>
       </div>
+      ${!r.isShopify ? `<div class="rec-note">Products can't auto-load — browse directly or add manually via the form above.</div>` : ''}
     </div>
   `).join('');
 }
