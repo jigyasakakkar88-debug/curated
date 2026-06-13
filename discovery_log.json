@@ -144,6 +144,182 @@
         }
       ],
       "axisScore": 3
+    },
+    {
+      "runId": "2f7dde01-9d08-47ca-af00-0785e28b2743",
+      "timestamp": "2026-06-13T13:15:01.985Z",
+      "brief": null,
+      "axis": "Slow fashion and sustainable labels",
+      "turns": 7,
+      "searchLog": [
+        "natural dye indie label India clothing brand official website",
+        "zero-waste upcycled Indian fashion brand storefront",
+        "handspun khadi clothing brand India official storefront",
+        "organic cotton indie label India women clothing brand website",
+        "artisan cooperative clothing brand India official website",
+        "The Jodi Life Indian clothing brand official website",
+        "Livbio naturally dyed organic cotton India brand official website",
+        "slow fashion indie Indian label site:shopify.com natural dye handloom",
+        "ajrakh block print brand India official website storefront",
+        "Kutch weave women clothing brand India official website",
+        "Jodi Life India clothing brand thejodilife.com official storefront",
+        "dhaagaa.in Indian clothing brand natural dye handloom India",
+        "indie slow fashion Indian label upcycled handwoven brand storefront 2023 2024",
+        "Doodlage India upcycled fashion brand official website doodlage.in",
+        "The Summer House India slow fashion clothing brand official website",
+        "Iro Iro India upcycled handwoven fashion brand official website storefront",
+        "Doodlage official website doodlage.in India upcycled brand",
+        "Sui India slow fashion handwoven brand official website storefront",
+        "\"doodlage.in\" OR \"shop.doodlage\" upcycled India fashion brand",
+        "Indian indie slow fashion label natural dye organic cotton women brand storefront 2024"
+      ],
+      "recommendations": [
+        {
+          "id": "livbio-in",
+          "name": "Livbio",
+          "url": "https://www.livbio.in",
+          "reason": "India's first naturally dyed organic cotton apparel brand, Ahmedabad-based, using plant, flower, and herb dyes with GOTS-certified fabric and fair-trade ethical pricing.",
+          "isShopify": true,
+          "sampleProduct": "Light Grey Organic Cotton & Natural Dyed Women's Underwear Combo - Pack of 2",
+          "productCount": 3,
+          "discoveredAt": "2026-06-13T13:14:52.706Z",
+          "runNumber": 2,
+          "searchAxis": "Slow fashion and sustainable labels",
+          "sourceQuery": "Livbio naturally dyed organic cotton India brand official website",
+          "sourcePosition": 2,
+          "score": 5,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 5,
+            "briefMatch": 5,
+            "quality": 5
+          },
+          "evaluatorNotes": "Highly credible slow-fashion label with GOTS certification, natural dyeing, and organic cotton — a textbook match for sustainable Indian fashion.",
+          "underperforming": false
+        },
+        {
+          "id": "iroirozerowaste-com",
+          "name": "Iro Iro",
+          "url": "https://iroirozerowaste.com",
+          "reason": "Jaipur-based zero-waste Indian label that upcycles pre-consumer garment industry waste into handwoven fabrics using craft traditions indigenous to India.",
+          "isShopify": false,
+          "sampleProduct": null,
+          "productCount": null,
+          "discoveredAt": "2026-06-13T13:14:52.707Z",
+          "runNumber": 2,
+          "searchAxis": "Slow fashion and sustainable labels",
+          "sourceQuery": "Iro Iro India upcycled handwoven fashion brand official website storefront",
+          "sourcePosition": 1,
+          "score": 4,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 4,
+            "briefMatch": 5,
+            "quality": 4
+          },
+          "evaluatorNotes": "Jaipur zero-waste upcycling label with strong craft credentials, though lack of Shopify and no sample product reduces confidence in storefront robustness.",
+          "underperforming": false
+        },
+        {
+          "id": "thesummerhouse-in",
+          "name": "The Summer House",
+          "url": "https://www.thesummerhouse.in",
+          "reason": "Bangalore-founded sustainable womenswear brand (est. 2015) crafting everyday essentials from organic cotton and natural-dyed artisan textiles, with a focus on slow, ethical production.",
+          "isShopify": true,
+          "sampleProduct": "Granger Rust Linen Halter Top",
+          "productCount": 3,
+          "discoveredAt": "2026-06-13T13:14:52.707Z",
+          "runNumber": 2,
+          "searchAxis": "Slow fashion and sustainable labels",
+          "sourceQuery": null,
+          "sourcePosition": null,
+          "score": 5,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 5,
+            "briefMatch": 5,
+            "quality": 5
+          },
+          "evaluatorNotes": "Well-established Bangalore slow-fashion brand with organic cotton, natural dyes, and artisan textiles — a strong and credible fit for the brief.",
+          "underperforming": false
+        },
+        {
+          "id": "dhaagaa-in",
+          "name": "Dhaagaa",
+          "url": "https://dhaagaa.in",
+          "reason": "Indian brand storefront specialising in authentic handcrafted textiles — Ajrakh block print, Chikankari embroidery, Kantha stitch, and handloom — sourced directly from regional artisans.",
+          "isShopify": true,
+          "sampleProduct": "Navy Blue  Modal Fabric",
+          "productCount": 3,
+          "discoveredAt": "2026-06-13T13:14:52.707Z",
+          "runNumber": 2,
+          "searchAxis": "Slow fashion and sustainable labels",
+          "sourceQuery": "ajrakh block print brand India official website storefront",
+          "sourcePosition": 8,
+          "score": 4,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 4,
+            "briefMatch": 4,
+            "quality": 4
+          },
+          "evaluatorNotes": "Authentic handcraft-focused Indian label covering Ajrakh, Chikankari, and Kantha, though the sample product (fabric yardage) hints at a slight B2B or textile-retail lean.",
+          "underperforming": false
+        },
+        {
+          "id": "vrittidesigns-com",
+          "name": "Vritti Designs",
+          "url": "https://vrittidesigns.com",
+          "reason": "India-based eco-clothing manufacturer producing organic and eco-friendly apparel handmade by skilled artisans using traditional age-old methods and natural materials.",
+          "isShopify": false,
+          "sampleProduct": null,
+          "productCount": null,
+          "discoveredAt": "2026-06-13T13:14:52.707Z",
+          "runNumber": 2,
+          "searchAxis": "Slow fashion and sustainable labels",
+          "sourceQuery": "natural dye indie label India clothing brand official website",
+          "sourcePosition": 2,
+          "score": 3,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 3,
+            "briefMatch": 3,
+            "quality": 3
+          },
+          "evaluatorNotes": "Eco-clothing manufacturer with artisan claims but non-Shopify site, no sample product, and a manufacturer-facing tone reduce confidence in it being a clean consumer indie label.",
+          "underperforming": false
+        },
+        {
+          "id": "theindianethnicco-com",
+          "name": "The Indian Ethnic Co",
+          "url": "https://www.theindianethnicco.com",
+          "reason": "Indian brand storefront dedicated to Ajrakh and regional block-print clothing, offering artisan-crafted sarees, kurtas, and dress materials rooted in Indian craft heritage.",
+          "isShopify": true,
+          "sampleProduct": "Cyra Blue Handblock Print Slub Cotton Anti-Fit Short Top",
+          "productCount": 3,
+          "discoveredAt": "2026-06-13T13:14:52.707Z",
+          "runNumber": 2,
+          "searchAxis": "Slow fashion and sustainable labels",
+          "sourceQuery": "ajrakh block print brand India official website storefront",
+          "sourcePosition": 7,
+          "score": 4,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 4,
+            "briefMatch": 4,
+            "quality": 4
+          },
+          "evaluatorNotes": "Solid block-print artisan storefront with clear Indian craft heritage, though the range skews toward ethnic occasionwear rather than pure slow-fashion everyday basics.",
+          "underperforming": false
+        }
+      ],
+      "axisScore": 4.17
     }
   ]
 }
