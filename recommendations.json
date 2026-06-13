@@ -61,16 +61,6 @@
       "discoveredAt": "2026-06-13T10:14:10.208Z"
     },
     {
-      "id": "nonasties-in",
-      "name": "No Nasties",
-      "url": "https://www.nonasties.in",
-      "reason": "India's first Fairtrade-certified, 100% organic cotton clothing brand — a pioneer in transparent, ethical, slow fashion for women and men.",
-      "isShopify": true,
-      "sampleProduct": "The Azul Co-ord With Knit Top Set",
-      "productCount": 3,
-      "discoveredAt": "2026-06-13T10:14:10.208Z"
-    },
-    {
       "id": "anuprerna-com",
       "name": "Anuprerna",
       "url": "https://anuprerna.com",
@@ -79,6 +69,56 @@
       "sampleProduct": null,
       "productCount": null,
       "discoveredAt": "2026-06-13T10:14:10.208Z"
+    },
+    {
+      "id": "ka-sha-com",
+      "name": "Ka-Sha",
+      "url": "https://www.ka-sha.com",
+      "reason": "Pune-based slow fashion label by designer Karishma Shahani Khan, crafting each piece in indigenous Indian textiles using artisanal techniques and conscious, low-waste production systems.",
+      "isShopify": true,
+      "sampleProduct": "Che Jacket",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T12:21:04.233Z"
+    },
+    {
+      "id": "ilamra-com",
+      "name": "ILAMRA",
+      "url": "https://www.ilamra.com",
+      "reason": "Made-in-India brand specialising in 100% organic cotton clothing that is entirely naturally dyed, offering a clean sustainable lifestyle aesthetic rooted in Indian craft.",
+      "isShopify": true,
+      "sampleProduct": "Veronica Dress",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T12:21:04.233Z"
+    },
+    {
+      "id": "retiyo-com",
+      "name": "Retiyo",
+      "url": "https://retiyo.com",
+      "reason": "India's dedicated khadi storefront offering handspun, handwoven khadi kurtas, dresses, and separates for women and men — keeping the slow-textile tradition alive in everyday wear.",
+      "isShopify": true,
+      "sampleProduct": "Eco Khadi Cotton Yellow Printed Shirt with Camp Collar - Aagastya",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T12:21:04.233Z"
+    },
+    {
+      "id": "sepiastories-in",
+      "name": "Sepia Stories",
+      "url": "https://sepiastories.in",
+      "reason": "Goa-based brand advocating conscious living through premium organic cotton, handcrafted artisanal clothing — thoughtfully designed to be cherished over discarded.",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-13T12:21:04.233Z"
+    },
+    {
+      "id": "nilamind-com",
+      "name": "Nilam India",
+      "url": "https://www.nilamind.com",
+      "reason": "Sustainable Indian women's clothing brand crafting AZO-free, hand-block printed and hand-dyed garments in 100% cotton, rooted in traditional techniques like ajrakh and natural dyeing.",
+      "isShopify": true,
+      "sampleProduct": "Polka Blue Screen Print Fit & Flare Dress",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T12:21:04.233Z"
     }
   ],
   "rejected": []
