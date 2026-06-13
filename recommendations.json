@@ -1,4 +1,85 @@
 {
-  "pending": [],
+  "pending": [
+    {
+      "id": "labeldhuni-com",
+      "name": "Dhuni",
+      "url": "https://labeldhuni.com",
+      "reason": "A handloom-first apparel brand rooted in artisanal skill and sustainable design, offering timeless woven pieces and handcrafted jewelry made in India.",
+      "isShopify": true,
+      "sampleProduct": "Taal (Mulmul Jamdani)",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T10:14:10.208Z"
+    },
+    {
+      "id": "kokun-in",
+      "name": "Kokūn",
+      "url": "https://kokun.in",
+      "reason": "A textile-artist-led Indian label specialising in one-of-a-kind naturally dyed, eco-printed, handwoven clothing — deeply slow fashion and zero-waste in ethos.",
+      "isShopify": true,
+      "sampleProduct": "shoonya 041",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T10:14:10.208Z"
+    },
+    {
+      "id": "dressfolk-com",
+      "name": "Dressfolk",
+      "url": "https://dressfolk.com",
+      "reason": "A direct-to-consumer ethical brand that translates India's handloom heritage — sarees, suits, and dresses — into contemporary high-street silhouettes.",
+      "isShopify": true,
+      "sampleProduct": "Dusk Nectar",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T10:14:10.208Z"
+    },
+    {
+      "id": "wearesui-com",
+      "name": "Sui",
+      "url": "https://www.wearesui.com",
+      "reason": "A slow-fashion label using handspun, handwoven Kala cotton and organic materials to craft minimalist, wearable ethical women's clothing rooted in Indian craft.",
+      "isShopify": true,
+      "sampleProduct": "Emerald Pine Pleated Lyocell Blouse",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T10:14:10.208Z"
+    },
+    {
+      "id": "doodlage-in",
+      "name": "Doodlage",
+      "url": "https://doodlage.in",
+      "reason": "India's leading upcycled and zero-waste fashion label, creating season-less styles from post-production textile waste with fair-wage production practices.",
+      "isShopify": true,
+      "sampleProduct": "Moore Stripe Dress",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T10:14:10.208Z"
+    },
+    {
+      "id": "thesummerhouse-in",
+      "name": "The Summer House",
+      "url": "https://thesummerhouse.in",
+      "reason": "A Bengaluru-based sustainable label known for beautifully crafted everyday occasion wear using ethical sourcing and India's artisan textile traditions.",
+      "isShopify": true,
+      "sampleProduct": "Granger Rust Linen Halter Top",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T10:14:10.208Z"
+    },
+    {
+      "id": "nonasties-in",
+      "name": "No Nasties",
+      "url": "https://www.nonasties.in",
+      "reason": "India's first Fairtrade-certified, 100% organic cotton clothing brand — a pioneer in transparent, ethical, slow fashion for women and men.",
+      "isShopify": true,
+      "sampleProduct": "The Azul Co-ord With Knit Top Set",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T10:14:10.208Z"
+    },
+    {
+      "id": "anuprerna-com",
+      "name": "Anuprerna",
+      "url": "https://anuprerna.com",
+      "reason": "A sustainable handloom fabric and apparel brand partnering with 300+ skilled artisans across East India, championing handwoven textiles and ethical craft production.",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-13T10:14:10.208Z"
+    }
+  ],
   "rejected": []
 }
