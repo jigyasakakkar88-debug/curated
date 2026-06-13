@@ -27,17 +27,30 @@ module.exports = async function handler(req, res) {
 
   try {
     // ── 1. Load all data in parallel ──────────────────────
-    const [brands, recData, logData, learnings] = await Promise.all([
+    const [brands, recData, logData, learnings, feedback] = await Promise.all([
       readFromGitHub('brands.json').catch(() => []),
       readFromGitHub('recommendations.json').catch(() => ({ pending: [], rejected: [] })),
       readFromGitHub('discovery_log.json').catch(() => ({ runs: [] })),
       readFromGitHub('discovery_learnings.json').catch(() => null),
+      readFromGitHub('user_feedback.json').catch(() => ({ entries: [] })),
     ]);
 
     const existingUrls      = new Set(brands.map(b => rootDomain(b.url)).filter(Boolean));
     const pendingUrls       = new Set((recData.pending || []).map(r => rootDomain(r.url)).filter(Boolean));
     const rejectedIds       = new Set(recData.rejected || []);
     const existingBrandList = brands.map(b => b.name).join(', ') || 'none yet';
+
+    // Brands marked not_relevant by user — exclude from recommendations
+    const feedbackEntries     = feedback?.entries || [];
+    const userExcludedIds     = new Set(
+      feedbackEntries.filter(e => e.rating === 'not_relevant').map(e => e.storefrontId)
+    );
+    const userExcludedUrls    = new Set(
+      feedbackEntries.filter(e => e.rating === 'not_relevant').map(e => rootDomain(e.storefrontUrl)).filter(Boolean)
+    );
+
+    // Current run number
+    const runNumber = (logData.runs || []).length + 1;
 
     // ── 2. Exploration axes (base + learned new axes) ─────
     const baseAxes = [
@@ -70,8 +83,9 @@ module.exports = async function handler(req, res) {
 
     const axis = allAxes[new Date().getDate() % allAxes.length];
 
-    // ── 3. Build system prompt with injected learnings ────
-    const learningsSection = buildLearningsSection(learnings);
+    // ── 3. Build system prompt with injected learnings + feedback ─
+    const learningsSection  = buildLearningsSection(learnings);
+    const feedbackSection   = await buildFeedbackSection(feedbackEntries);
 
     const systemPrompt = `You are a fashion brand discovery agent for Curated, a personal Indian fashion aggregator. Your job is to discover new INDIAN fashion brands.
 
@@ -93,7 +107,7 @@ Search strategies that work well:
 - "indie [aesthetic] Indian label storefront" — e.g. "indie slow fashion Indian label storefront"
 - "[designer name] Indian fashion label" — follow up on designer names you spot in snippets
 - Add "site:shopify.com" occasionally to surface indie Shopify storefronts directly
-${learningsSection}
+${learningsSection}${feedbackSection}
 Existing brands already on Curated — do NOT recommend these: ${existingBrandList}`;
 
     const userMsg = brief.trim()
@@ -168,7 +182,7 @@ Existing brands already on Curated — do NOT recommend these: ${existingBrandLi
                   const hostname = new URL(domain).hostname.replace(/^www\./, '');
                   if (SKIP_DOMAINS.has(hostname)) return false;
                 } catch { return false; }
-                return !existingUrls.has(domain) && !pendingUrls.has(domain);
+                return !existingUrls.has(domain) && !pendingUrls.has(domain) && !userExcludedUrls.has(domain);
               });
               const top = filtered.slice(0, 10).map((r, i) => ({
                 position: i + 1,
@@ -212,7 +226,7 @@ Existing brands already on Curated — do NOT recommend these: ${existingBrandLi
     finalRecs.forEach((r, i) => {
       const url = urlsToTest[i];
       const id  = makeId(url);
-      if (rejectedIds.has(id)) return;
+      if (rejectedIds.has(id) || userExcludedIds.has(id)) return;
 
       const st        = shopifyTests[i];
       const isShopify = st.status === 'fulfilled' && st.value.valid;
@@ -230,6 +244,8 @@ Existing brands already on Curated — do NOT recommend these: ${existingBrandLi
         sampleProduct:  isShopify ? st.value.sampleProduct : null,
         productCount:   isShopify ? st.value.productCount  : null,
         discoveredAt:   new Date().toISOString(),
+        runNumber,
+        searchAxis:     axis.theme,
         sourceQuery,
         sourcePosition,
       });
@@ -312,6 +328,56 @@ Existing brands already on Curated — do NOT recommend these: ${existingBrandLi
     return res.status(500).json({ success: false, error: e.message });
   }
 };
+
+// ── Feedback → system prompt injection ───────────────────
+
+async function buildFeedbackSection(entries) {
+  if (!entries?.length) return '';
+
+  const liked      = entries.filter(e => e.rating === 'thumbs_up');
+  const notRelevant = entries.filter(e => e.rating === 'not_relevant');
+  const withComment = entries.filter(e => e.comment);
+
+  const lines = ['\n## User feedback from previous recommendations:'];
+
+  // Use Claude to extract actionable patterns from comments
+  if (withComment.length > 0) {
+    try {
+      const prompt = `Analyze these user feedback comments for an Indian fashion brand discovery system.
+Extract actionable patterns in 3 concise sentences:
+1. What qualities users appreciate (e.g. natural dyes, artisanal craft, specific aesthetics)
+2. What barriers or dislikes they flag (e.g. high prices, too formal, wrong vibe)
+3. One concrete search guidance (e.g. "prioritise brands under ₹3000", "avoid heavy embroidery")
+
+Feedback:
+${withComment.map(e => `- "${e.storefrontName}" (${e.rating}): "${e.comment}"`).join('\n')}
+
+Return only the 3 sentences, nothing else.`;
+
+      const resp = await callClaude(
+        'Extract concise actionable patterns from user feedback. Return exactly 3 sentences.',
+        [{ role: 'user', content: prompt }],
+        []
+      );
+      const summary = resp.content.find(b => b.type === 'text')?.text?.trim();
+      if (summary) lines.push(summary);
+    } catch {}
+  }
+
+  if (liked.length) {
+    lines.push(`Brands users liked: ${liked.slice(-8).map(e => e.storefrontName).join(', ')}`);
+  }
+
+  if (notRelevant.length) {
+    lines.push(`\nBrands marked NOT RELEVANT by user — do NOT recommend similar brands:`);
+    notRelevant.slice(-10).forEach(e => {
+      const why = e.comment ? ` — user said: "${e.comment}"` : '';
+      lines.push(`  - ${e.storefrontName} (${e.storefrontUrl})${why}`);
+    });
+  }
+
+  return '\n' + lines.join('\n');
+}
 
 // ── Learnings → system prompt injection ───────────────────
 

@@ -121,6 +121,21 @@ input:focus { border-color:var(--accent); }
 .score-pip.filled-4 { background:#5A8A75; }
 .score-pip.filled-3 { background:#8B6F2A; }
 .score-pip.filled-2, .score-pip.filled-1 { background:#9B3A2A; }
+.run-header { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); padding:14px 0 6px; border-top:1px solid var(--border); margin-top:8px; }
+.run-header:first-child { border-top:none; padding-top:4px; }
+.rec-feedback { border-top:1px solid var(--border); margin-top:12px; padding-top:12px; }
+.feedback-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+.feedback-ratings { display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
+.btn-rate { padding:6px 12px; border:1px solid var(--border); background:var(--warm); font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; cursor:pointer; transition:all 0.15s; }
+.btn-rate:hover { border-color:var(--accent); }
+.btn-rate.active-thumbs_up   { background:#e8f4f0; border-color:var(--ok);   color:var(--ok);   }
+.btn-rate.active-neutral      { background:#fdf8f0; border-color:var(--warn); color:var(--warn); }
+.btn-rate.active-not_relevant { background:#fdf1ef; border-color:var(--err);  color:var(--err);  }
+.feedback-comment { width:100%; box-sizing:border-box; padding:8px 10px; font-family:'Jost',sans-serif; font-size:12px; border:1px solid var(--border); background:var(--warm); resize:vertical; min-height:52px; outline:none; margin-bottom:8px; line-height:1.5; }
+.feedback-comment:focus { border-color:var(--accent); }
+.btn-feedback-submit { padding:6px 14px; background:none; border:1px solid var(--border); color:var(--muted); font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; cursor:pointer; }
+.btn-feedback-submit:hover { border-color:var(--accent); color:var(--accent); }
+.btn-feedback-submit:disabled { opacity:0.5; cursor:not-allowed; }
 .btn-visit-primary { padding:7px 16px; background:var(--ink); color:var(--paper); border:none; font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; font-family:'DM Mono',monospace; text-decoration:none; display:inline-block; }
 .btn-visit-primary:hover { background:var(--accent); }
 .rec-empty { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); padding:16px 0; line-height:1.8; }
@@ -547,7 +562,10 @@ async function dismissRec(id) {
   }
 }
 
+let currentRecs = [];
+
 function renderRecommendations(recs) {
+  currentRecs = recs;
   const listEl  = document.getElementById('recList');
   const countEl = document.getElementById('recCount');
   countEl.textContent = recs.length ? `${recs.length} pending` : '';
@@ -557,39 +575,116 @@ function renderRecommendations(recs) {
     return;
   }
 
-  listEl.innerHTML = recs.map(r => {
-    const score = r.score ?? null;
-    const pips  = score != null
-      ? Array.from({length:5}, (_,i) => `<span class="score-pip ${i < score ? 'filled-'+score : ''}"></span>`).join('')
-      : '';
-    const scoreHtml = score != null
-      ? `<div class="rec-score">${pips}<span style="margin-left:4px;color:var(--muted)">${score}/5${r.evaluatorNotes ? ' · ' + esc(r.evaluatorNotes) : ''}</span></div>`
-      : '';
-    return `
-    <div class="rec-card">
-      <span class="shopify-badge ${r.isShopify ? 'yes' : 'no'}">
-        ${r.isShopify ? '✓ Shopify' : '◆ Non-Shopify'}
-      </span>
-      ${scoreHtml}
-      <div class="rec-name">${esc(r.name)}</div>
-      <div class="rec-url"><a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:var(--muted)">${esc(r.url)}</a></div>
-      <div class="rec-reason">💡 ${esc(r.reason)}</div>
-      <div class="rec-meta">
-        ${r.productCount ? `${r.productCount}+ products` : ''}
-        ${r.sampleProduct ? ` &nbsp;·&nbsp; e.g. "${esc(r.sampleProduct)}"` : ''}
-      </div>
-      <div class="rec-actions">
-        ${r.isShopify
-          ? `<button class="btn-accept" onclick="acceptRec('${esc(r.id)}')">+ Add to Feed</button>
-             <a class="btn-visit" href="${esc(r.url)}" target="_blank" rel="noopener">Visit Site →</a>`
-          : `<a class="btn-visit-primary" href="${esc(r.url)}" target="_blank" rel="noopener">Visit Site →</a>`
-        }
-        <button class="btn-dismiss" onclick="dismissRec('${esc(r.id)}')">Dismiss</button>
-      </div>
-      ${!r.isShopify ? `<div class="rec-note">Products can't auto-load — browse directly or add manually via the form above.</div>` : ''}
-    </div>
-  `;
-  }).join('');
+  // Group by run number (newest run first)
+  const byRun = {};
+  recs.forEach(r => {
+    const rn = r.runNumber || 0;
+    if (!byRun[rn]) byRun[rn] = [];
+    byRun[rn].push(r);
+  });
+  const runKeys = Object.keys(byRun).map(Number).sort((a, b) => b - a);
+
+  let html = '';
+  runKeys.forEach(rn => {
+    const axisLabel = byRun[rn][0]?.searchAxis || '';
+    html += `<div class="run-header">Run #${rn || '—'}${axisLabel ? ' · ' + esc(axisLabel) : ''}</div>`;
+    html += byRun[rn].map(r => {
+      const id    = r.id;
+      const score = r.score ?? null;
+      const pips  = score != null
+        ? Array.from({length:5}, (_,i) => `<span class="score-pip ${i < score ? 'filled-'+score : ''}"></span>`).join('')
+        : '';
+      const scoreHtml = score != null
+        ? `<div class="rec-score">${pips}<span style="margin-left:4px;color:var(--muted)">${score}/5${r.evaluatorNotes ? ' · ' + esc(r.evaluatorNotes) : ''}</span></div>`
+        : '';
+      return `
+      <div class="rec-card" id="card-${esc(id)}">
+        <span class="shopify-badge ${r.isShopify ? 'yes' : 'no'}">
+          ${r.isShopify ? '✓ Shopify' : '◆ Non-Shopify'}
+        </span>
+        ${scoreHtml}
+        <div class="rec-name">${esc(r.name)}</div>
+        <div class="rec-url"><a href="${esc(r.url)}" target="_blank" rel="noopener" style="color:var(--muted)">${esc(r.url)}</a></div>
+        <div class="rec-reason">💡 ${esc(r.reason)}</div>
+        <div class="rec-meta">
+          ${r.productCount ? `${r.productCount}+ products` : ''}
+          ${r.sampleProduct ? ` &nbsp;·&nbsp; e.g. "${esc(r.sampleProduct)}"` : ''}
+        </div>
+        <div class="rec-actions">
+          ${r.isShopify
+            ? `<button class="btn-accept" onclick="acceptRec('${esc(id)}')">+ Add to Feed</button>
+               <a class="btn-visit" href="${esc(r.url)}" target="_blank" rel="noopener">Visit Site →</a>`
+            : `<a class="btn-visit-primary" href="${esc(r.url)}" target="_blank" rel="noopener">Visit Site →</a>`
+          }
+          <button class="btn-dismiss" onclick="dismissRec('${esc(id)}')">Dismiss</button>
+        </div>
+        ${!r.isShopify ? `<div class="rec-note">Products can't auto-load — browse directly or add manually via the form above.</div>` : ''}
+        <div class="rec-feedback">
+          <div class="feedback-label">Rate this discovery</div>
+          <div class="feedback-ratings">
+            <button class="btn-rate" id="rate-thumbs_up-${esc(id)}"   onclick="selectRating('${esc(id)}','thumbs_up')">👍 Relevant</button>
+            <button class="btn-rate" id="rate-neutral-${esc(id)}"     onclick="selectRating('${esc(id)}','neutral')">😐 Neutral</button>
+            <button class="btn-rate" id="rate-not_relevant-${esc(id)}" onclick="selectRating('${esc(id)}','not_relevant')">👎 Not for me</button>
+          </div>
+          <textarea id="fb-comment-${esc(id)}" class="feedback-comment" placeholder="What did you think? e.g. 'nice aesthetic but too expensive' or 'not the right vibe' — helps improve future discoveries"></textarea>
+          <button class="btn-feedback-submit" id="fb-submit-${esc(id)}" onclick="submitFeedback('${esc(id)}')">Send Feedback</button>
+        </div>
+      </div>`;
+    }).join('');
+  });
+  listEl.innerHTML = html;
+}
+
+// ── Feedback ──────────────────────────────────────────────
+
+const ratingState = {}; // recId → rating string
+
+function selectRating(recId, rating) {
+  ratingState[recId] = rating;
+  ['thumbs_up', 'neutral', 'not_relevant'].forEach(r => {
+    const btn = document.getElementById(`rate-${r}-${recId}`);
+    if (!btn) return;
+    btn.className = 'btn-rate' + (r === rating ? ` active-${rating}` : '');
+  });
+}
+
+async function submitFeedback(recId) {
+  const rating = ratingState[recId];
+  if (!rating) { showToast('Please select a rating first'); return; }
+
+  const rec     = currentRecs.find(r => r.id === recId);
+  const comment = (document.getElementById(`fb-comment-${recId}`)?.value || '').trim();
+  const btn     = document.getElementById(`fb-submit-${recId}`);
+
+  btn.textContent = 'Saving…'; btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${password}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        storefrontId:   rec?.id,
+        storefrontName: rec?.name,
+        storefrontUrl:  rec?.url,
+        rating,
+        comment:        comment || null,
+        searchAxis:     rec?.searchAxis || null,
+        runNumber:      rec?.runNumber  || null,
+        discoveryScore: rec?.score      || null,
+      }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      btn.textContent = '✓ Feedback saved';
+      showToast('Feedback saved — helps improve future discoveries');
+    } else {
+      btn.textContent = 'Send Feedback'; btn.disabled = false;
+      showToast('Error: ' + (data.error || 'unknown'));
+    }
+  } catch (e) {
+    btn.textContent = 'Send Feedback'; btn.disabled = false;
+    showToast('Error: ' + e.message);
+  }
 }
 
 // ── Toast + utils ─────────────────────────────────────────
