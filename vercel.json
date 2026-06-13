@@ -1,7 +1,7 @@
 {
   "version": 2,
   "functions": {
-    "api/discover.js": { "maxDuration": 120 }
+    "api/discover.js": { "maxDuration": 300 }
   },
   "routes": [
     { "src": "/api/discover",         "dest": "/api/discover" },

@@ -1,4 +1,5 @@
-const https = require('https');
+const https  = require('https');
+const crypto = require('crypto');
 
 const GITHUB_TOKEN   = process.env.GITHUB_TOKEN       || "";
 const GITHUB_REPO    = process.env.GITHUB_REPO        || "";
@@ -6,7 +7,9 @@ const SERPAPI_KEY    = process.env.SERPAPI_KEY         || "";
 const ANTHROPIC_KEY  = process.env.ANTHROPIC_API_KEY  || "";
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD      || "changeme123";
 const GITHUB_BRANCH  = "main";
-const MAX_TURNS      = 12;
+const MAX_TURNS      = 15;
+const LEARNING_INTERVAL = 3;  // run learning analysis every N runs
+const MAX_LOG_RUNS   = 60;    // cap log size
 
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -17,43 +20,100 @@ module.exports = async function handler(req, res) {
   if (req.headers["authorization"] !== `Bearer ${ADMIN_PASSWORD}`) {
     return res.status(401).json({ error: "Unauthorized" });
   }
-  if (!SERPAPI_KEY) {
-    return res.status(500).json({ error: "SERPAPI_KEY not configured in Vercel environment variables." });
-  }
-  if (!ANTHROPIC_KEY) {
-    return res.status(500).json({ error: "ANTHROPIC_API_KEY not configured in Vercel environment variables." });
-  }
+  if (!SERPAPI_KEY)    return res.status(500).json({ error: "SERPAPI_KEY not configured." });
+  if (!ANTHROPIC_KEY)  return res.status(500).json({ error: "ANTHROPIC_API_KEY not configured." });
 
   const { brief = '' } = req.body || {};
 
   try {
-    // Load existing data
-    const [brands, recData] = await Promise.all([
+    // ── 1. Load all data in parallel ──────────────────────
+    const [brands, recData, logData, learnings] = await Promise.all([
       readFromGitHub('brands.json').catch(() => []),
       readFromGitHub('recommendations.json').catch(() => ({ pending: [], rejected: [] })),
+      readFromGitHub('discovery_log.json').catch(() => ({ runs: [] })),
+      readFromGitHub('discovery_learnings.json').catch(() => null),
     ]);
 
-    const existingUrls = new Set(brands.map(b => rootDomain(b.url)).filter(Boolean));
-    const pendingUrls  = new Set((recData.pending || []).map(r => rootDomain(r.url)).filter(Boolean));
-    const rejectedIds  = new Set(recData.rejected || []);
+    const existingUrls      = new Set(brands.map(b => rootDomain(b.url)).filter(Boolean));
+    const pendingUrls       = new Set((recData.pending || []).map(r => rootDomain(r.url)).filter(Boolean));
+    const rejectedIds       = new Set(recData.rejected || []);
     const existingBrandList = brands.map(b => b.name).join(', ') || 'none yet';
 
-    // Tool definitions
+    // ── 2. Exploration axes (base + learned new axes) ─────
+    const baseAxes = [
+      {
+        theme: 'Regional craft traditions',
+        angles: ['Kutch embroidery and mirror work India brand', 'Ajrakh block print Rajasthan brand storefront', 'Chanderi Maheshwari weaves MP clothing brand', 'Pochampally Ikat Telangana Odisha brand', 'Kalamkari hand-painted textiles Andhra brand'],
+      },
+      {
+        theme: 'Slow fashion and sustainable labels',
+        angles: ['natural dye indie label India clothing brand', 'zero-waste upcycled Indian fashion brand', 'handspun khadi clothing brand India storefront', 'organic cotton indie label India women', 'artisan cooperative clothing brand India'],
+      },
+      {
+        theme: 'Contemporary Indian designers',
+        angles: ['independent Indian womenswear designer brand', 'contemporary fusion Indian clothing label storefront', 'minimalist Indian ethnic wear brand', 'NID NIFT graduate fashion label India', 'emerging Indian designer brand official website'],
+      },
+      {
+        theme: 'Specific garment categories',
+        angles: ['hand block printed kurta brand India storefront', 'Indian linen cotton co-ord set brand', 'indie Indian saree label brand website', 'Indian resort vacation wear brand storefront', 'artisanal Indian jacket cape brand'],
+      },
+    ];
+
+    // Append any new axes learned from previous runs
+    const allAxes = [...baseAxes, ...(learnings?.newAxes || [])];
+
+    // If learnings flag axes to emphasize, weight them by inserting duplicates
+    if (learnings?.emphasizeAxes?.length) {
+      const boosted = allAxes.filter(a => learnings.emphasizeAxes.includes(a.theme));
+      allAxes.push(...boosted); // appears twice → double chance of selection
+    }
+
+    const axis = allAxes[new Date().getDate() % allAxes.length];
+
+    // ── 3. Build system prompt with injected learnings ────
+    const learningsSection = buildLearningsSection(learnings);
+
+    const systemPrompt = `You are a fashion brand discovery agent for Curated, a personal Indian fashion aggregator. Your job is to discover new INDIAN fashion brands.
+
+You have two tools:
+- search_web: run a Google search; returns up to 10 results with position number, title, URL, snippet
+- save_recommendations: save your final curated list (call this once done)
+
+STRICT RULES — no exceptions:
+1. INDIA ONLY — every brand must be founded in India, headquartered in India, and primarily serve Indian customers. If the snippet/title does not clearly confirm the brand is Indian, skip it.
+2. Only recommend direct BRAND STOREFRONTS (the brand's own website, e.g. anokhi.com). No blogs, magazines, multi-brand retailers, aggregators, or marketplaces.
+3. Never recommend: Myntra, Nykaa, Amazon, Flipkart, Ajio, Meesho, Indiamart, Craftsvilla, TataCliq, Vogue, Elle, Harper's Bazaar, Wikipedia, Reddit, Quora, Medium, Instagram, Pinterest, Zara India, H&M India, or any global brand with an India storefront.
+4. Never recommend an article, listicle, review, or "top 10 brands" page — these are disqualified even if the URL looks like a brand.
+5. Run 6-8 targeted searches before saving. Each search must explore a genuinely different angle.
+6. Find 4-8 genuinely new Indian brand storefronts, then call save_recommendations.
+
+Search strategies that work well:
+- "[craft/technique] brand India official website" — e.g. "ajrakh block print brand India official website"
+- "[Indian region] handloom clothing brand" — e.g. "Kutch weave women clothing brand"
+- "indie [aesthetic] Indian label storefront" — e.g. "indie slow fashion Indian label storefront"
+- "[designer name] Indian fashion label" — follow up on designer names you spot in snippets
+- Add "site:shopify.com" occasionally to surface indie Shopify storefronts directly
+${learningsSection}
+Existing brands already on Curated — do NOT recommend these: ${existingBrandList}`;
+
+    const userMsg = brief.trim()
+      ? `Style brief: "${brief.trim()}"\n\nDiscover 4-8 new Indian fashion brand websites matching this brief. Search from multiple distinct angles — aesthetics, materials, occasions, regional craft traditions. Only recommend clearly Indian brands.`
+      : `Discover 4-8 new Indian fashion brand websites for Curated.\n\nToday's exploration theme: **${axis.theme}**\nAngles to explore: ${axis.angles.join(' · ')}\n\nSearch each angle with a targeted query. After exhausting this theme, branch into adjacent Indian craft traditions or indie labels you spot in snippets. Only recommend brands clearly based in India.`;
+
+    // ── 4. Tool definitions ───────────────────────────────
     const tools = [
       {
         name: "search_web",
-        description: "Search Google for Indian fashion brands. Returns up to 10 results with title, URL, and snippet. Run 4-8 targeted searches before saving.",
+        description: "Search Google for Indian fashion brands. Returns up to 10 results with position (1=top), title, URL, snippet. Run 6-8 targeted searches before saving.",
         input_schema: {
           type: "object",
-          properties: {
-            query: { type: "string", description: "Search query to find brand websites" }
-          },
-          required: ["query"]
-        }
+          properties: { query: { type: "string" } },
+          required: ["query"],
+        },
       },
       {
         name: "save_recommendations",
-        description: "Save your final curated list of brand website URLs. Call this once you have found 3-8 high-quality brand websites. Each recommendation needs a URL, name, and reason.",
+        description: "Save your final curated list. Call once you have 4-8 high-quality Indian brand storefronts.",
         input_schema: {
           type: "object",
           properties: {
@@ -62,79 +122,28 @@ module.exports = async function handler(req, res) {
               items: {
                 type: "object",
                 properties: {
-                  url:    { type: "string", description: "Full URL of the brand website, e.g. https://anokhi.com" },
-                  name:   { type: "string", description: "Brand name" },
-                  reason: { type: "string", description: "Why this brand matches the style brief (1-2 sentences)" }
+                  url:    { type: "string", description: "Brand website URL" },
+                  name:   { type: "string" },
+                  reason: { type: "string", description: "Why this is a good Indian fashion brand (1-2 sentences)" },
                 },
-                required: ["url", "name", "reason"]
-              }
-            }
+                required: ["url", "name", "reason"],
+              },
+            },
           },
-          required: ["recommendations"]
-        }
-      }
-    ];
-
-    const systemPrompt = `You are a fashion brand discovery agent for Curated, a personal Indian fashion aggregator. Your job is to discover new INDIAN fashion brands.
-
-You have two tools:
-- search_web: run a Google search and get back 10 results
-- save_recommendations: save your final curated list of brand URLs (call this once done)
-
-STRICT RULES — follow these without exception:
-1. INDIA ONLY — every brand you recommend must be founded in India, headquartered in India, and primarily serve Indian customers. If the snippet or title does not clearly indicate the brand is Indian, skip it.
-2. Only recommend direct BRAND STOREFRONTS with their own website (e.g. anokhi.com, fabindia.com). No blogs, magazines, marketplaces, multi-brand retailers, or aggregators.
-3. Never recommend: Myntra, Nykaa Fashion, Amazon, Flipkart, Ajio, Meesho, Indiamart, Craftsvilla, TataCliq, Vogue, Elle, Harper's Bazaar, Wikipedia, Reddit, Quora, Medium, Instagram, Pinterest, or any article/listicle URLs.
-4. Never recommend international brands (e.g. Zara India, H&M India, global brands with an India store).
-5. Only recommend a brand if you can confirm it is a real fashion brand storefront from the title and snippet — not a search result about a brand, not a review, not a news article.
-6. Run 6-8 targeted searches before saving. Each search should explore a distinct angle — don't repeat the same query.
-7. After each search, assess results critically. If a result looks like a blog or marketplace, discard it.
-8. Find 4-8 genuinely new brand websites, then call save_recommendations.
-
-Search strategies that work well:
-- "[specific craft/technique] brand India site" (e.g. "ajrakh block print brand India")
-- "[region] handloom clothing brand India" (e.g. "Kutch weave clothing brand India")
-- "indie [aesthetic] Indian women's clothing brand" (e.g. "indie cottagecore Indian women's clothing brand")
-- "[designer name] Indian fashion label" when you spot a designer name in results
-- Include "online store" or "official website" to surface storefronts over articles
-
-Existing brands already on Curated (do NOT recommend these): ${existingBrandList}`;
-
-    // Rotate exploration axes so each no-brief run discovers a different corner of Indian fashion
-    const explorationAxes = [
-      {
-        theme: 'Regional craft traditions',
-        angles: ['Kutch embroidery and mirror work', 'Ajrakh and dabu block print from Rajasthan', 'Chanderi and Maheshwari weaves from MP', 'Pochampally and Ikat from Telangana/Odisha', 'Kalamkari hand-painted textiles from Andhra'],
-      },
-      {
-        theme: 'Slow fashion and sustainable labels',
-        angles: ['natural dye indie labels', 'zero-waste and upcycled Indian fashion', 'handspun khadi clothing brands', 'organic cotton indie labels India', 'artisan cooperative clothing brands'],
-      },
-      {
-        theme: 'Contemporary Indian designers',
-        angles: ['independent Indian women\'s wear designers', 'contemporary fusion Indian label', 'minimalist Indian ethnic wear', 'NID/NIFT graduate fashion labels', 'emerging Indian designer storefronts'],
-      },
-      {
-        theme: 'Specific garment categories',
-        angles: ['hand-block-printed kurta brands India', 'Indian linen and cotton co-ord sets', 'indie Indian saree labels', 'Indian resort and vacation wear brands', 'artisanal Indian accessories and textiles'],
+          required: ["recommendations"],
+        },
       },
     ];
 
-    const axis = explorationAxes[new Date().getDate() % explorationAxes.length];
-
-    const userMsg = brief.trim()
-      ? `Style brief: "${brief.trim()}"\n\nDiscover 4-8 new Indian fashion brand websites that match this brief. For each search, try a distinct angle — different aesthetics, materials, occasions, regional craft traditions. Only recommend brands that are clearly Indian.`
-      : `Discover 4-8 new Indian fashion brand websites to add to Curated.\n\nToday's exploration theme: **${axis.theme}**\n\nAngles to explore: ${axis.angles.join('; ')}.\n\nSearch each angle specifically. After exhausting this theme, if you still need more brands, branch out to adjacent Indian craft traditions or indie labels you spot in results. Only recommend brands clearly based in India.`;
-
-    // Agentic loop
-    let messages   = [{ role: 'user', content: userMsg }];
-    let finalRecs  = null;
-    let turns      = 0;
-    const searchLog = [];
+    // ── 5. Agentic discovery loop ─────────────────────────
+    let messages    = [{ role: 'user', content: userMsg }];
+    let finalRecs   = null;
+    let turns       = 0;
+    const searchLog     = [];
+    const searchResults = []; // [{query, results:[{position,title,url,snippet}]}]
 
     while (turns < MAX_TURNS && !finalRecs) {
       turns++;
-
       const response = await callClaude(systemPrompt, messages, tools);
       messages.push({ role: 'assistant', content: response.content });
 
@@ -151,26 +160,26 @@ Existing brands already on Curated (do NOT recommend these): ${existingBrandList
             searchLog.push(query);
             let resultText;
             try {
-              const results = await googleSearch(query);
-              const filtered = (results.items || []).filter(item => {
+              const raw = await googleSearch(query);
+              const filtered = (raw.items || []).filter(item => {
                 const domain = rootDomain(item.link);
                 if (!domain) return false;
                 try {
                   const hostname = new URL(domain).hostname.replace(/^www\./, '');
                   if (SKIP_DOMAINS.has(hostname)) return false;
                 } catch { return false; }
-                if (existingUrls.has(domain) || pendingUrls.has(domain)) return false;
-                return true;
+                return !existingUrls.has(domain) && !pendingUrls.has(domain);
               });
-              const top = filtered.slice(0, 10).map(r => ({
-                title:   r.title,
-                url:     r.link,
-                snippet: r.snippet || '',
+              const top = filtered.slice(0, 10).map((r, i) => ({
+                position: i + 1,
+                title:    r.title,
+                url:      r.link,
+                snippet:  r.snippet || '',
               }));
-              resultText = top.length
-                ? JSON.stringify(top)
-                : 'No relevant results found for this query. Try a different search.';
+              searchResults.push({ query, results: top });
+              resultText = top.length ? JSON.stringify(top) : 'No relevant results. Try a different query.';
             } catch (e) {
+              searchResults.push({ query, results: [] });
               resultText = `Search error: ${e.message}`;
             }
             toolResults.push({ type: 'tool_result', tool_use_id: block.id, content: resultText });
@@ -182,24 +191,21 @@ Existing brands already on Curated (do NOT recommend these): ${existingBrandList
           }
         }
 
-        if (toolResults.length > 0) {
-          messages.push({ role: 'user', content: toolResults });
-        }
+        if (toolResults.length) messages.push({ role: 'user', content: toolResults });
       }
     }
 
-    if (!finalRecs || finalRecs.length === 0) {
+    if (!finalRecs || !finalRecs.length) {
       return res.status(200).json({
-        success:      true,
-        newFound:     0,
+        success: true, newFound: 0,
         totalPending: (recData.pending || []).length,
-        pending:      recData.pending || [],
-        debug:        { turns, searchLog },
+        pending: recData.pending || [],
+        debug: { turns, searchLog, axis: axis.theme },
       });
     }
 
-    // Test Shopify for each recommendation in parallel
-    const urlsToTest = finalRecs.map(r => rootDomain(r.url) || r.url);
+    // ── 6. Shopify test + source tracking ─────────────────
+    const urlsToTest   = finalRecs.map(r => rootDomain(r.url) || r.url);
     const shopifyTests = await Promise.allSettled(urlsToTest.map(u => testShopify(u)));
 
     const newRecs = [];
@@ -207,38 +213,99 @@ Existing brands already on Curated (do NOT recommend these): ${existingBrandList
       const url = urlsToTest[i];
       const id  = makeId(url);
       if (rejectedIds.has(id)) return;
-      const st       = shopifyTests[i];
+
+      const st        = shopifyTests[i];
       const isShopify = st.status === 'fulfilled' && st.value.valid;
+
+      // Find which query and position surfaced this URL
+      let sourceQuery = null, sourcePosition = null;
+      for (const { query, results } of searchResults) {
+        const hit = results.find(res => rootDomain(res.url) === url || res.url === url);
+        if (hit) { sourceQuery = query; sourcePosition = hit.position; break; }
+      }
+
       newRecs.push({
-        id,
-        name:          r.name,
-        url,
-        reason:        r.reason,
+        id, name: r.name, url, reason: r.reason,
         isShopify,
-        sampleProduct: isShopify ? st.value.sampleProduct : null,
-        productCount:  isShopify ? st.value.productCount  : null,
-        discoveredAt:  new Date().toISOString(),
+        sampleProduct:  isShopify ? st.value.sampleProduct : null,
+        productCount:   isShopify ? st.value.productCount  : null,
+        discoveredAt:   new Date().toISOString(),
+        sourceQuery,
+        sourcePosition,
       });
     });
 
-    // Merge with existing pending, avoiding duplicates
+    // ── 7. Evaluate recommendations ───────────────────────
+    const evaluatedRecs = await evaluateRecommendations(newRecs, brief || axis.theme);
+
+    // ── 8. Save quality recs (score >= 3) to pending ──────
+    const qualityRecs        = evaluatedRecs.filter(r => r.score >= 3);
     const existingPendingIds = new Set((recData.pending || []).map(r => r.id));
     const merged = [
       ...(recData.pending || []),
-      ...newRecs.filter(r => !existingPendingIds.has(r.id)),
+      ...qualityRecs.filter(r => !existingPendingIds.has(r.id)),
     ];
+    const updatedRecs = { pending: merged, rejected: recData.rejected || [] };
+    let recSha = null;
+    try { recSha = await getFileSha('recommendations.json'); } catch {}
+    await writeToGitHub('recommendations.json', updatedRecs, recSha,
+      `Discover: +${qualityRecs.length} recommendations`);
 
-    const updated = { pending: merged, rejected: recData.rejected || [] };
-    let sha = null;
-    try { sha = await getFileSha('recommendations.json'); } catch {}
-    await writeToGitHub('recommendations.json', updated, sha, `Discover: +${newRecs.length} recommendations`);
+    // ── 9. Append to discovery log ────────────────────────
+    const runEntry = {
+      runId:     crypto.randomUUID(),
+      timestamp: new Date().toISOString(),
+      brief:     brief || null,
+      axis:      axis.theme,
+      turns,
+      searchLog,
+      recommendations: evaluatedRecs, // log ALL including underperforming
+      axisScore: evaluatedRecs.length
+        ? +(evaluatedRecs.reduce((s, r) => s + (r.score || 0), 0) / evaluatedRecs.length).toFixed(2)
+        : null,
+    };
+
+    const updatedLog = {
+      runs: [...(logData.runs || []), runEntry].slice(-MAX_LOG_RUNS),
+    };
+    let logSha = null;
+    try { logSha = await getFileSha('discovery_log.json'); } catch {}
+    await writeToGitHub('discovery_log.json', updatedLog, logSha,
+      `Discovery log: run ${updatedLog.runs.length}`);
+
+    // ── 10. Trigger learning every N runs ─────────────────
+    let learningResult = null;
+    const runsSinceLearning = learnings?.lastAnalyzed
+      ? updatedLog.runs.filter(r => r.timestamp > learnings.lastAnalyzed).length
+      : updatedLog.runs.length;
+
+    if (runsSinceLearning >= LEARNING_INTERVAL) {
+      try {
+        learningResult = await runLearningAnalysis(updatedLog);
+        let learnSha = null;
+        try { learnSha = await getFileSha('discovery_learnings.json'); } catch {}
+        await writeToGitHub('discovery_learnings.json', learningResult, learnSha,
+          'Update discovery learnings');
+      } catch (e) {
+        console.error('Learning analysis failed:', e.message);
+      }
+    }
 
     return res.status(200).json({
       success:      true,
-      newFound:     newRecs.length,
+      newFound:     qualityRecs.length,
       totalPending: merged.length,
       pending:      merged,
-      debug:        { turns, searchLog },
+      debug: {
+        turns,
+        searchLog,
+        axis:              axis.theme,
+        axisScore:         runEntry.axisScore,
+        evaluated:         evaluatedRecs.length,
+        underperforming:   evaluatedRecs.filter(r => r.score < 3).length,
+        learningTriggered: !!learningResult,
+        learningSummary:   learningResult?.summary || null,
+      },
     });
 
   } catch (e) {
@@ -246,22 +313,204 @@ Existing brands already on Curated (do NOT recommend these): ${existingBrandList
   }
 };
 
+// ── Learnings → system prompt injection ───────────────────
+
+function buildLearningsSection(learnings) {
+  if (!learnings?.summary) return '';
+  const lines = [
+    '\n## Learnings from previous runs — use these to guide your searches:',
+    learnings.summary,
+  ];
+  if (learnings.emphasizeAxes?.length) {
+    lines.push(`High-performing themes to emphasize: ${learnings.emphasizeAxes.join(', ')}`);
+  }
+  if (learnings.topQueryPatterns?.length) {
+    lines.push(`Query patterns that found the best brands: ${learnings.topQueryPatterns.slice(0, 4).join(' · ')}`);
+  }
+  if (learnings.searchPositionInsight) {
+    lines.push(`Search position insight: ${learnings.searchPositionInsight}`);
+  }
+  return '\n' + lines.join('\n');
+}
+
+// ── Evaluation ────────────────────────────────────────────
+
+async function evaluateRecommendations(recs, context) {
+  if (!recs.length) return [];
+
+  const prompt = `Evaluate these Indian fashion brand recommendations for quality and relevance.
+
+Context/brief: "${context}"
+
+Score each brand 1-5 on OVERALL RELEVANCE:
+5 = Excellent: genuine Indian indie storefront, strong earthy/artisanal aesthetic, clearly a curated label
+4 = Good: real Indian brand storefront, solid fit for slow/artisan fashion
+3 = Acceptable: real brand but more generic or mass-market
+2 = Poor: possibly not India-based, multi-brand aggregator, very generic, or unclear storefront
+1 = Bad: article, listicle, blog, international brand, marketplace — clearly wrong
+
+Also score sub-dimensions 1-5:
+- aesthetic: earthy, handmade, artisanal, slow-fashion sensibility
+- briefMatch: alignment with the context/brief
+- quality: indie curated label vs mass-market generic
+
+Brands to evaluate:
+${JSON.stringify(recs.map(r => ({
+  id: r.id, name: r.name, url: r.url,
+  reason: r.reason, isShopify: r.isShopify, sampleProduct: r.sampleProduct,
+})), null, 2)}
+
+Return ONLY a valid JSON array — no other text, no markdown:
+[{"id":"...","score":N,"isStorefront":true/false,"isIndian":true/false,"aesthetic":N,"briefMatch":N,"quality":N,"notes":"one sentence"}]`;
+
+  try {
+    const resp  = await callClaude(
+      'You are a precise evaluator. Return only a valid JSON array, nothing else.',
+      [{ role: 'user', content: prompt }],
+      []
+    );
+    const text   = resp.content.find(b => b.type === 'text')?.text || '[]';
+    const match  = text.match(/\[[\s\S]*\]/);
+    const scores = match ? JSON.parse(match[0]) : [];
+
+    return recs.map(r => {
+      const s = scores.find(x => x.id === r.id) || {};
+      return {
+        ...r,
+        score: s.score ?? 3,
+        scoreDetails: {
+          isStorefront: s.isStorefront ?? null,
+          isIndian:     s.isIndian     ?? null,
+          aesthetic:    s.aesthetic    ?? null,
+          briefMatch:   s.briefMatch   ?? null,
+          quality:      s.quality      ?? null,
+        },
+        evaluatorNotes: s.notes || '',
+        underperforming: (s.score ?? 3) < 3,
+      };
+    });
+  } catch {
+    return recs.map(r => ({
+      ...r, score: 3,
+      scoreDetails: {}, evaluatorNotes: 'Evaluation failed', underperforming: false,
+    }));
+  }
+}
+
+// ── Learning analysis ─────────────────────────────────────
+
+async function runLearningAnalysis(log) {
+  const runs = (log.runs || []).slice(-20);
+
+  const axisMap  = {};
+  const queryMap = {};
+  const posMap   = {};
+
+  for (const run of runs) {
+    const scored = (run.recommendations || []).filter(r => r.score != null);
+    if (!scored.length) continue;
+    const runAvg = scored.reduce((s, r) => s + r.score, 0) / scored.length;
+
+    if (run.axis) {
+      if (!axisMap[run.axis]) axisMap[run.axis] = { total: 0, count: 0 };
+      axisMap[run.axis].total += runAvg;
+      axisMap[run.axis].count += 1;
+    }
+
+    for (const r of scored) {
+      if (r.sourceQuery) {
+        if (!queryMap[r.sourceQuery]) queryMap[r.sourceQuery] = { total: 0, count: 0 };
+        queryMap[r.sourceQuery].total += r.score;
+        queryMap[r.sourceQuery].count += 1;
+      }
+      if (r.sourcePosition != null) {
+        const p = String(r.sourcePosition);
+        if (!posMap[p]) posMap[p] = { total: 0, count: 0 };
+        posMap[p].total += r.score;
+        posMap[p].count += 1;
+      }
+    }
+  }
+
+  const axisPerf  = Object.entries(axisMap)
+    .map(([axis, d]) => ({ axis, avgScore: +(d.total/d.count).toFixed(2), runs: d.count }))
+    .sort((a, b) => b.avgScore - a.avgScore);
+
+  const queryPerf = Object.entries(queryMap)
+    .map(([query, d]) => ({ query, avgScore: +(d.total/d.count).toFixed(2), uses: d.count }))
+    .sort((a, b) => b.avgScore - a.avgScore)
+    .slice(0, 15);
+
+  const posPerf = Object.entries(posMap)
+    .map(([pos, d]) => ({ position: parseInt(pos), avgScore: +(d.total/d.count).toFixed(2), count: d.count }))
+    .sort((a, b) => a.position - b.position);
+
+  const prompt = `You are analyzing performance data from an Indian fashion brand discovery system to improve future runs.
+
+Axis performance (theme → avg quality score, max 5):
+${JSON.stringify(axisPerf)}
+
+Top query performance (which exact search queries found the best brands):
+${JSON.stringify(queryPerf)}
+
+Search result position performance (position 1-10 within results → avg brand quality score):
+${JSON.stringify(posPerf)}
+
+Total runs analyzed: ${runs.length}
+
+Based on this, generate:
+1. A 2-3 sentence summary of what's working and what isn't
+2. Which axes to emphasize in future runs (top 2-3 performers)
+3. 2-3 new exploration axes NOT yet covered (consider: menswear, bridal, accessories, luxury handloom, specific underexplored states like Kerala/Karnataka/Northeast, plus-size Indian fashion, kidswear)
+4. Top 5 query patterns to continue using (generalize from the best-performing specific queries)
+5. One-sentence insight about which search result positions (1-10) yield the best brand discoveries
+
+Return ONLY valid JSON — no other text:
+{
+  "summary": "...",
+  "emphasizeAxes": ["axis name", "axis name"],
+  "newAxes": [{"theme":"...","angles":["...","...","..."]}],
+  "topQueryPatterns": ["pattern","pattern","pattern","pattern","pattern"],
+  "searchPositionInsight": "..."
+}`;
+
+  const resp  = await callClaude(
+    'You are a data analyst. Return only valid JSON, no other text.',
+    [{ role: 'user', content: prompt }],
+    []
+  );
+  const text  = resp.content.find(b => b.type === 'text')?.text || '{}';
+  const match = text.match(/\{[\s\S]*\}/);
+  const result = match ? JSON.parse(match[0]) : {};
+
+  return {
+    ...result,
+    lastAnalyzed:           new Date().toISOString(),
+    runsAnalyzed:           runs.length,
+    axisPerformance:        axisPerf,
+    queryPerformance:       queryPerf,
+    searchPositionInsights: posPerf,
+  };
+}
+
 // ── Anthropic API ─────────────────────────────────────────
 
 function callClaude(system, messages, tools) {
   return new Promise((resolve, reject) => {
-    const body = JSON.stringify({
+    const bodyObj = {
       model:      'claude-sonnet-4-6',
       max_tokens: 4096,
       system,
       messages,
-      tools,
-    });
+    };
+    if (tools.length) bodyObj.tools = tools;
+    const body = JSON.stringify(bodyObj);
+
     const req = https.request({
       hostname: 'api.anthropic.com',
       path:     '/v1/messages',
       method:   'POST',
-      headers:  {
+      headers: {
         'Content-Type':      'application/json',
         'x-api-key':         ANTHROPIC_KEY,
         'anthropic-version': '2023-06-01',
@@ -273,40 +522,38 @@ function callClaude(system, messages, tools) {
       resp.on('end', () => {
         try {
           const parsed = JSON.parse(data);
-          if (resp.statusCode >= 400) {
-            reject(new Error(parsed.error?.message || `Anthropic ${resp.statusCode}`));
-          } else {
-            resolve(parsed);
-          }
+          if (resp.statusCode >= 400) reject(new Error(parsed.error?.message || `Anthropic ${resp.statusCode}`));
+          else resolve(parsed);
         } catch { reject(new Error('Invalid Anthropic response')); }
       });
     });
     req.on('error', reject);
-    req.setTimeout(30000, () => { req.destroy(); reject(new Error('Anthropic request timed out')); });
+    req.setTimeout(45000, () => { req.destroy(); reject(new Error('Anthropic request timed out')); });
     req.write(body);
     req.end();
   });
 }
 
-// ── Domains to skip — passed to Claude as context and used to filter results ──
+// ── Domains to skip ───────────────────────────────────────
 
 const SKIP_DOMAINS = new Set([
   'instagram.com','pinterest.com','facebook.com','twitter.com','x.com','youtube.com','linkedin.com',
-  'myntra.com','amazon.in','amazon.com','flipkart.com','nykaa.com','ajio.com','meesho.com',
-  'indiamart.com','snapdeal.com','tatacliq.com','craftsvilla.com',
+  'myntra.com','amazon.in','amazon.com','flipkart.com','nykaa.com','nykaafashion.com','ajio.com','meesho.com',
+  'indiamart.com','snapdeal.com','tatacliq.com','craftsvilla.com','gleam.io',
   'vogue.in','elle.in','harpersbazaar.in','femina.in','grazia.in',
   'wikipedia.org','reddit.com','quora.com','medium.com','blogspot.com','wordpress.com',
   'zara.com','hm.com','uniqlo.com','shein.com',
+  'so.city','ecocult.com','thegoodtrade.com','fashionrevolution.org',
 ]);
 
-// ── SerpAPI search ────────────────────────────────────────
+// ── SerpAPI ───────────────────────────────────────────────
 
 function googleSearch(query) {
   return new Promise((resolve, reject) => {
     const qs  = `api_key=${encodeURIComponent(SERPAPI_KEY)}&q=${encodeURIComponent(query)}&num=10&engine=google`;
     const req = https.get(
       `https://serpapi.com/search.json?${qs}`,
-      { headers: { 'Accept': 'application/json' }, timeout: 12000 },
+      { headers: { 'Accept': 'application/json' }, timeout: 15000 },
       (resp) => {
         let data = '';
         resp.on('data', c => data += c);
