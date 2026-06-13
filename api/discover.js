@@ -75,25 +75,56 @@ module.exports = async function handler(req, res) {
       }
     ];
 
-    const systemPrompt = `You are a fashion brand discovery agent for Curated, a personal Indian fashion aggregator. Your job is to discover new Indian fashion brands that match the user's style.
+    const systemPrompt = `You are a fashion brand discovery agent for Curated, a personal Indian fashion aggregator. Your job is to discover new INDIAN fashion brands.
 
 You have two tools:
 - search_web: run a Google search and get back 10 results
-- save_recommendations: save your final curated list of brand URLs (call this to finish)
+- save_recommendations: save your final curated list of brand URLs (call this once done)
 
-Rules:
-1. Run 4-8 targeted searches, exploring different angles (aesthetics, techniques, price points, regions)
-2. Only recommend direct BRAND STOREFRONTS — e.g. anokhi.com, fabindia.com — not blogs, magazines, or marketplaces
-3. Never recommend: Myntra, Nykaa, Amazon, Flipkart, Ajio, Meesho, Instagram pages, Pinterest, Vogue, Elle, Harper's Bazaar, Wikipedia, Reddit, Quora, Medium
-4. Only recommend brands you can confirm are real fashion brand storefronts based on title and snippet
-5. Do NOT recommend any of the existing brands listed below
-6. Find 3-8 genuinely new brand websites, then call save_recommendations
+STRICT RULES — follow these without exception:
+1. INDIA ONLY — every brand you recommend must be founded in India, headquartered in India, and primarily serve Indian customers. If the snippet or title does not clearly indicate the brand is Indian, skip it.
+2. Only recommend direct BRAND STOREFRONTS with their own website (e.g. anokhi.com, fabindia.com). No blogs, magazines, marketplaces, multi-brand retailers, or aggregators.
+3. Never recommend: Myntra, Nykaa Fashion, Amazon, Flipkart, Ajio, Meesho, Indiamart, Craftsvilla, TataCliq, Vogue, Elle, Harper's Bazaar, Wikipedia, Reddit, Quora, Medium, Instagram, Pinterest, or any article/listicle URLs.
+4. Never recommend international brands (e.g. Zara India, H&M India, global brands with an India store).
+5. Only recommend a brand if you can confirm it is a real fashion brand storefront from the title and snippet — not a search result about a brand, not a review, not a news article.
+6. Run 6-8 targeted searches before saving. Each search should explore a distinct angle — don't repeat the same query.
+7. After each search, assess results critically. If a result looks like a blog or marketplace, discard it.
+8. Find 4-8 genuinely new brand websites, then call save_recommendations.
 
-Existing brands already on Curated (skip these): ${existingBrandList}`;
+Search strategies that work well:
+- "[specific craft/technique] brand India site" (e.g. "ajrakh block print brand India")
+- "[region] handloom clothing brand India" (e.g. "Kutch weave clothing brand India")
+- "indie [aesthetic] Indian women's clothing brand" (e.g. "indie cottagecore Indian women's clothing brand")
+- "[designer name] Indian fashion label" when you spot a designer name in results
+- Include "online store" or "official website" to surface storefronts over articles
+
+Existing brands already on Curated (do NOT recommend these): ${existingBrandList}`;
+
+    // Rotate exploration axes so each no-brief run discovers a different corner of Indian fashion
+    const explorationAxes = [
+      {
+        theme: 'Regional craft traditions',
+        angles: ['Kutch embroidery and mirror work', 'Ajrakh and dabu block print from Rajasthan', 'Chanderi and Maheshwari weaves from MP', 'Pochampally and Ikat from Telangana/Odisha', 'Kalamkari hand-painted textiles from Andhra'],
+      },
+      {
+        theme: 'Slow fashion and sustainable labels',
+        angles: ['natural dye indie labels', 'zero-waste and upcycled Indian fashion', 'handspun khadi clothing brands', 'organic cotton indie labels India', 'artisan cooperative clothing brands'],
+      },
+      {
+        theme: 'Contemporary Indian designers',
+        angles: ['independent Indian women\'s wear designers', 'contemporary fusion Indian label', 'minimalist Indian ethnic wear', 'NID/NIFT graduate fashion labels', 'emerging Indian designer storefronts'],
+      },
+      {
+        theme: 'Specific garment categories',
+        angles: ['hand-block-printed kurta brands India', 'Indian linen and cotton co-ord sets', 'indie Indian saree labels', 'Indian resort and vacation wear brands', 'artisanal Indian accessories and textiles'],
+      },
+    ];
+
+    const axis = explorationAxes[new Date().getDate() % explorationAxes.length];
 
     const userMsg = brief.trim()
-      ? `Style brief: "${brief.trim()}"\n\nDiscover 3-8 new Indian fashion brand websites that match this brief. Explore the brief from multiple angles — search for different aesthetics, materials, occasions, and regional traditions that fit it.`
-      : `Discover 3-8 new Indian fashion brand websites to add to Curated. Focus on: handloom, block print, natural dyes, sustainable fashion, artisan labels, slow fashion, indie Indian labels. Search from multiple angles.`;
+      ? `Style brief: "${brief.trim()}"\n\nDiscover 4-8 new Indian fashion brand websites that match this brief. For each search, try a distinct angle — different aesthetics, materials, occasions, regional craft traditions. Only recommend brands that are clearly Indian.`
+      : `Discover 4-8 new Indian fashion brand websites to add to Curated.\n\nToday's exploration theme: **${axis.theme}**\n\nAngles to explore: ${axis.angles.join('; ')}.\n\nSearch each angle specifically. After exhausting this theme, if you still need more brands, branch out to adjacent Indian craft traditions or indie labels you spot in results. Only recommend brands clearly based in India.`;
 
     // Agentic loop
     let messages   = [{ role: 'user', content: userMsg }];
