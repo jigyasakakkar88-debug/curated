@@ -219,6 +219,76 @@
       "sampleProduct": null,
       "productCount": null,
       "discoveredAt": "2026-06-11T08:53:36.271Z"
+    },
+    {
+      "id": "prathaa-in",
+      "name": "Prathaa",
+      "url": "https://prathaa.in",
+      "reason": "A conscious fashion brand offering hand-woven, organic cotton clothing for women in modern silhouettes like dresses, midis, and tunics — directly reviving forgotten Indian weaves with a clean, contemporary aesthetic.",
+      "isShopify": true,
+      "sampleProduct": "BLACK HANDLOOM CROP TOP",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T09:54:06.671Z"
+    },
+    {
+      "id": "ilamra-com",
+      "name": "ILAMRA",
+      "url": "https://www.ilamra.com",
+      "reason": "100% organic cotton clothing with Indian hand-block prints in naturally dyed, earthy tones — designed with modern, experimental cuts that feel fresh yet deeply rooted in Indian craft tradition.",
+      "isShopify": true,
+      "sampleProduct": "Veronica Dress",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T09:54:06.671Z"
+    },
+    {
+      "id": "sepiastories-in",
+      "name": "Sepia Stories",
+      "url": "https://sepiastories.in",
+      "reason": "An Indian organic cotton clothing store that partners with artisan clusters to create handwoven cotton kurtas, dresses, and tops — modern in silhouette with a warm, earthy colour story.",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-13T09:54:06.671Z"
+    },
+    {
+      "id": "cottonconscious-com",
+      "name": "Cotton Conscious",
+      "url": "https://cottonconscious.com",
+      "reason": "Handwoven and block-printed organic cotton clothing made in small batches in Rishikesh — slow fashion with earthy sensibilities and modern, wearable everyday designs.",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-13T09:54:06.671Z"
+    },
+    {
+      "id": "somashop-com",
+      "name": "Soma",
+      "url": "https://somashop.com",
+      "reason": "A Jaipur-based brand offering breathable hand block-printed cotton clothing with artisan detailing — designed for modern everyday elegance with an unmistakably Indian handcrafted character.",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-13T09:54:06.671Z"
+    },
+    {
+      "id": "sutraclothing-in",
+      "name": "Sutra Clothing",
+      "url": "https://sutraclothing.in",
+      "reason": "Specialises in handloom sarees, kurta sets, and ethnic wear in pure cotton — praised for exceptional fabric quality and contemporary fits that bridge traditional handloom and modern dressing.",
+      "isShopify": true,
+      "sampleProduct": "Black Pukhoor Cotton SIlk Woven Dupatta",
+      "productCount": 3,
+      "discoveredAt": "2026-06-13T09:54:06.671Z"
+    },
+    {
+      "id": "theblockart-com",
+      "name": "The Block Art",
+      "url": "https://www.theblockart.com",
+      "reason": "A modern ethnic wear brand combining exquisite hand block prints on cotton fabrics — earthy and artisanal in material but with contemporary, fashion-forward silhouettes for everyday wear.",
+      "isShopify": false,
+      "sampleProduct": null,
+      "productCount": null,
+      "discoveredAt": "2026-06-13T09:54:06.671Z"
     }
   ],
   "rejected": []
