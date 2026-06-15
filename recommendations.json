@@ -103,22 +103,6 @@
       "underperforming": false
     },
     {
-      "id": "tamarindchutney-in",
-      "name": "Tamarind Chutney",
-      "url": "https://tamarindchutney.in",
-      "reason": "A Delhi-based sustainable and ethical fashion brand co-founded by Stanford and NIFT alumni that takes a fresh, contemporary spin on Indian craft traditions while generating fair livelihoods for artisans.",
-      "isShopify": true,
-      "sampleProduct": "Mira Oversized Ikat Blazer (Pre-order)",
-      "productCount": 3,
-      "discoveredAt": "2026-06-13T12:46:45.099Z",
-      "sourceQuery": "ajrakh block print slow fashion India brand site:shopify.com OR site:.in",
-      "sourcePosition": 1,
-      "score": 3,
-      "scoreDetails": {},
-      "evaluatorNotes": "Evaluation failed",
-      "underperforming": false
-    },
-    {
       "id": "sueestore-com",
       "name": "Suee",
       "url": "https://sueestore.com",
@@ -265,6 +249,7 @@
   ],
   "rejected": [
     "kokun-in",
-    "prathaa-in"
+    "prathaa-in",
+    "tamarindchutney-in"
   ]
 }
