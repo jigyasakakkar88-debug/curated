@@ -271,30 +271,6 @@
       "underperforming": false
     },
     {
-      "id": "dhaagaa-in",
-      "name": "Dhaagaa",
-      "url": "https://dhaagaa.in",
-      "reason": "Indian brand storefront specialising in authentic handcrafted textiles — Ajrakh block print, Chikankari embroidery, Kantha stitch, and handloom — sourced directly from regional artisans.",
-      "isShopify": true,
-      "sampleProduct": "Navy Blue  Modal Fabric",
-      "productCount": 3,
-      "discoveredAt": "2026-06-13T13:14:52.707Z",
-      "runNumber": 2,
-      "searchAxis": "Slow fashion and sustainable labels",
-      "sourceQuery": "ajrakh block print brand India official website storefront",
-      "sourcePosition": 8,
-      "score": 4,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 4,
-        "briefMatch": 4,
-        "quality": 4
-      },
-      "evaluatorNotes": "Authentic handcraft-focused Indian label covering Ajrakh, Chikankari, and Kantha, though the sample product (fabric yardage) hints at a slight B2B or textile-retail lean.",
-      "underperforming": false
-    },
-    {
       "id": "vrittidesigns-com",
       "name": "Vritti Designs",
       "url": "https://vrittidesigns.com",
