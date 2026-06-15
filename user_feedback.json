@@ -117,6 +117,21 @@
       "searchAxis": null,
       "runNumber": null,
       "discoveryScore": null
+    },
+    {
+      "id": "8ee947bd-cefe-4d02-91f7-3503d7d0c377",
+      "timestamp": "2026-06-15T10:10:18.624Z",
+      "storefrontId": "prathaa-in",
+      "storefrontName": "Prathaa – Weaving Traditions",
+      "storefrontUrl": "https://prathaa.in",
+      "vibe": "not_for_me",
+      "rating": "not_relevant",
+      "price": "accessible",
+      "design": null,
+      "comment": null,
+      "searchAxis": null,
+      "runNumber": null,
+      "discoveryScore": 3
     }
   ]
 }
