@@ -1,0 +1,154 @@
+{
+  "summary": "Specific garment category queries and direct brand name lookups with official website/storefront anchors are consistently yielding the highest quality scores (4-5), while broader slow fashion and sustainable label queries underperform at 3.58 average. Highly specific queries — naming a craft technique, fiber, or brand directly alongside 'official website storefront' — reliably surface score-5 brands, whereas generic category or site-operator queries like site:shopify.com perform poorly at score 3. Query specificity and craft/material anchoring are the clearest performance drivers across all runs.",
+  "emphasizeAxes": [
+    "Specific garment categories",
+    "Slow fashion and sustainable labels"
+  ],
+  "newAxes": [
+    {
+      "theme": "Regional craft and state-specific fashion labels",
+      "angles": [
+        "Kerala handloom kasavu contemporary womenswear indie brand",
+        "Northeast India Manipur Nagaland traditional textile modern fashion label",
+        "Karnataka Ilkal or Dharwad handloom indie clothing brand"
+      ]
+    },
+    {
+      "theme": "Luxury handloom and bridal Indian fashion",
+      "angles": [
+        "luxury handwoven Banarasi or Kanjeevaram bridal label India independent brand",
+        "contemporary Indian bridal trousseau indie designer official storefront",
+        "high-end handloom saree and occasion wear independent India brand website"
+      ]
+    },
+    {
+      "theme": "Inclusive and niche demographic fashion",
+      "angles": [
+        "plus-size Indian ethnic wear independent brand official website storefront",
+        "Indian kidswear organic cotton independent label official website",
+        "Indian menswear handloom kurta independent brand official storefront"
+      ]
+    }
+  ],
+  "topQueryPatterns": [
+    "[specific brand name] India [craft/material] brand official website storefront",
+    "[craft technique e.g. hand block print / ajrakh / ikat] [garment type] brand India official storefront website",
+    "[material e.g. organic cotton / natural dye / handwoven linen] indie label India clothing brand official website",
+    "[garment category e.g. co-ord set / kurta / resort wear] affordable independent label brand India storefront",
+    "[regional craft or technique] slow fashion India brand official website"
+  ],
+  "searchPositionInsight": "Positions 3, 5, 7, and 8 yield the highest average brand quality scores (all at 4.0), suggesting that the top two results often surface well-known or commercial brands while genuinely high-quality indie discoveries are more reliably found from position 3 onward.",
+  "lastAnalyzed": "2026-06-15T10:18:48.280Z",
+  "runsAnalyzed": 3,
+  "axisPerformance": [
+    {
+      "axis": "Specific garment categories",
+      "avgScore": 4.2,
+      "runs": 1
+    },
+    {
+      "axis": "Slow fashion and sustainable labels",
+      "avgScore": 3.58,
+      "runs": 2
+    }
+  ],
+  "queryPerformance": [
+    {
+      "query": "Livbio naturally dyed organic cotton India brand official website",
+      "avgScore": 5,
+      "uses": 1
+    },
+    {
+      "query": "hand block printed kurta brand India official storefront website",
+      "avgScore": 5,
+      "uses": 2
+    },
+    {
+      "query": "Iro Iro India upcycled handwoven fashion brand official website storefront",
+      "avgScore": 4,
+      "uses": 1
+    },
+    {
+      "query": "ajrakh block print brand India official website storefront",
+      "avgScore": 4,
+      "uses": 2
+    },
+    {
+      "query": "Indian linen co-ord set affordable independent label brand India storefront",
+      "avgScore": 4,
+      "uses": 2
+    },
+    {
+      "query": "Nicobar India clothing brand official website",
+      "avgScore": 3,
+      "uses": 1
+    },
+    {
+      "query": "The Jodi Life Indian fashion brand official website",
+      "avgScore": 3,
+      "uses": 1
+    },
+    {
+      "query": "ajrakh block print slow fashion India brand site:shopify.com OR site:.in",
+      "avgScore": 3,
+      "uses": 3
+    },
+    {
+      "query": "Sui slow fashion India handloom brand official website",
+      "avgScore": 3,
+      "uses": 1
+    },
+    {
+      "query": "ikat handloom indie clothing brand India women official website storefront",
+      "avgScore": 3,
+      "uses": 1
+    },
+    {
+      "query": "natural dye indie label India clothing brand official website",
+      "avgScore": 3,
+      "uses": 1
+    },
+    {
+      "query": "Indian resort vacation wear brand storefront India website",
+      "avgScore": 3,
+      "uses": 1
+    }
+  ],
+  "searchPositionInsights": [
+    {
+      "position": 1,
+      "avgScore": 3.25,
+      "count": 4
+    },
+    {
+      "position": 2,
+      "avgScore": 3.75,
+      "count": 4
+    },
+    {
+      "position": 3,
+      "avgScore": 4,
+      "count": 2
+    },
+    {
+      "position": 4,
+      "avgScore": 3,
+      "count": 2
+    },
+    {
+      "position": 5,
+      "avgScore": 4,
+      "count": 3
+    },
+    {
+      "position": 7,
+      "avgScore": 4,
+      "count": 1
+    },
+    {
+      "position": 8,
+      "avgScore": 4,
+      "count": 1
+    }
+  ]
+}
