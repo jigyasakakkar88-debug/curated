@@ -72,6 +72,21 @@
       "searchAxis": null,
       "runNumber": null,
       "discoveryScore": null
+    },
+    {
+      "id": "eebf8704-cebb-47aa-b3db-6ab404faa87b",
+      "timestamp": "2026-06-15T09:09:28.745Z",
+      "storefrontId": "wearesui-com",
+      "storefrontName": "Sui",
+      "storefrontUrl": "https://www.wearesui.com",
+      "vibe": "yes",
+      "rating": "thumbs_up",
+      "price": "luxe",
+      "design": "fresh",
+      "comment": "Very very expensive. will not buy even on sale",
+      "searchAxis": null,
+      "runNumber": null,
+      "discoveryScore": null
     }
   ]
 }
