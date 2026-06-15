@@ -1,16 +1,6 @@
 {
   "pending": [
     {
-      "id": "labeldhuni-com",
-      "name": "Dhuni",
-      "url": "https://labeldhuni.com",
-      "reason": "A handloom-first apparel brand rooted in artisanal skill and sustainable design, offering timeless woven pieces and handcrafted jewelry made in India.",
-      "isShopify": true,
-      "sampleProduct": "Taal (Mulmul Jamdani)",
-      "productCount": 3,
-      "discoveredAt": "2026-06-13T10:14:10.208Z"
-    },
-    {
       "id": "kokun-in",
       "name": "Kokūn",
       "url": "https://kokun.in",
