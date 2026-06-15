@@ -162,6 +162,21 @@
       "searchAxis": null,
       "runNumber": null,
       "discoveryScore": 3
+    },
+    {
+      "id": "75e5e1f5-40ad-49f2-b127-f7047c06375b",
+      "timestamp": "2026-06-15T10:15:15.528Z",
+      "storefrontId": "theikatstory-com",
+      "storefrontName": "The Ikat Story",
+      "storefrontUrl": "https://www.theikatstory.com",
+      "vibe": "yes",
+      "rating": "thumbs_up",
+      "price": "luxe",
+      "design": "standout",
+      "comment": "Runway fashion not for real life",
+      "searchAxis": null,
+      "runNumber": null,
+      "discoveryScore": 3
     }
   ]
 }
