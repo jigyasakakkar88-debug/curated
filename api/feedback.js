@@ -8,12 +8,27 @@ const GITHUB_BRANCH  = "main";
 
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   if (req.method === "OPTIONS") return res.status(200).end();
   if (req.headers["authorization"] !== `Bearer ${ADMIN_PASSWORD}`) {
     return res.status(401).json({ error: "Unauthorized" });
   }
+
+  // GET — return all feedback indexed by storefrontId
+  if (req.method === "GET") {
+    try {
+      const feedbackData = await readFromGitHub('user_feedback.json').catch(() => ({ entries: [] }));
+      const byId = {};
+      for (const entry of (feedbackData.entries || [])) {
+        if (entry.storefrontId) byId[entry.storefrontId] = entry;
+      }
+      return res.status(200).json({ feedback: byId });
+    } catch (e) {
+      return res.status(500).json({ error: e.message });
+    }
+  }
+
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   const {
@@ -39,18 +54,32 @@ module.exports = async function handler(req, res) {
       sha = resp.sha;
     } catch {}
 
-    feedbackData.entries.push({
-      id:             crypto.randomUUID(),
-      timestamp:      new Date().toISOString(),
-      storefrontId,
-      storefrontName,
-      storefrontUrl:  storefrontUrl || null,
-      rating,
-      comment:        comment?.trim() || null,
-      searchAxis:     searchAxis || null,
-      runNumber:      runNumber  || null,
-      discoveryScore: discoveryScore || null,
-    });
+    const now = new Date().toISOString();
+    const existingIdx = (feedbackData.entries || []).findIndex(e => e.storefrontId === storefrontId);
+
+    if (existingIdx >= 0) {
+      // Upsert — update existing entry, preserve original discovery metadata
+      feedbackData.entries[existingIdx] = {
+        ...feedbackData.entries[existingIdx],
+        rating,
+        comment:   comment?.trim() || null,
+        updatedAt: now,
+      };
+    } else {
+      // New entry
+      feedbackData.entries.push({
+        id:             crypto.randomUUID(),
+        timestamp:      now,
+        storefrontId,
+        storefrontName,
+        storefrontUrl:  storefrontUrl || null,
+        rating,
+        comment:        comment?.trim() || null,
+        searchAxis:     searchAxis || null,
+        runNumber:      runNumber  || null,
+        discoveryScore: discoveryScore || null,
+      });
+    }
 
     const content = Buffer.from(JSON.stringify(feedbackData, null, 2)).toString('base64');
     await githubRequest('PUT', `/repos/${GITHUB_REPO}/contents/user_feedback.json`, {
@@ -94,4 +123,9 @@ function githubRequest(method, path, body) {
     if (bodyStr) req.write(bodyStr);
     req.end();
   });
+}
+
+async function readFromGitHub(filename) {
+  const resp = await githubRequest('GET', `/repos/${GITHUB_REPO}/contents/${filename}?ref=${GITHUB_BRANCH}`);
+  return JSON.parse(Buffer.from(resp.content, 'base64').toString('utf8'));
 }

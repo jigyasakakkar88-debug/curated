@@ -49,8 +49,9 @@ header { background:var(--ink); color:var(--paper); display:flex; align-items:ce
 .panel-body { padding:24px; }
 
 /* BRAND LIST */
-.brand-row { display:flex; align-items:center; gap:12px; padding:14px 0; border-bottom:1px solid var(--border); }
-.brand-row:last-child { border-bottom:none; }
+.brand-item { border-bottom:1px solid var(--border); }
+.brand-item:last-child { border-bottom:none; }
+.brand-row { display:flex; align-items:center; gap:12px; padding:14px 0; }
 .brand-dot { width:8px; height:8px; border-radius:50%; background:var(--ok); flex-shrink:0; }
 .brand-info { flex:1; min-width:0; }
 .brand-name { font-size:14px; font-weight:400; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -58,6 +59,17 @@ header { background:var(--ink); color:var(--paper); display:flex; align-items:ce
 .btn-remove { background:none; border:1px solid var(--border); color:var(--muted); padding:5px 10px; font-size:10px; cursor:pointer; letter-spacing:1px; font-family:'DM Mono',monospace; flex-shrink:0; }
 .btn-remove:hover { border-color:var(--err); color:var(--err); }
 .empty-brands { padding:32px; text-align:center; color:var(--muted); font-size:13px; }
+.brand-rating-badge { font-size:12px; flex-shrink:0; }
+.brand-notes { padding:0 0 10px 20px; }
+.brand-notes-text { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); font-style:italic; margin-bottom:4px; line-height:1.5; }
+.btn-edit-notes { background:none; border:none; font-family:'DM Mono',monospace; font-size:9px; color:var(--accent); cursor:pointer; letter-spacing:1px; padding:0; text-decoration:underline; }
+.brand-edit-form { padding:0 0 14px 20px; display:none; }
+.brand-edit-ratings { display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
+.brand-edit-comment { width:100%; box-sizing:border-box; padding:8px 10px; font-family:'Jost',sans-serif; font-size:12px; border:1px solid var(--border); background:var(--warm); resize:vertical; min-height:52px; outline:none; margin-bottom:8px; line-height:1.5; }
+.brand-edit-comment:focus { border-color:var(--accent); }
+.brand-edit-actions { display:flex; gap:8px; }
+.btn-save-notes { padding:6px 14px; background:var(--ink); color:var(--paper); border:none; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; cursor:pointer; }
+.btn-cancel-notes { padding:6px 14px; background:none; border:1px solid var(--border); color:var(--muted); font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; cursor:pointer; }
 
 /* FORM */
 label { display:block; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; margin-top:20px; }
@@ -303,6 +315,7 @@ input:focus { border-color:var(--accent); }
 <script>
 let password = '';
 let currentBrands = [];
+let feedbackMap = {}; // storefrontId → feedback entry
 let testPassed = false;
 
 function doLogin() {
@@ -334,15 +347,24 @@ async function api(method, body, query = '') {
 
 async function loadBrands() {
   try {
-    const res = await api('GET');
-    if (res.status === 401) return false;
-    const data = await res.json();
+    const [brandsRes, feedbackRes] = await Promise.all([
+      api('GET'),
+      fetch('/api/feedback', { headers: { 'Authorization': `Bearer ${password}` } }),
+    ]);
+    if (brandsRes.status === 401) return false;
+    const data = await brandsRes.json();
 
     if (data.error && data.error.includes('GitHub not configured')) {
       document.getElementById('configWarn').style.display = 'block';
     }
 
     currentBrands = data.brands || [];
+
+    if (feedbackRes.ok) {
+      const fd = await feedbackRes.json();
+      feedbackMap = fd.feedback || {};
+    }
+
     renderBrandList();
     return true;
   } catch { return false; }
@@ -475,16 +497,52 @@ function renderBrandList() {
     el.innerHTML = '<div class="empty-brands">No brands yet. Add one →</div>';
     return;
   }
-  el.innerHTML = currentBrands.map(b => `
-    <div class="brand-row">
-      <div class="brand-dot"></div>
-      <div class="brand-info">
-        <div class="brand-name">${esc(b.name)}</div>
-        <div class="brand-url">${esc(b.url)}</div>
+
+  const ratingEmoji = { thumbs_up: '👍', neutral: '😐', not_relevant: '👎' };
+
+  el.innerHTML = currentBrands.map(b => {
+    const fb      = feedbackMap[b.id];
+    const badge   = fb ? `<span class="brand-rating-badge" title="${fb.rating}">${ratingEmoji[fb.rating] || ''}</span>` : '';
+    const notesEl = fb
+      ? `<div class="brand-notes">
+           ${fb.comment ? `<div class="brand-notes-text">"${esc(fb.comment)}"</div>` : ''}
+           <button class="btn-edit-notes" onclick="toggleBrandEdit('${b.id}')">Edit notes</button>
+         </div>`
+      : `<div class="brand-notes">
+           <button class="btn-edit-notes" onclick="toggleBrandEdit('${b.id}')">+ Add notes</button>
+         </div>`;
+
+    const editRatings = ['thumbs_up','neutral','not_relevant'].map(r =>
+      `<button class="btn-rate ${fb?.rating === r ? 'active-'+r : ''}" id="bedit-rate-${r}-${b.id}" onclick="selectBrandRating('${b.id}','${r}')">${ratingEmoji[r]} ${r === 'thumbs_up' ? 'Relevant' : r === 'neutral' ? 'Neutral' : 'Not for me'}</button>`
+    ).join('');
+
+    return `
+    <div class="brand-item" id="bitem-${b.id}">
+      <div class="brand-row">
+        <div class="brand-dot"></div>
+        <div class="brand-info">
+          <div class="brand-name">${esc(b.name)}</div>
+          <div class="brand-url">${esc(b.url)}</div>
+        </div>
+        ${badge}
+        <button class="btn-remove" onclick="removeBrand('${b.id}','${esc(b.name)}')">Remove</button>
       </div>
-      <button class="btn-remove" onclick="removeBrand('${b.id}','${esc(b.name)}')">Remove</button>
-    </div>
-  `).join('');
+      ${notesEl}
+      <div class="brand-edit-form" id="bedit-${b.id}">
+        <div class="brand-edit-ratings">${editRatings}</div>
+        <textarea id="bedit-comment-${b.id}" class="brand-edit-comment" placeholder="Your notes on this brand…">${esc(fb?.comment || '')}</textarea>
+        <div class="brand-edit-actions">
+          <button class="btn-save-notes" onclick="saveBrandFeedback('${b.id}')">Save</button>
+          <button class="btn-cancel-notes" onclick="toggleBrandEdit('${b.id}')">Cancel</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Init rating state for brands that already have feedback
+  currentBrands.forEach(b => {
+    if (feedbackMap[b.id]) brandRatingState[b.id] = feedbackMap[b.id].rating;
+  });
 }
 
 // ── Discover ──────────────────────────────────────────────
@@ -633,6 +691,57 @@ function renderRecommendations(recs) {
     }).join('');
   });
   listEl.innerHTML = html;
+}
+
+// ── Brand feedback (accepted brands) ─────────────────────
+
+const brandRatingState = {}; // brandId → rating string
+
+function toggleBrandEdit(brandId) {
+  const form = document.getElementById(`bedit-${brandId}`);
+  const notes = form.previousElementSibling; // .brand-notes div
+  const open = form.style.display === 'block';
+  form.style.display  = open ? 'none' : 'block';
+  notes.style.display = open ? 'block' : 'none';
+}
+
+function selectBrandRating(brandId, rating) {
+  brandRatingState[brandId] = rating;
+  ['thumbs_up','neutral','not_relevant'].forEach(r => {
+    const btn = document.getElementById(`bedit-rate-${r}-${brandId}`);
+    if (btn) btn.className = 'btn-rate' + (r === rating ? ` active-${r}` : '');
+  });
+}
+
+async function saveBrandFeedback(brandId) {
+  const rating  = brandRatingState[brandId];
+  if (!rating) { showToast('Please select a rating first'); return; }
+  const brand   = currentBrands.find(b => b.id === brandId);
+  const comment = (document.getElementById(`bedit-comment-${brandId}`)?.value || '').trim();
+
+  try {
+    const res = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${password}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        storefrontId:   brandId,
+        storefrontName: brand?.name,
+        storefrontUrl:  brand?.url,
+        rating,
+        comment: comment || null,
+      }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      feedbackMap[brandId] = { ...feedbackMap[brandId], rating, comment: comment || null };
+      renderBrandList();
+      showToast('✓ Notes saved');
+    } else {
+      showToast('Error: ' + (data.error || 'unknown'));
+    }
+  } catch (e) {
+    showToast('Error: ' + e.message);
+  }
 }
 
 // ── Feedback ──────────────────────────────────────────────
