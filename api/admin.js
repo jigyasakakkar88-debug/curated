@@ -81,7 +81,7 @@ module.exports = async function handler(req, res) {
         return res.status(409).json({ error: "Brand already exists" });
       }
 
-      brands.push({ id, name, url: url.replace(/\/$/, "") });
+      brands.push({ id, name, url: url.replace(/\/$/, ""), addedAt: new Date().toISOString() });
       await writeFileToGitHub('brands.json', brands, sha, `Add brand: ${name}`);
 
       return res.status(200).json({ success: true, brands, message: `${name} added! Your site will update in ~1 minute.` });

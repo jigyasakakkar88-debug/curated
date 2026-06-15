@@ -59,7 +59,15 @@ module.exports = async function handler(req, res) {
         const brands = brandsFile.data;
         // Avoid duplicate
         if (!brands.find(b => b.url === rec.url)) {
-          brands.push({ id: rec.id, name: rec.name, url: rec.url });
+          brands.push({
+            id:            rec.id,
+            name:          rec.name,
+            url:           rec.url,
+            discoveredAt:  rec.discoveredAt  || null,
+            acceptedAt:    new Date().toISOString(),
+            runNumber:     rec.runNumber     || null,
+            searchAxis:    rec.searchAxis    || null,
+          });
         }
         // Write both files (sequential — each needs the other's SHA to be stable)
         await writeToGitHub('brands.json', brands, brandsFile.sha, `Add brand: ${rec.name}`);
