@@ -468,6 +468,176 @@
         }
       ],
       "axisScore": 4.2
+    },
+    {
+      "runId": "e869e69f-77bb-4f13-bfc0-c3821d132efd",
+      "timestamp": "2026-06-15T10:29:35.143Z",
+      "brief": "home brands matching my aesthetic",
+      "axis": "Inclusive and niche demographic fashion",
+      "turns": 5,
+      "searchLog": [
+        "Indian handloom loungewear home wear brand official website storefront",
+        "organic cotton kurta set everyday wear India indie brand official website",
+        "ajrakh block print kurta brand India official storefront website",
+        "handwoven linen clothing brand India official website storefront",
+        "natural dye hand block print co-ord set indie label India official website",
+        "Kutch weave women clothing brand India official storefront",
+        "Saphed linen clothing India brand official website storefront",
+        "Yell linen clothing India brand yellwithus official storefront",
+        "yellwithus.com linen India brand founded headquarters",
+        "Pinklay handcrafted clothing home decor India brand official website",
+        "slow fashion resort wear everyday India indie label brand official storefront mid range",
+        "handblock print mulmul kurta set brand India official website storefront",
+        "Khamir Kutch handmade clothing India brand shop official storefront",
+        "Cotton Cottage India handblock print men women clothing brand official website storefront"
+      ],
+      "recommendations": [
+        {
+          "id": "saphed-com",
+          "name": "Saphed",
+          "url": "https://saphed.com",
+          "reason": "A Mumbai-founded linen label (est. 2020) making breathable, timeless kurta sets, co-ords, shirts and dresses for men and women — clean, unfussy everyday pieces in the ₹5–12K range that translate beautifully from home to street.",
+          "isShopify": true,
+          "sampleProduct": "Undyed Linen Oversized Pocket Shirt - Sale",
+          "productCount": 3,
+          "discoveredAt": "2026-06-15T10:29:25.305Z",
+          "runNumber": 4,
+          "searchAxis": "Inclusive and niche demographic fashion",
+          "sourceQuery": "handwoven linen clothing brand India official website storefront",
+          "sourcePosition": 2,
+          "score": 5,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 5,
+            "briefMatch": 5,
+            "quality": 5
+          },
+          "evaluatorNotes": "Genuine Mumbai linen indie label with clean artisanal sensibility, undyed fabrics, and a home-to-street ethos that aligns perfectly with the brief.",
+          "underperforming": false
+        },
+        {
+          "id": "yellwithus-com",
+          "name": "Yell",
+          "url": "https://www.yellwithus.com",
+          "reason": "A 15-year-old Indian linen house that designs specifically for Indian bodies and the Indian day — think effortless kurtas, dresses and co-ords cut in 100% linen; a wardrobe that genuinely lives between home and the outside world.",
+          "isShopify": true,
+          "sampleProduct": "The Prishitha Cape Set - Light Blue",
+          "productCount": 3,
+          "discoveredAt": "2026-06-15T10:29:25.305Z",
+          "runNumber": 4,
+          "searchAxis": "Inclusive and niche demographic fashion",
+          "sourceQuery": "handwoven linen clothing brand India official website storefront",
+          "sourcePosition": 5,
+          "score": 4,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 4,
+            "briefMatch": 4,
+            "quality": 4
+          },
+          "evaluatorNotes": "Established Indian linen house with solid fit for slow fashion, though 15 years in the market and a wider catalogue edges it slightly toward accessible mass rather than curated indie.",
+          "underperforming": false
+        },
+        {
+          "id": "pinklay-com",
+          "name": "Pinklay",
+          "url": "https://www.pinklay.com",
+          "reason": "Hyderabad-based lifestyle brand made by 1000+ Indian artisans — block-printed clothing in cotton and mulmul alongside quilts and home furnishings, so the same craft aesthetic flows through what you wear and how you live.",
+          "isShopify": true,
+          "sampleProduct": "Set of 2 - Aurora Oversized Long Shirt & Salwar Set",
+          "productCount": 3,
+          "discoveredAt": "2026-06-15T10:29:25.305Z",
+          "runNumber": 4,
+          "searchAxis": "Inclusive and niche demographic fashion",
+          "sourceQuery": "handwoven linen clothing brand India official website storefront",
+          "sourcePosition": 4,
+          "score": 5,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 5,
+            "briefMatch": 5,
+            "quality": 5
+          },
+          "evaluatorNotes": "Hyderabad artisan-led brand with block-printed clothing and home goods that create a seamless craft aesthetic across wardrobe and living space — excellent brief match.",
+          "underperforming": false
+        },
+        {
+          "id": "shop-khamir-org",
+          "name": "Khamir",
+          "url": "https://shop.khamir.org",
+          "reason": "Kutch, Gujarat's renowned craft-conservation platform with its own direct storefront — authentic Ajrakh, bandhani and handwoven Kutchi textiles turned into clothing and home furnishings, sourced straight from the artisans who make them.",
+          "isShopify": true,
+          "sampleProduct": "Authentic Kutch Handwoven Kala Cotton Silk Saree",
+          "productCount": 3,
+          "discoveredAt": "2026-06-15T10:29:25.305Z",
+          "runNumber": 4,
+          "searchAxis": "Inclusive and niche demographic fashion",
+          "sourceQuery": "Kutch weave women clothing brand India official storefront",
+          "sourcePosition": 2,
+          "score": 5,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 5,
+            "briefMatch": 5,
+            "quality": 5
+          },
+          "evaluatorNotes": "Authentic Kutch craft-conservation storefront selling directly from artisans, with Ajrakh and handwoven textiles that are as earthy and genuinely artisanal as it gets.",
+          "underperforming": false
+        },
+        {
+          "id": "cottoncottageindia-com",
+          "name": "Cotton Cottage",
+          "url": "https://cottoncottageindia.com",
+          "reason": "An India-based direct brand specialising in Sanganeri handblock-printed cotton clothing for men and women — relaxed kurtas, shirts and separates with traditional print heritage at approachable everyday prices.",
+          "isShopify": true,
+          "sampleProduct": "Cool Brown Sanganeri Natural Cotton Linen Men Shirt",
+          "productCount": 3,
+          "discoveredAt": "2026-06-15T10:29:25.305Z",
+          "runNumber": 4,
+          "searchAxis": "Inclusive and niche demographic fashion",
+          "sourceQuery": "organic cotton kurta set everyday wear India indie brand official website",
+          "sourcePosition": 5,
+          "score": 3,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 3,
+            "briefMatch": 3,
+            "quality": 3
+          },
+          "evaluatorNotes": "Real Indian handblock-print brand with traditional Sanganeri heritage but feels more generic and price-driven than a curated indie label, limiting its aesthetic alignment.",
+          "underperforming": false
+        },
+        {
+          "id": "manandesign-com",
+          "name": "Manan",
+          "url": "https://www.manandesign.com",
+          "reason": "An Indian indie label building a 'timeless for modern life' wardrobe in linen — hand-embroidered kurtas, co-ord sets and separates that feel considered and slow-made rather than trend-driven, well-placed in the mid-range.",
+          "isShopify": true,
+          "sampleProduct": "Gift Card",
+          "productCount": 3,
+          "discoveredAt": "2026-06-15T10:29:25.305Z",
+          "runNumber": 4,
+          "searchAxis": "Inclusive and niche demographic fashion",
+          "sourceQuery": "handwoven linen clothing brand India official website storefront",
+          "sourcePosition": 1,
+          "score": 2,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 3,
+            "briefMatch": 2,
+            "quality": 2
+          },
+          "evaluatorNotes": "Claims a slow-fashion linen identity but the sample product being only a gift card raises serious doubts about catalogue depth and brand legitimacy as a curated storefront.",
+          "underperforming": true
+        }
+      ],
+      "axisScore": 4
     }
   ]
 }
