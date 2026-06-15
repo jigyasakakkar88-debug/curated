@@ -192,6 +192,21 @@
       "searchAxis": "Specific garment categories",
       "runNumber": 3,
       "discoveryScore": 5
+    },
+    {
+      "id": "5cfb5638-76cb-4ff9-8417-3b2dd58b39c0",
+      "timestamp": "2026-06-15T10:25:59.151Z",
+      "storefrontId": "houseofthehandblock-com",
+      "storefrontName": "House of the Handblock",
+      "storefrontUrl": "https://www.houseofthehandblock.com",
+      "vibe": "yes",
+      "rating": "thumbs_up",
+      "price": "accessible",
+      "design": "familiar",
+      "comment": "quite mainstream but can be considered for everyday wear.",
+      "searchAxis": "Specific garment categories",
+      "runNumber": 3,
+      "discoveryScore": 5
     }
   ]
 }
