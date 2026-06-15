@@ -42,6 +42,21 @@
       "searchAxis": "Slow fashion and sustainable labels",
       "runNumber": 2,
       "discoveryScore": 5
+    },
+    {
+      "id": "b0b226e6-7cd5-47a5-9315-c9ae54bfd0aa",
+      "timestamp": "2026-06-15T09:07:40.338Z",
+      "storefrontId": "labeldhuni-com",
+      "storefrontName": "Dhuni",
+      "storefrontUrl": "https://labeldhuni.com",
+      "vibe": "yes",
+      "rating": "thumbs_up",
+      "price": "premium",
+      "design": "fresh",
+      "comment": null,
+      "searchAxis": null,
+      "runNumber": null,
+      "discoveryScore": null
     }
   ]
 }
