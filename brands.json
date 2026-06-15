@@ -48,5 +48,14 @@
     "id": "dressfolk-com",
     "name": "Dressfolk",
     "url": "https://dressfolk.com"
+  },
+  {
+    "id": "doodlage-in",
+    "name": "Doodlage",
+    "url": "https://doodlage.in",
+    "discoveredAt": "2026-06-13T10:14:10.208Z",
+    "acceptedAt": "2026-06-15T10:02:24.119Z",
+    "runNumber": null,
+    "searchAxis": null
   }
 ]
