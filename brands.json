@@ -66,5 +66,14 @@
     "acceptedAt": "2026-06-15T10:02:32.470Z",
     "runNumber": null,
     "searchAxis": null
+  },
+  {
+    "id": "indiefabstore-com",
+    "name": "IndieFab",
+    "url": "https://indiefabstore.com",
+    "discoveredAt": "2026-06-15T10:18:21.664Z",
+    "acceptedAt": "2026-06-15T10:27:07.208Z",
+    "runNumber": 3,
+    "searchAxis": "Specific garment categories"
   }
 ]
