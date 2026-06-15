@@ -147,6 +147,21 @@
       "searchAxis": null,
       "runNumber": null,
       "discoveryScore": 3
+    },
+    {
+      "id": "bee6a7a8-59cd-4aa7-817c-fde122cee11f",
+      "timestamp": "2026-06-15T10:14:01.068Z",
+      "storefrontId": "vasudhaavastrram-in",
+      "storefrontName": "Vasudhaa Vastrram",
+      "storefrontUrl": "https://vasudhaavastrram.in",
+      "vibe": "yes",
+      "rating": "thumbs_up",
+      "price": "accessible",
+      "design": "fresh",
+      "comment": "good men stuff",
+      "searchAxis": null,
+      "runNumber": null,
+      "discoveryScore": 3
     }
   ]
 }
