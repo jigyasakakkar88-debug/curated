@@ -85,7 +85,7 @@ module.exports = async function handler(req, res) {
 
     // ── 3. Build system prompt with injected learnings + feedback ─
     const learningsSection  = buildLearningsSection(learnings);
-    const feedbackSection   = await buildFeedbackSection(feedbackEntries);
+    const feedbackSection   = buildFeedbackSection(feedbackEntries);
 
     const systemPrompt = `You are a fashion brand discovery agent for Curated, a personal Indian fashion aggregator. Your job is to discover new INDIAN fashion brands.
 
@@ -331,47 +331,49 @@ Existing brands already on Curated — do NOT recommend these: ${existingBrandLi
 
 // ── Feedback → system prompt injection ───────────────────
 
-async function buildFeedbackSection(entries) {
+function buildFeedbackSection(entries) {
   if (!entries?.length) return '';
 
-  const liked      = entries.filter(e => e.rating === 'thumbs_up');
-  const notRelevant = entries.filter(e => e.rating === 'not_relevant');
-  const withComment = entries.filter(e => e.comment);
+  const vibeYes = entries.filter(e => e.vibe === 'yes'        || e.rating === 'thumbs_up');
+  const vibeNo  = entries.filter(e => e.vibe === 'not_for_me' || e.rating === 'not_relevant');
 
   const lines = ['\n## User feedback from previous recommendations:'];
 
-  // Use Claude to extract actionable patterns from comments
-  if (withComment.length > 0) {
-    try {
-      const prompt = `Analyze these user feedback comments for an Indian fashion brand discovery system.
-Extract actionable patterns in 3 concise sentences:
-1. What qualities users appreciate (e.g. natural dyes, artisanal craft, specific aesthetics)
-2. What barriers or dislikes they flag (e.g. high prices, too formal, wrong vibe)
-3. One concrete search guidance (e.g. "prioritise brands under ₹3000", "avoid heavy embroidery")
-
-Feedback:
-${withComment.map(e => `- "${e.storefrontName}" (${e.rating}): "${e.comment}"`).join('\n')}
-
-Return only the 3 sentences, nothing else.`;
-
-      const resp = await callClaude(
-        'Extract concise actionable patterns from user feedback. Return exactly 3 sentences.',
-        [{ role: 'user', content: prompt }],
-        []
-      );
-      const summary = resp.content.find(b => b.type === 'text')?.text?.trim();
-      if (summary) lines.push(summary);
-    } catch {}
+  // Price preference — aggregate structured tags
+  const priceCount = {};
+  entries.forEach(e => { if (e.price) priceCount[e.price] = (priceCount[e.price] || 0) + 1; });
+  if (Object.keys(priceCount).length) {
+    const top = Object.entries(priceCount).sort((a,b) => b[1]-a[1])[0][0];
+    const label = { accessible: 'affordable brands (₹1–5K)', premium: 'mid-range brands (₹5–12K)', luxe: 'luxury brands (₹12K+)' }[top];
+    lines.push(`Price preference: user has most liked ${label} — weight towards this tier.`);
   }
 
-  if (liked.length) {
-    lines.push(`Brands users liked: ${liked.slice(-8).map(e => e.storefrontName).join(', ')}`);
+  // Design preference — aggregate structured tags
+  const designCount = {};
+  entries.forEach(e => { if (e.design) designCount[e.design] = (designCount[e.design] || 0) + 1; });
+  if ((designCount.standout || 0) > (designCount.familiar || 0)) {
+    lines.push('Design preference: user rates "Standout" designs highest — prioritise distinctive, non-generic labels.');
+  } else if ((designCount.familiar || 0) > (designCount.standout || 0)) {
+    lines.push('Design preference: user appreciates classic craft aesthetics — familiar handloom brands are well received.');
   }
 
-  if (notRelevant.length) {
-    lines.push(`\nBrands marked NOT RELEVANT by user — do NOT recommend similar brands:`);
-    notRelevant.slice(-10).forEach(e => {
-      const why = e.comment ? ` — user said: "${e.comment}"` : '';
+  // Free-text comments
+  const withComment = entries.filter(e => e.comment);
+  if (withComment.length) {
+    lines.push('User comments on specific brands:');
+    withComment.slice(-6).forEach(e => {
+      lines.push(`  - "${e.storefrontName}": "${e.comment}"`);
+    });
+  }
+
+  if (vibeYes.length) {
+    lines.push(`Brands user liked: ${vibeYes.slice(-8).map(e => e.storefrontName).join(', ')}`);
+  }
+
+  if (vibeNo.length) {
+    lines.push('\nBrands NOT for this user — do NOT recommend similar:');
+    vibeNo.slice(-10).forEach(e => {
+      const why = e.comment ? ` — "${e.comment}"` : '';
       lines.push(`  - ${e.storefrontName} (${e.storefrontUrl})${why}`);
     });
   }

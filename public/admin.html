@@ -64,8 +64,7 @@ header { background:var(--ink); color:var(--paper); display:flex; align-items:ce
 .brand-notes-text { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); font-style:italic; margin-bottom:4px; line-height:1.5; }
 .btn-edit-notes { background:none; border:none; font-family:'DM Mono',monospace; font-size:9px; color:var(--accent); cursor:pointer; letter-spacing:1px; padding:0; text-decoration:underline; }
 .brand-edit-form { padding:0 0 14px 20px; display:none; }
-.brand-edit-ratings { display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
-.brand-edit-comment { width:100%; box-sizing:border-box; padding:8px 10px; font-family:'Jost',sans-serif; font-size:12px; border:1px solid var(--border); background:var(--warm); resize:vertical; min-height:52px; outline:none; margin-bottom:8px; line-height:1.5; }
+.brand-edit-comment { width:100%; box-sizing:border-box; padding:8px 10px; font-family:'Jost',sans-serif; font-size:12px; border:1px solid var(--border); background:var(--warm); resize:vertical; min-height:48px; outline:none; margin-bottom:8px; line-height:1.5; margin-top:8px; }
 .brand-edit-comment:focus { border-color:var(--accent); }
 .brand-edit-actions { display:flex; gap:8px; }
 .btn-save-notes { padding:6px 14px; background:var(--ink); color:var(--paper); border:none; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; cursor:pointer; }
@@ -136,17 +135,21 @@ input:focus { border-color:var(--accent); }
 .run-header { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); padding:14px 0 6px; border-top:1px solid var(--border); margin-top:8px; }
 .run-header:first-child { border-top:none; padding-top:4px; }
 .rec-feedback { border-top:1px solid var(--border); margin-top:12px; padding-top:12px; }
-.feedback-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
-.feedback-ratings { display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap; }
-.btn-rate { padding:6px 12px; border:1px solid var(--border); background:var(--warm); font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; cursor:pointer; transition:all 0.15s; }
-.btn-rate:hover { border-color:var(--accent); }
-.btn-rate.active-thumbs_up   { background:#e8f4f0; border-color:var(--ok);   color:var(--ok);   }
-.btn-rate.active-neutral      { background:#fdf8f0; border-color:var(--warn); color:var(--warn); }
-.btn-rate.active-not_relevant { background:#fdf1ef; border-color:var(--err);  color:var(--err);  }
-.feedback-comment { width:100%; box-sizing:border-box; padding:8px 10px; font-family:'Jost',sans-serif; font-size:12px; border:1px solid var(--border); background:var(--warm); resize:vertical; min-height:52px; outline:none; margin-bottom:8px; line-height:1.5; }
+.feedback-label { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+.fb-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.fb-dim-label { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); width:44px; flex-shrink:0; text-transform:uppercase; letter-spacing:1px; }
+.fb-pills { display:flex; gap:4px; flex-wrap:wrap; }
+.fb-pill { padding:4px 10px; border:1px solid var(--border); background:var(--warm); font-family:'DM Mono',monospace; font-size:9px; cursor:pointer; transition:all 0.15s; white-space:nowrap; }
+.fb-pill:hover { border-color:var(--accent); }
+.fb-pill.sel-vibe-yes       { background:#e8f4f0; border-color:var(--ok);   color:var(--ok);   }
+.fb-pill.sel-vibe-maybe     { background:#fdf8f0; border-color:var(--warn); color:var(--warn); }
+.fb-pill.sel-vibe-not_for_me { background:#fdf1ef; border-color:var(--err); color:var(--err);  }
+.fb-pill.sel-price, .fb-pill.sel-design { background:var(--ink); border-color:var(--ink); color:var(--paper); }
+.fb-note-row { display:flex; gap:8px; align-items:flex-start; margin-top:8px; }
+.feedback-comment { flex:1; padding:7px 10px; font-family:'Jost',sans-serif; font-size:12px; border:1px solid var(--border); background:var(--warm); resize:none; height:36px; outline:none; line-height:1.4; }
 .feedback-comment:focus { border-color:var(--accent); }
-.btn-feedback-submit { padding:6px 14px; background:none; border:1px solid var(--border); color:var(--muted); font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; cursor:pointer; }
-.btn-feedback-submit:hover { border-color:var(--accent); color:var(--accent); }
+.btn-feedback-submit { padding:6px 14px; background:var(--ink); color:var(--paper); border:none; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; cursor:pointer; flex-shrink:0; align-self:flex-end; }
+.btn-feedback-submit:hover { background:var(--accent); }
 .btn-feedback-submit:disabled { opacity:0.5; cursor:not-allowed; }
 .btn-visit-primary { padding:7px 16px; background:var(--ink); color:var(--paper); border:none; font-size:10px; letter-spacing:1px; text-transform:uppercase; cursor:pointer; font-family:'DM Mono',monospace; text-decoration:none; display:inline-block; }
 .btn-visit-primary:hover { background:var(--accent); }
@@ -498,11 +501,21 @@ function renderBrandList() {
     return;
   }
 
-  const ratingEmoji = { thumbs_up: '👍', neutral: '😐', not_relevant: '👎' };
+  const vibeEmoji   = { yes: '👍', maybe: '😐', not_for_me: '👎' };
+  const priceLabel  = { accessible: '₹', premium: '₹₹', luxe: '₹₹₹' };
+  const vibeFromOld = { thumbs_up: 'yes', neutral: 'maybe', not_relevant: 'not_for_me' };
 
   el.innerHTML = currentBrands.map(b => {
-    const fb      = feedbackMap[b.id];
-    const badge   = fb ? `<span class="brand-rating-badge" title="${fb.rating}">${ratingEmoji[fb.rating] || ''}</span>` : '';
+    const fb   = feedbackMap[b.id];
+    const vibe = fb ? (fb.vibe || vibeFromOld[fb.rating]) : null;
+
+    const badgeParts = [
+      vibe             ? vibeEmoji[vibe]      : '',
+      fb?.price        ? priceLabel[fb.price] : '',
+      fb?.design === 'standout' ? '✦' : '',
+    ].filter(Boolean).join(' ');
+    const badge = badgeParts ? `<span class="brand-rating-badge">${badgeParts}</span>` : '';
+
     const notesEl = fb
       ? `<div class="brand-notes">
            ${fb.comment ? `<div class="brand-notes-text">"${esc(fb.comment)}"</div>` : ''}
@@ -512,9 +525,7 @@ function renderBrandList() {
            <button class="btn-edit-notes" onclick="toggleBrandEdit('${b.id}')">+ Add notes</button>
          </div>`;
 
-    const editRatings = ['thumbs_up','neutral','not_relevant'].map(r =>
-      `<button class="btn-rate ${fb?.rating === r ? 'active-'+r : ''}" id="bedit-rate-${r}-${b.id}" onclick="selectBrandRating('${b.id}','${r}')">${ratingEmoji[r]} ${r === 'thumbs_up' ? 'Relevant' : r === 'neutral' ? 'Neutral' : 'Not for me'}</button>`
-    ).join('');
+    const existingFs = vibe ? { vibe, price: fb?.price || null, design: fb?.design || null } : null;
 
     return `
     <div class="brand-item" id="bitem-${b.id}">
@@ -529,8 +540,8 @@ function renderBrandList() {
       </div>
       ${notesEl}
       <div class="brand-edit-form" id="bedit-${b.id}">
-        <div class="brand-edit-ratings">${editRatings}</div>
-        <textarea id="bedit-comment-${b.id}" class="brand-edit-comment" placeholder="Your notes on this brand…">${esc(fb?.comment || '')}</textarea>
+        ${feedbackPillsHtml(b.id, existingFs)}
+        <textarea id="bedit-comment-${b.id}" class="brand-edit-comment" placeholder="Optional note…">${esc(fb?.comment || '')}</textarea>
         <div class="brand-edit-actions">
           <button class="btn-save-notes" onclick="saveBrandFeedback('${b.id}')">Save</button>
           <button class="btn-cancel-notes" onclick="toggleBrandEdit('${b.id}')">Cancel</button>
@@ -539,9 +550,11 @@ function renderBrandList() {
     </div>`;
   }).join('');
 
-  // Init rating state for brands that already have feedback
+  // Seed feedbackState from existing feedback
   currentBrands.forEach(b => {
-    if (feedbackMap[b.id]) brandRatingState[b.id] = feedbackMap[b.id].rating;
+    const fb   = feedbackMap[b.id];
+    const vibe = fb ? (fb.vibe || vibeFromOld[fb.rating]) : null;
+    if (vibe) feedbackState[b.id] = { vibe, price: fb?.price || null, design: fb?.design || null };
   });
 }
 
@@ -678,14 +691,12 @@ function renderRecommendations(recs) {
         </div>
         ${!r.isShopify ? `<div class="rec-note">Products can't auto-load — browse directly or add manually via the form above.</div>` : ''}
         <div class="rec-feedback">
-          <div class="feedback-label">Rate this discovery</div>
-          <div class="feedback-ratings">
-            <button class="btn-rate" id="rate-thumbs_up-${esc(id)}"   onclick="selectRating('${esc(id)}','thumbs_up')">👍 Relevant</button>
-            <button class="btn-rate" id="rate-neutral-${esc(id)}"     onclick="selectRating('${esc(id)}','neutral')">😐 Neutral</button>
-            <button class="btn-rate" id="rate-not_relevant-${esc(id)}" onclick="selectRating('${esc(id)}','not_relevant')">👎 Not for me</button>
+          <div class="feedback-label">Quick take</div>
+          ${feedbackPillsHtml(esc(id), null)}
+          <div class="fb-note-row">
+            <textarea id="fb-comment-${esc(id)}" class="feedback-comment" placeholder="Optional note…"></textarea>
+            <button class="btn-feedback-submit" id="fb-submit-${esc(id)}" onclick="submitFeedback('${esc(id)}')">Save</button>
           </div>
-          <textarea id="fb-comment-${esc(id)}" class="feedback-comment" placeholder="What did you think? e.g. 'nice aesthetic but too expensive' or 'not the right vibe' — helps improve future discoveries"></textarea>
-          <button class="btn-feedback-submit" id="fb-submit-${esc(id)}" onclick="submitFeedback('${esc(id)}')">Send Feedback</button>
         </div>
       </div>`;
     }).join('');
@@ -693,29 +704,50 @@ function renderRecommendations(recs) {
   listEl.innerHTML = html;
 }
 
+// ── Shared structured feedback state ─────────────────────
+// feedbackState[id] = { vibe, price, design }  (for both rec cards and brand items)
+
+const feedbackState = {};
+
+const FB_DIMS = {
+  vibe:   [['yes','My vibe'],['maybe','Maybe'],['not_for_me','Not for me']],
+  price:  [['accessible','Accessible ₹1–5K'],['premium','Premium ₹5–12K'],['luxe','Luxe 12K+']],
+  design: [['familiar','Familiar'],['fresh','Fresh'],['standout','Standout']],
+};
+
+function feedbackPillsHtml(id, existing) {
+  return Object.entries(FB_DIMS).map(([dim, opts]) => {
+    const pills = opts.map(([val, label]) => {
+      const sel = existing?.[dim] === val ? ` sel-${dim === 'price' ? 'price' : dim === 'design' ? 'design' : 'vibe-'+val}` : '';
+      return `<button class="fb-pill${sel}" onclick="selectFeedbackDim('${id}','${dim}','${val}')" data-fbid="${id}" data-dim="${dim}" data-val="${val}">${label}</button>`;
+    }).join('');
+    return `<div class="fb-row"><span class="fb-dim-label">${dim.charAt(0).toUpperCase()+dim.slice(1)}</span><div class="fb-pills">${pills}</div></div>`;
+  }).join('');
+}
+
+function selectFeedbackDim(id, dim, val) {
+  if (!feedbackState[id]) feedbackState[id] = {};
+  feedbackState[id][dim] = val;
+  document.querySelectorAll(`[data-fbid="${id}"][data-dim="${dim}"]`).forEach(btn => {
+    const isSelected = btn.dataset.val === val;
+    const selClass   = dim === 'vibe' ? `sel-vibe-${val}` : `sel-${dim}`;
+    btn.className    = 'fb-pill' + (isSelected ? ' ' + selClass : '');
+  });
+}
+
 // ── Brand feedback (accepted brands) ─────────────────────
 
-const brandRatingState = {}; // brandId → rating string
-
 function toggleBrandEdit(brandId) {
-  const form = document.getElementById(`bedit-${brandId}`);
-  const notes = form.previousElementSibling; // .brand-notes div
-  const open = form.style.display === 'block';
+  const form  = document.getElementById(`bedit-${brandId}`);
+  const notes = form.previousElementSibling;
+  const open  = form.style.display === 'block';
   form.style.display  = open ? 'none' : 'block';
   notes.style.display = open ? 'block' : 'none';
 }
 
-function selectBrandRating(brandId, rating) {
-  brandRatingState[brandId] = rating;
-  ['thumbs_up','neutral','not_relevant'].forEach(r => {
-    const btn = document.getElementById(`bedit-rate-${r}-${brandId}`);
-    if (btn) btn.className = 'btn-rate' + (r === rating ? ` active-${r}` : '');
-  });
-}
-
 async function saveBrandFeedback(brandId) {
-  const rating  = brandRatingState[brandId];
-  if (!rating) { showToast('Please select a rating first'); return; }
+  const fs = feedbackState[brandId] || {};
+  if (!fs.vibe) { showToast('Please select a Vibe first'); return; }
   const brand   = currentBrands.find(b => b.id === brandId);
   const comment = (document.getElementById(`bedit-comment-${brandId}`)?.value || '').trim();
 
@@ -727,13 +759,15 @@ async function saveBrandFeedback(brandId) {
         storefrontId:   brandId,
         storefrontName: brand?.name,
         storefrontUrl:  brand?.url,
-        rating,
-        comment: comment || null,
+        vibe:    fs.vibe,
+        price:   fs.price   || null,
+        design:  fs.design  || null,
+        comment: comment    || null,
       }),
     });
     const data = await res.json();
     if (data.success) {
-      feedbackMap[brandId] = { ...feedbackMap[brandId], rating, comment: comment || null };
+      feedbackMap[brandId] = { ...feedbackMap[brandId], vibe: fs.vibe, price: fs.price || null, design: fs.design || null, comment: comment || null };
       renderBrandList();
       showToast('✓ Notes saved');
     } else {
@@ -744,22 +778,11 @@ async function saveBrandFeedback(brandId) {
   }
 }
 
-// ── Feedback ──────────────────────────────────────────────
-
-const ratingState = {}; // recId → rating string
-
-function selectRating(recId, rating) {
-  ratingState[recId] = rating;
-  ['thumbs_up', 'neutral', 'not_relevant'].forEach(r => {
-    const btn = document.getElementById(`rate-${r}-${recId}`);
-    if (!btn) return;
-    btn.className = 'btn-rate' + (r === rating ? ` active-${rating}` : '');
-  });
-}
+// ── Rec card feedback ─────────────────────────────────────
 
 async function submitFeedback(recId) {
-  const rating = ratingState[recId];
-  if (!rating) { showToast('Please select a rating first'); return; }
+  const fs = feedbackState[recId] || {};
+  if (!fs.vibe) { showToast('Please select a Vibe first'); return; }
 
   const rec     = currentRecs.find(r => r.id === recId);
   const comment = (document.getElementById(`fb-comment-${recId}`)?.value || '').trim();
@@ -775,8 +798,10 @@ async function submitFeedback(recId) {
         storefrontId:   rec?.id,
         storefrontName: rec?.name,
         storefrontUrl:  rec?.url,
-        rating,
-        comment:        comment || null,
+        vibe:    fs.vibe,
+        price:   fs.price   || null,
+        design:  fs.design  || null,
+        comment: comment    || null,
         searchAxis:     rec?.searchAxis || null,
         runNumber:      rec?.runNumber  || null,
         discoveryScore: rec?.score      || null,
@@ -784,14 +809,14 @@ async function submitFeedback(recId) {
     });
     const data = await res.json();
     if (data.success) {
-      btn.textContent = '✓ Feedback saved';
+      btn.textContent = '✓ Saved';
       showToast('Feedback saved — helps improve future discoveries');
     } else {
-      btn.textContent = 'Send Feedback'; btn.disabled = false;
+      btn.textContent = 'Save'; btn.disabled = false;
       showToast('Error: ' + (data.error || 'unknown'));
     }
   } catch (e) {
-    btn.textContent = 'Send Feedback'; btn.disabled = false;
+    btn.textContent = 'Save'; btn.disabled = false;
     showToast('Error: ' + e.message);
   }
 }

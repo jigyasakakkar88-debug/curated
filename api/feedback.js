@@ -33,16 +33,26 @@ module.exports = async function handler(req, res) {
 
   const {
     storefrontId, storefrontName, storefrontUrl,
-    rating, comment,
+    vibe, price, design, comment,
     searchAxis, runNumber, discoveryScore,
   } = req.body || {};
 
-  if (!storefrontId || !rating) {
-    return res.status(400).json({ error: "storefrontId and rating are required" });
+  if (!storefrontId || !vibe) {
+    return res.status(400).json({ error: "storefrontId and vibe are required" });
   }
-  if (!['thumbs_up', 'neutral', 'not_relevant'].includes(rating)) {
-    return res.status(400).json({ error: "Invalid rating value" });
+  if (!['yes', 'maybe', 'not_for_me'].includes(vibe)) {
+    return res.status(400).json({ error: "Invalid vibe value" });
   }
+  if (price  && !['accessible','premium','luxe'].includes(price))  {
+    return res.status(400).json({ error: "Invalid price value" });
+  }
+  if (design && !['familiar','fresh','standout'].includes(design)) {
+    return res.status(400).json({ error: "Invalid design value" });
+  }
+
+  // Map vibe → rating for backward compat with discover.js exclusion checks
+  const vibeToRating = { yes: 'thumbs_up', maybe: 'neutral', not_for_me: 'not_relevant' };
+  const rating = vibeToRating[vibe];
 
   try {
     let feedbackData = { entries: [] };
@@ -58,10 +68,12 @@ module.exports = async function handler(req, res) {
     const existingIdx = (feedbackData.entries || []).findIndex(e => e.storefrontId === storefrontId);
 
     if (existingIdx >= 0) {
-      // Upsert — update existing entry, preserve original discovery metadata
+      // Upsert — update structured fields, preserve original discovery metadata
       feedbackData.entries[existingIdx] = {
         ...feedbackData.entries[existingIdx],
-        rating,
+        vibe, rating,
+        price:     price   || null,
+        design:    design  || null,
         comment:   comment?.trim() || null,
         updatedAt: now,
       };
@@ -73,7 +85,9 @@ module.exports = async function handler(req, res) {
         storefrontId,
         storefrontName,
         storefrontUrl:  storefrontUrl || null,
-        rating,
+        vibe, rating,
+        price:          price   || null,
+        design:         design  || null,
         comment:        comment?.trim() || null,
         searchAxis:     searchAxis || null,
         runNumber:      runNumber  || null,
