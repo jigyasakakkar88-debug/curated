@@ -222,6 +222,21 @@
       "searchAxis": "Specific garment categories",
       "runNumber": 3,
       "discoveryScore": 4
+    },
+    {
+      "id": "3acdb6cb-1387-419e-af44-350124228326",
+      "timestamp": "2026-06-15T10:27:24.960Z",
+      "storefrontId": "nolabels-in",
+      "storefrontName": "Nolabels",
+      "storefrontUrl": "https://nolabels.in",
+      "vibe": "not_for_me",
+      "rating": "not_relevant",
+      "price": null,
+      "design": null,
+      "comment": null,
+      "searchAxis": "Specific garment categories",
+      "runNumber": 3,
+      "discoveryScore": 3
     }
   ]
 }
