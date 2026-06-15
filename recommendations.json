@@ -119,22 +119,6 @@
       "underperforming": false
     },
     {
-      "id": "theikatstory-com",
-      "name": "The Ikat Story",
-      "url": "https://www.theikatstory.com",
-      "reason": "An ethical Indian clothing label established in 2014 by designer Chandni Sareen, celebrated for versatile, fun-hued ikat-weave garments — dresses, co-ords, tops, and shirts — that blend timeless tradition with contemporary flair.",
-      "isShopify": true,
-      "sampleProduct": "Bandhani Summer Dress",
-      "productCount": 3,
-      "discoveredAt": "2026-06-13T12:46:45.102Z",
-      "sourceQuery": "ikat handloom indie clothing brand India women official website storefront",
-      "sourcePosition": 4,
-      "score": 3,
-      "scoreDetails": {},
-      "evaluatorNotes": "Evaluation failed",
-      "underperforming": false
-    },
-    {
       "id": "livbio-in",
       "name": "Livbio",
       "url": "https://www.livbio.in",
@@ -235,6 +219,7 @@
     "kokun-in",
     "prathaa-in",
     "tamarindchutney-in",
-    "sueestore-com"
+    "sueestore-com",
+    "theikatstory-com"
   ]
 }
