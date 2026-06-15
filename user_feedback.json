@@ -132,6 +132,21 @@
       "searchAxis": null,
       "runNumber": null,
       "discoveryScore": 3
+    },
+    {
+      "id": "3798d4a2-2da6-4b2e-9f8c-d3da2f865491",
+      "timestamp": "2026-06-15T10:12:51.965Z",
+      "storefrontId": "sueestore-com",
+      "storefrontName": "Suee",
+      "storefrontUrl": "https://sueestore.com",
+      "vibe": "maybe",
+      "rating": "neutral",
+      "price": "accessible",
+      "design": "familiar",
+      "comment": "nothing extraordinary.",
+      "searchAxis": null,
+      "runNumber": null,
+      "discoveryScore": 3
     }
   ]
 }
