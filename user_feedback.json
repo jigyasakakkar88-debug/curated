@@ -252,6 +252,21 @@
       "searchAxis": "Inclusive and niche demographic fashion",
       "runNumber": 4,
       "discoveryScore": 5
+    },
+    {
+      "id": "5ac72204-150e-4755-8763-6e26f37cb21c",
+      "timestamp": "2026-06-15T10:33:00.445Z",
+      "storefrontId": "pinklay-com",
+      "storefrontName": "Pinklay",
+      "storefrontUrl": "https://www.pinklay.com",
+      "vibe": "yes",
+      "rating": "thumbs_up",
+      "price": "accessible",
+      "design": "fresh",
+      "comment": null,
+      "searchAxis": "Inclusive and niche demographic fashion",
+      "runNumber": 4,
+      "discoveryScore": 5
     }
   ]
 }
