@@ -11,6 +11,18 @@
       "searchAxis": "Slow fashion and sustainable labels",
       "runNumber": 2,
       "discoveryScore": 4
+    },
+    {
+      "id": "3f7ac991-16e6-45ac-ac32-a2b3e0033517",
+      "timestamp": "2026-06-15T07:02:42.743Z",
+      "storefrontId": "vrittidesigns-com",
+      "storefrontName": "Vritti Designs",
+      "storefrontUrl": "https://vrittidesigns.com",
+      "rating": "not_relevant",
+      "comment": "its relevant as per the category but site seems shabby and archaic. doesn't inspire confidence",
+      "searchAxis": "Slow fashion and sustainable labels",
+      "runNumber": 2,
+      "discoveryScore": 3
     }
   ]
 }
