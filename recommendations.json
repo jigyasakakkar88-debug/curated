@@ -103,22 +103,6 @@
       "underperforming": false
     },
     {
-      "id": "sueestore-com",
-      "name": "Suee",
-      "url": "https://sueestore.com",
-      "reason": "A Fort Kochi, Kerala-based social startup dedicated to reviving the Kerala handloom industry in collaboration with over 2,000 artisans, producing women's clothing and accessories in natural fibres and traditional weaves.",
-      "isShopify": true,
-      "sampleProduct": "Mathilukal",
-      "productCount": 3,
-      "discoveredAt": "2026-06-13T12:46:45.099Z",
-      "sourceQuery": "Sui slow fashion India handloom brand official website",
-      "sourcePosition": 4,
-      "score": 3,
-      "scoreDetails": {},
-      "evaluatorNotes": "Evaluation failed",
-      "underperforming": false
-    },
-    {
       "id": "vasudhaavastrram-in",
       "name": "Vasudhaa Vastrram",
       "url": "https://vasudhaavastrram.in",
@@ -250,6 +234,7 @@
   "rejected": [
     "kokun-in",
     "prathaa-in",
-    "tamarindchutney-in"
+    "tamarindchutney-in",
+    "sueestore-com"
   ]
 }
