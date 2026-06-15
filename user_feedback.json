@@ -237,6 +237,21 @@
       "searchAxis": "Specific garment categories",
       "runNumber": 3,
       "discoveryScore": 3
+    },
+    {
+      "id": "acbb2593-2868-44e4-b606-8355a2a86ad0",
+      "timestamp": "2026-06-15T10:32:54.153Z",
+      "storefrontId": "shop-khamir-org",
+      "storefrontName": "Khamir",
+      "storefrontUrl": "https://shop.khamir.org",
+      "vibe": "yes",
+      "rating": "thumbs_up",
+      "price": "premium",
+      "design": "fresh",
+      "comment": null,
+      "searchAxis": "Inclusive and niche demographic fashion",
+      "runNumber": 4,
+      "discoveryScore": 5
     }
   ]
 }
