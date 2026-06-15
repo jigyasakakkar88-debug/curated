@@ -57,5 +57,14 @@
     "acceptedAt": "2026-06-15T10:02:24.119Z",
     "runNumber": null,
     "searchAxis": null
+  },
+  {
+    "id": "thesummerhouse-in",
+    "name": "The Summer House",
+    "url": "https://thesummerhouse.in",
+    "discoveredAt": "2026-06-13T10:14:10.208Z",
+    "acceptedAt": "2026-06-15T10:02:32.470Z",
+    "runNumber": null,
+    "searchAxis": null
   }
 ]
