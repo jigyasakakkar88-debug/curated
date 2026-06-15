@@ -103,22 +103,6 @@
       "underperforming": false
     },
     {
-      "id": "prathaa-in",
-      "name": "Prathaa – Weaving Traditions",
-      "url": "https://prathaa.in",
-      "reason": "An eco-conscious Indian label founded in 2016 dedicated to reviving forgotten handloom weaves and craft traditions, offering contemporary fusion silhouettes woven and handmade by Indian artisans.",
-      "isShopify": true,
-      "sampleProduct": "BLACK HANDLOOM CROP TOP",
-      "productCount": 3,
-      "discoveredAt": "2026-06-13T12:46:45.099Z",
-      "sourceQuery": "ajrakh block print slow fashion India brand site:shopify.com OR site:.in",
-      "sourcePosition": 5,
-      "score": 3,
-      "scoreDetails": {},
-      "evaluatorNotes": "Evaluation failed",
-      "underperforming": false
-    },
-    {
       "id": "tamarindchutney-in",
       "name": "Tamarind Chutney",
       "url": "https://tamarindchutney.in",
@@ -280,6 +264,7 @@
     }
   ],
   "rejected": [
-    "kokun-in"
+    "kokun-in",
+    "prathaa-in"
   ]
 }
