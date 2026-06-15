@@ -263,30 +263,6 @@
       "underperforming": false
     },
     {
-      "id": "indiefabstore-com",
-      "name": "IndieFab",
-      "url": "https://indiefabstore.com",
-      "reason": "A homegrown Indian ethnic wear brand centred on premium linen and linen-cotton — known for minimal, everyday kurta sets and linen co-ord sets with refined detailing, priced accessibly for regular wear.",
-      "isShopify": true,
-      "sampleProduct": "Aarzoo Festive - Co-ord Set of 2",
-      "productCount": 3,
-      "discoveredAt": "2026-06-15T10:18:21.664Z",
-      "runNumber": 3,
-      "searchAxis": "Specific garment categories",
-      "sourceQuery": "Indian linen co-ord set affordable independent label brand India storefront",
-      "sourcePosition": 5,
-      "score": 4,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 3,
-        "briefMatch": 4,
-        "quality": 4
-      },
-      "evaluatorNotes": "Solid Indian indie label with a refined linen-focused aesthetic, though more minimal and contemporary than deeply artisanal, making it a good but slightly softer fit for earthy slow-fashion briefs.",
-      "underperforming": false
-    },
-    {
       "id": "taractara-com",
       "name": "Tara-C-Tara",
       "url": "https://taractara.com",
