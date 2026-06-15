@@ -21,16 +21,6 @@
       "discoveredAt": "2026-06-13T10:14:10.208Z"
     },
     {
-      "id": "dressfolk-com",
-      "name": "Dressfolk",
-      "url": "https://dressfolk.com",
-      "reason": "A direct-to-consumer ethical brand that translates India's handloom heritage — sarees, suits, and dresses — into contemporary high-street silhouettes.",
-      "isShopify": true,
-      "sampleProduct": "Dusk Nectar",
-      "productCount": 3,
-      "discoveredAt": "2026-06-13T10:14:10.208Z"
-    },
-    {
       "id": "wearesui-com",
       "name": "Sui",
       "url": "https://www.wearesui.com",
