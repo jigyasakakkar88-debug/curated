@@ -177,6 +177,21 @@
       "searchAxis": null,
       "runNumber": null,
       "discoveryScore": 3
+    },
+    {
+      "id": "bb79763e-01fa-4197-ab17-92344f6532f2",
+      "timestamp": "2026-06-15T10:25:39.089Z",
+      "storefrontId": "baghindia-com",
+      "storefrontName": "Bagh India",
+      "storefrontUrl": "https://baghindia.com",
+      "vibe": "yes",
+      "rating": "thumbs_up",
+      "price": "premium",
+      "design": "fresh",
+      "comment": null,
+      "searchAxis": "Specific garment categories",
+      "runNumber": 3,
+      "discoveryScore": 5
     }
   ]
 }
