@@ -87,6 +87,21 @@
       "searchAxis": null,
       "runNumber": null,
       "discoveryScore": null
+    },
+    {
+      "id": "a55606e7-da0b-4d55-b0ff-0fdf0fd84e42",
+      "timestamp": "2026-06-15T10:02:11.328Z",
+      "storefrontId": "doodlage-in",
+      "storefrontName": "Doodlage",
+      "storefrontUrl": "https://doodlage.in",
+      "vibe": "yes",
+      "rating": "thumbs_up",
+      "price": "premium",
+      "design": "fresh",
+      "comment": "good to buy when on sale",
+      "searchAxis": null,
+      "runNumber": null,
+      "discoveryScore": null
     }
   ]
 }
