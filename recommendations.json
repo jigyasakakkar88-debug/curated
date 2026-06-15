@@ -1,16 +1,6 @@
 {
   "pending": [
     {
-      "id": "kokun-in",
-      "name": "Kokūn",
-      "url": "https://kokun.in",
-      "reason": "A textile-artist-led Indian label specialising in one-of-a-kind naturally dyed, eco-printed, handwoven clothing — deeply slow fashion and zero-waste in ethos.",
-      "isShopify": true,
-      "sampleProduct": "shoonya 041",
-      "productCount": 3,
-      "discoveredAt": "2026-06-13T10:14:10.208Z"
-    },
-    {
       "id": "wearesui-com",
       "name": "Sui",
       "url": "https://www.wearesui.com",
@@ -309,5 +299,7 @@
       "underperforming": false
     }
   ],
-  "rejected": []
+  "rejected": [
+    "kokun-in"
+  ]
 }
