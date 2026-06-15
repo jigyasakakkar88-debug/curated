@@ -57,6 +57,21 @@
       "searchAxis": null,
       "runNumber": null,
       "discoveryScore": null
+    },
+    {
+      "id": "e06f5a0a-1b83-47d7-82e5-e8206fa2c369",
+      "timestamp": "2026-06-15T09:08:38.639Z",
+      "storefrontId": "kokun-in",
+      "storefrontName": "Kokūn",
+      "storefrontUrl": "https://kokun.in",
+      "vibe": "not_for_me",
+      "rating": "not_relevant",
+      "price": "luxe",
+      "design": "standout",
+      "comment": "too hipster and designer for me",
+      "searchAxis": null,
+      "runNumber": null,
+      "discoveryScore": null
     }
   ]
 }
