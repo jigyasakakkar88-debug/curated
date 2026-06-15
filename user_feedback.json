@@ -102,6 +102,21 @@
       "searchAxis": null,
       "runNumber": null,
       "discoveryScore": null
+    },
+    {
+      "id": "d25c26d2-d2cd-4964-9607-e604b16d9c02",
+      "timestamp": "2026-06-15T10:02:46.354Z",
+      "storefrontId": "anuprerna-com",
+      "storefrontName": "Anuprerna",
+      "storefrontUrl": "https://anuprerna.com",
+      "vibe": "yes",
+      "rating": "thumbs_up",
+      "price": "luxe",
+      "design": "standout",
+      "comment": "good to buy when on sale",
+      "searchAxis": null,
+      "runNumber": null,
+      "discoveryScore": null
     }
   ]
 }
