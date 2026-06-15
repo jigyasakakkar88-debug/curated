@@ -207,6 +207,21 @@
       "searchAxis": "Specific garment categories",
       "runNumber": 3,
       "discoveryScore": 5
+    },
+    {
+      "id": "2559d221-336b-4881-bc71-8d66d49d6398",
+      "timestamp": "2026-06-15T10:27:04.876Z",
+      "storefrontId": "indiefabstore-com",
+      "storefrontName": "IndieFab",
+      "storefrontUrl": "https://indiefabstore.com",
+      "vibe": "yes",
+      "rating": "thumbs_up",
+      "price": "premium",
+      "design": "fresh",
+      "comment": null,
+      "searchAxis": "Specific garment categories",
+      "runNumber": 3,
+      "discoveryScore": 4
     }
   ]
 }
