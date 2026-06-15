@@ -6,11 +6,15 @@
       "storefrontId": "theindianethnicco-com",
       "storefrontName": "The Indian Ethnic Co",
       "storefrontUrl": "https://www.theindianethnicco.com",
-      "rating": "neutral",
-      "comment": "this iss great but expensive. i'd chase them when highly discounted",
+      "rating": "thumbs_up",
+      "comment": "would buy if on major sale",
       "searchAxis": "Slow fashion and sustainable labels",
       "runNumber": 2,
-      "discoveryScore": 4
+      "discoveryScore": 4,
+      "vibe": "yes",
+      "price": "premium",
+      "design": "fresh",
+      "updatedAt": "2026-06-15T09:06:01.785Z"
     },
     {
       "id": "3f7ac991-16e6-45ac-ac32-a2b3e0033517",
