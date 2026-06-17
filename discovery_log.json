@@ -638,6 +638,178 @@
         }
       ],
       "axisScore": 4
+    },
+    {
+      "runId": "5ff2c55b-66ee-45a4-9db4-d940df7d7895",
+      "timestamp": "2026-06-17T04:19:55.066Z",
+      "brief": "dresses for women in pure khadhi",
+      "axis": "Specific garment categories",
+      "turns": 7,
+      "searchLog": [
+        "pure khadi dress women India official website brand storefront",
+        "handwoven khadi cotton dress women Indian label official storefront",
+        "khadi silk dress women India brand official website",
+        "indie khadi dress label India slow fashion women storefront official website",
+        "natural dye khadi dress women Indian brand official website",
+        "block print khadi dress women India independent label storefront",
+        "charkha tales khadi India brand official website storefront",
+        "khadi linen maxi dress women India independent brand mid-range ₹5000 ₹12000 official website",
+        "Bengal khadi weave women dress India clothing brand official website",
+        "khadiandco.com India brand women khadi dresses official storefront",
+        "terra luna India khadi linen women dresses sustainable brand official website",
+        "Jaypore OR \"Ikai by Ragini Ahuja\" OR \"Pero\" khadi dress women India brand official website",
+        "\"khadi dress\" women India indie artisan label mid-range brand official website storefront 2023 2024",
+        "Rajasthan OR Gujarat khadi handspun dress women indie clothing brand India storefront official website",
+        "tjori India brand women khadi dresses official storefront founded India",
+        "organicssite.com India khadi clothing brand founded official storefront"
+      ],
+      "recommendations": [
+        {
+          "id": "terralunaindia-com",
+          "name": "Terra Luna India",
+          "url": "https://www.terralunaindia.com",
+          "reason": "Indian sustainable label founded by Stuti Dhanuka crafting 100% pure khadi and linen dresses for women — GOTS-certified, contemporary silhouettes in the ₹5–12K sweet spot.",
+          "isShopify": true,
+          "sampleProduct": "Ara",
+          "productCount": 3,
+          "discoveredAt": "2026-06-17T04:19:45.057Z",
+          "runNumber": 5,
+          "searchAxis": "Specific garment categories",
+          "sourceQuery": "indie khadi dress label India slow fashion women storefront official website",
+          "sourcePosition": 1,
+          "score": 5,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 5,
+            "briefMatch": 5,
+            "quality": 5
+          },
+          "evaluatorNotes": "GOTS-certified indie label by a named Indian founder with explicit 100% pure khadi dresses — textbook match for the brief.",
+          "underperforming": false
+        },
+        {
+          "id": "charkhatales-com",
+          "name": "Charkha Tales",
+          "url": "https://charkhatales.com",
+          "reason": "Affordable Indian brand built entirely around khadi, offering women's dresses, co-ord sets and tunics in handwoven fabric — ideal for everyday wear at accessible price points.",
+          "isShopify": true,
+          "sampleProduct": "Women Cotton Chikankari Dress - Green",
+          "productCount": 3,
+          "discoveredAt": "2026-06-17T04:19:45.057Z",
+          "runNumber": 5,
+          "searchAxis": "Specific garment categories",
+          "sourceQuery": "indie khadi dress label India slow fashion women storefront official website",
+          "sourcePosition": 3,
+          "score": 4,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 4,
+            "briefMatch": 4,
+            "quality": 4
+          },
+          "evaluatorNotes": "Khadi-centric brand with women's dresses at accessible price points, though the sample product references Chikankari rather than pure khadi, slightly diluting the brief alignment.",
+          "underperforming": false
+        },
+        {
+          "id": "khaddarvas-com",
+          "name": "Khadi Sadan",
+          "url": "https://khaddarvas.com",
+          "reason": "India-rooted khadi specialist stocking pure handwoven khadi dress materials and ready-to-wear women's styles, with a no-frills focus on authentic fabric quality.",
+          "isShopify": true,
+          "sampleProduct": "Khadi Cotton Beige Full Sleeve Smart Casual Shirt",
+          "productCount": 3,
+          "discoveredAt": "2026-06-17T04:19:45.057Z",
+          "runNumber": 5,
+          "searchAxis": "Specific garment categories",
+          "sourceQuery": "pure khadi dress women India official website brand storefront",
+          "sourcePosition": 3,
+          "score": 3,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 3,
+            "briefMatch": 3,
+            "quality": 3
+          },
+          "evaluatorNotes": "Authentic khadi specialist but sample product is a men's shirt and the storefront appears more utilitarian than curated, limiting confidence in women's dress inventory.",
+          "underperforming": false
+        },
+        {
+          "id": "daughtersofindia-net",
+          "name": "Daughters of India",
+          "url": "https://www.daughtersofindia.net",
+          "reason": "Jaipur-based slow-fashion label making hand block-printed maxi and midi dresses from natural Indian cotton, crafted by local artisans with an ethical supply chain.",
+          "isShopify": true,
+          "sampleProduct": "Zahra Mini Dress ~ Indigo",
+          "productCount": 3,
+          "discoveredAt": "2026-06-17T04:19:45.057Z",
+          "runNumber": 5,
+          "searchAxis": "Specific garment categories",
+          "sourceQuery": "indie khadi dress label India slow fashion women storefront official website",
+          "sourcePosition": 4,
+          "score": 3,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 5,
+            "briefMatch": 2,
+            "quality": 4
+          },
+          "evaluatorNotes": "Strong artisanal and slow-fashion aesthetic with beautiful hand block-printed dresses, but fabric is natural cotton not specifically khadi, weakening direct brief alignment.",
+          "underperforming": false
+        },
+        {
+          "id": "tjori-com",
+          "name": "Tjori",
+          "url": "https://www.tjori.com",
+          "reason": "Made-in-India everyday-ethnic brand with a well-stocked khadi dress line for women — relaxed silhouettes, handcrafted details, and mid-range pricing that fits the brief perfectly.",
+          "isShopify": true,
+          "sampleProduct": "Sage Green Striped Cotton Shirt Maxi Dress",
+          "productCount": 3,
+          "discoveredAt": "2026-06-17T04:19:45.058Z",
+          "runNumber": 5,
+          "searchAxis": "Specific garment categories",
+          "sourceQuery": "\"khadi dress\" women India indie artisan label mid-range brand official website storefront 2023 2024",
+          "sourcePosition": 7,
+          "score": 3,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 3,
+            "briefMatch": 3,
+            "quality": 3
+          },
+          "evaluatorNotes": "Real Indian brand with a khadi line but operates at a more mass-market scale with broad ethnic-wear inventory, reducing its standing as a curated khadi-specialist label.",
+          "underperforming": false
+        },
+        {
+          "id": "organicssite-com",
+          "name": "OrganicsSite",
+          "url": "https://www.organicssite.com",
+          "reason": "India-based khadi storefront offering authentic handwoven, naturally dyed 100% organic cotton clothing — a good source for pure-fabric women's pieces with a slow-fashion ethos.",
+          "isShopify": false,
+          "sampleProduct": null,
+          "productCount": null,
+          "discoveredAt": "2026-06-17T04:19:45.058Z",
+          "runNumber": 5,
+          "searchAxis": "Specific garment categories",
+          "sourceQuery": "pure khadi dress women India official website brand storefront",
+          "sourcePosition": 6,
+          "score": 2,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 3,
+            "briefMatch": 3,
+            "quality": 2
+          },
+          "evaluatorNotes": "Claims khadi and organic cotton focus but lacks a Shopify storefront, has no sample product to verify inventory depth, and the brand identity feels underdeveloped and hard to validate.",
+          "underperforming": true
+        }
+      ],
+      "axisScore": 3.33
     }
   ]
 }
