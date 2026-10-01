@@ -103,3 +103,5 @@ _ToS = HTTP status only. Policy sizes = characters of policy body text._
 
 - **Brand Scout doesn't look at images.** `discover.js` sends the model only text: search snippets plus one sample product *name*. Its "aesthetic" scores are inferred from wording. Improvement: send 3–4 product image URLs from `/products.json` to the scoring call as image inputs.
 - **`/admin` returns 404**; only `/admin.html` works. Fix the route in `vercel.json`.
+- **Diagnose why Brand Scout takes so long.** A discovery run takes a long time to return. Find out where the time goes (Claude turns, SerpAPI calls, Shopify checks, the scoring call, GitHub writes) before optimising.
+- **Diagnose why some briefs return zero results.** Briefs like "dress materials" and "cotton sarees" found nothing. Check the search queries Claude ran, what SerpAPI returned, and what the domain blocklist, the India-only rule, the Shopify check and the score ≥ 3 cut removed (`discovery_log.json` should show this per run).
