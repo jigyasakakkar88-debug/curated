@@ -263,30 +263,6 @@
       "underperforming": false
     },
     {
-      "id": "nolabels-in",
-      "name": "Nolabels",
-      "url": "https://nolabels.in",
-      "reason": "Founded in 2022 in Mohali, Nolabels is an accessible-luxury Indian women's fashion brand spanning resort wear, streetwear and co-ord sets — fresh, contemporary aesthetic with an indie edge.",
-      "isShopify": true,
-      "sampleProduct": "Willow Mist Scarf Dress",
-      "productCount": 3,
-      "discoveredAt": "2026-06-15T10:18:21.665Z",
-      "runNumber": 3,
-      "searchAxis": "Specific garment categories",
-      "sourceQuery": "Indian resort vacation wear brand storefront India website",
-      "sourcePosition": 3,
-      "score": 3,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 2,
-        "briefMatch": 3,
-        "quality": 3
-      },
-      "evaluatorNotes": "Real Indian indie brand but leans contemporary resort and streetwear rather than earthy or artisanal, making it a weaker match for garment categories requiring handcraft or traditional craft sensibility.",
-      "underperforming": false
-    },
-    {
       "id": "saphed-com",
       "name": "Saphed",
       "url": "https://saphed.com",
