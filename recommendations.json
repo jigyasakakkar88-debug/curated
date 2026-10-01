@@ -215,6 +215,30 @@
       "underperforming": false
     },
     {
+      "id": "baghindia-com",
+      "name": "Bagh India",
+      "url": "https://baghindia.com",
+      "reason": "A Jaipur-rooted Indian brand specialising in Ajrakh and hand block printed clothing — kurtas, kurtis and parallels in natural fabrics at ~₹3,500–4,500. Distinctive traditional craft aesthetics with a clean, confident storefront.",
+      "isShopify": true,
+      "sampleProduct": "Black Cotton Ajrakh Print Short Kurti",
+      "productCount": 3,
+      "discoveredAt": "2026-06-15T10:18:21.664Z",
+      "runNumber": 3,
+      "searchAxis": "Specific garment categories",
+      "sourceQuery": "hand block printed kurta brand India official storefront website",
+      "sourcePosition": 3,
+      "score": 5,
+      "scoreDetails": {
+        "isStorefront": true,
+        "isIndian": true,
+        "aesthetic": 5,
+        "briefMatch": 5,
+        "quality": 5
+      },
+      "evaluatorNotes": "Excellent Jaipur-rooted indie label with strong Ajrakh/block print identity, natural fabrics, and a clean curated storefront perfectly aligned with artisanal ethnic garment categories.",
+      "underperforming": false
+    },
+    {
       "id": "houseofthehandblock-com",
       "name": "House of the Handblock",
       "url": "https://www.houseofthehandblock.com",
@@ -260,6 +284,30 @@
         "quality": 4
       },
       "evaluatorNotes": "Genuine Indian block-print label with strong artisanal appeal and accessible price points, though the very low entry price and COD focus suggest a more mass-accessible positioning than premium indie curation.",
+      "underperforming": false
+    },
+    {
+      "id": "nolabels-in",
+      "name": "Nolabels",
+      "url": "https://nolabels.in",
+      "reason": "Founded in 2022 in Mohali, Nolabels is an accessible-luxury Indian women's fashion brand spanning resort wear, streetwear and co-ord sets — fresh, contemporary aesthetic with an indie edge.",
+      "isShopify": true,
+      "sampleProduct": "Willow Mist Scarf Dress",
+      "productCount": 3,
+      "discoveredAt": "2026-06-15T10:18:21.665Z",
+      "runNumber": 3,
+      "searchAxis": "Specific garment categories",
+      "sourceQuery": "Indian resort vacation wear brand storefront India website",
+      "sourcePosition": 3,
+      "score": 3,
+      "scoreDetails": {
+        "isStorefront": true,
+        "isIndian": true,
+        "aesthetic": 2,
+        "briefMatch": 3,
+        "quality": 3
+      },
+      "evaluatorNotes": "Real Indian indie brand but leans contemporary resort and streetwear rather than earthy or artisanal, making it a weaker match for garment categories requiring handcraft or traditional craft sensibility.",
       "underperforming": false
     },
     {
@@ -335,6 +383,30 @@
       "underperforming": false
     },
     {
+      "id": "shop-khamir-org",
+      "name": "Khamir",
+      "url": "https://shop.khamir.org",
+      "reason": "Kutch, Gujarat's renowned craft-conservation platform with its own direct storefront — authentic Ajrakh, bandhani and handwoven Kutchi textiles turned into clothing and home furnishings, sourced straight from the artisans who make them.",
+      "isShopify": true,
+      "sampleProduct": "Authentic Kutch Handwoven Kala Cotton Silk Saree",
+      "productCount": 3,
+      "discoveredAt": "2026-06-15T10:29:25.305Z",
+      "runNumber": 4,
+      "searchAxis": "Inclusive and niche demographic fashion",
+      "sourceQuery": "Kutch weave women clothing brand India official storefront",
+      "sourcePosition": 2,
+      "score": 5,
+      "scoreDetails": {
+        "isStorefront": true,
+        "isIndian": true,
+        "aesthetic": 5,
+        "briefMatch": 5,
+        "quality": 5
+      },
+      "evaluatorNotes": "Authentic Kutch craft-conservation storefront selling directly from artisans, with Ajrakh and handwoven textiles that are as earthy and genuinely artisanal as it gets.",
+      "underperforming": false
+    },
+    {
       "id": "cottoncottageindia-com",
       "name": "Cotton Cottage",
       "url": "https://cottoncottageindia.com",
@@ -356,6 +428,54 @@
         "quality": 3
       },
       "evaluatorNotes": "Real Indian handblock-print brand with traditional Sanganeri heritage but feels more generic and price-driven than a curated indie label, limiting its aesthetic alignment.",
+      "underperforming": false
+    },
+    {
+      "id": "terralunaindia-com",
+      "name": "Terra Luna India",
+      "url": "https://www.terralunaindia.com",
+      "reason": "Indian sustainable label founded by Stuti Dhanuka crafting 100% pure khadi and linen dresses for women — GOTS-certified, contemporary silhouettes in the ₹5–12K sweet spot.",
+      "isShopify": true,
+      "sampleProduct": "Ara",
+      "productCount": 3,
+      "discoveredAt": "2026-06-17T04:19:45.057Z",
+      "runNumber": 5,
+      "searchAxis": "Specific garment categories",
+      "sourceQuery": "indie khadi dress label India slow fashion women storefront official website",
+      "sourcePosition": 1,
+      "score": 5,
+      "scoreDetails": {
+        "isStorefront": true,
+        "isIndian": true,
+        "aesthetic": 5,
+        "briefMatch": 5,
+        "quality": 5
+      },
+      "evaluatorNotes": "GOTS-certified indie label by a named Indian founder with explicit 100% pure khadi dresses — textbook match for the brief.",
+      "underperforming": false
+    },
+    {
+      "id": "charkhatales-com",
+      "name": "Charkha Tales",
+      "url": "https://charkhatales.com",
+      "reason": "Affordable Indian brand built entirely around khadi, offering women's dresses, co-ord sets and tunics in handwoven fabric — ideal for everyday wear at accessible price points.",
+      "isShopify": true,
+      "sampleProduct": "Women Cotton Chikankari Dress - Green",
+      "productCount": 3,
+      "discoveredAt": "2026-06-17T04:19:45.057Z",
+      "runNumber": 5,
+      "searchAxis": "Specific garment categories",
+      "sourceQuery": "indie khadi dress label India slow fashion women storefront official website",
+      "sourcePosition": 3,
+      "score": 4,
+      "scoreDetails": {
+        "isStorefront": true,
+        "isIndian": true,
+        "aesthetic": 4,
+        "briefMatch": 4,
+        "quality": 4
+      },
+      "evaluatorNotes": "Khadi-centric brand with women's dresses at accessible price points, though the sample product references Chikankari rather than pure khadi, slightly diluting the brief alignment.",
       "underperforming": false
     },
     {
@@ -404,6 +524,150 @@
         "quality": 4
       },
       "evaluatorNotes": "Strong artisanal and slow-fashion aesthetic with beautiful hand block-printed dresses, but fabric is natural cotton not specifically khadi, weakening direct brief alignment.",
+      "underperforming": false
+    },
+    {
+      "id": "tjori-com",
+      "name": "Tjori",
+      "url": "https://www.tjori.com",
+      "reason": "Made-in-India everyday-ethnic brand with a well-stocked khadi dress line for women — relaxed silhouettes, handcrafted details, and mid-range pricing that fits the brief perfectly.",
+      "isShopify": true,
+      "sampleProduct": "Sage Green Striped Cotton Shirt Maxi Dress",
+      "productCount": 3,
+      "discoveredAt": "2026-06-17T04:19:45.058Z",
+      "runNumber": 5,
+      "searchAxis": "Specific garment categories",
+      "sourceQuery": "\"khadi dress\" women India indie artisan label mid-range brand official website storefront 2023 2024",
+      "sourcePosition": 7,
+      "score": 3,
+      "scoreDetails": {
+        "isStorefront": true,
+        "isIndian": true,
+        "aesthetic": 3,
+        "briefMatch": 3,
+        "quality": 3
+      },
+      "evaluatorNotes": "Real Indian brand with a khadi line but operates at a more mass-market scale with broad ethnic-wear inventory, reducing its standing as a curated khadi-specialist label.",
+      "underperforming": false
+    },
+    {
+      "id": "hidesign-com",
+      "name": "Hidesign",
+      "url": "https://hidesign.com",
+      "reason": "India's most iconic leather handbag brand, founded in Pondicherry in 1978, using vegetable-tanned leather and solar energy in production — a premium heritage label with structured totes, satchels, and everyday carry bags in the ₹5K–15K range.",
+      "isShopify": true,
+      "sampleProduct": "Marquise 04 Olive Leather Tote Bag",
+      "productCount": 3,
+      "discoveredAt": "2026-10-01T06:37:25.614Z",
+      "runNumber": 6,
+      "searchAxis": "Slow fashion and sustainable labels",
+      "sourceQuery": "vegetable tanned leather handbag brand India official website",
+      "sourcePosition": 1,
+      "score": 5,
+      "scoreDetails": {
+        "isStorefront": true,
+        "isIndian": true,
+        "aesthetic": 4,
+        "briefMatch": 5,
+        "quality": 5
+      },
+      "evaluatorNotes": "India's most iconic leather handbag heritage brand with premium vegetable-tanned leather and strong artisanal credentials — a textbook match for the brief.",
+      "underperforming": false
+    },
+    {
+      "id": "nappadori-com",
+      "name": "Nappa Dori",
+      "url": "https://www.nappadori.com",
+      "reason": "A Delhi-based heritage leather goods house handcrafting bags, trunks, and accessories that blend quintessential Indian sensibilities with contemporary design — loved for its distinctive craftsmanship and elevated mid-range positioning.",
+      "isShopify": true,
+      "sampleProduct": "Merchant Wallet",
+      "productCount": 3,
+      "discoveredAt": "2026-10-01T06:37:25.615Z",
+      "runNumber": 6,
+      "searchAxis": "Slow fashion and sustainable labels",
+      "sourceQuery": "nappadora.com OR nappadori.com Nappa Dori India leather brand official site",
+      "sourcePosition": 1,
+      "score": 5,
+      "scoreDetails": {
+        "isStorefront": true,
+        "isIndian": true,
+        "aesthetic": 5,
+        "briefMatch": 5,
+        "quality": 5
+      },
+      "evaluatorNotes": "Delhi-based indie leather goods house with exceptional handcrafted quality, distinctive aesthetic, and strong Indian identity — highly relevant and curated.",
+      "underperforming": false
+    },
+    {
+      "id": "tanandloom-com",
+      "name": "Tan & Loom",
+      "url": "https://www.tanandloom.com",
+      "reason": "A homegrown Indian label specialising in premium vegetable-tanned leather handbags woven with authentic Indian handloom fabrics — beautifully crafted totes and satchels tailored for the modern Indian woman, priced largely in the ₹5K–12K sweet spot.",
+      "isShopify": true,
+      "sampleProduct": "Skinny Baguette (Tuscany Tan)",
+      "productCount": 3,
+      "discoveredAt": "2026-10-01T06:37:25.615Z",
+      "runNumber": 6,
+      "searchAxis": "Slow fashion and sustainable labels",
+      "sourceQuery": "vegetable tanned leather handbag brand India official website",
+      "sourcePosition": 4,
+      "score": 5,
+      "scoreDetails": {
+        "isStorefront": true,
+        "isIndian": true,
+        "aesthetic": 5,
+        "briefMatch": 5,
+        "quality": 5
+      },
+      "evaluatorNotes": "Standout artisanal label fusing vegetable-tanned leather with Indian handloom fabrics — earthy, slow-fashion, and perfectly aligned with the brief.",
+      "underperforming": false
+    },
+    {
+      "id": "zouk-co-in",
+      "name": "Zouk",
+      "url": "https://zouk.co.in",
+      "reason": "An Indian D2C brand making PETA-approved vegan leather handbags, slings, and totes with India-inspired prints — a great option for cruelty-free everyday carry with strong Indian design identity, priced accessibly at ₹2K–6K.",
+      "isShopify": true,
+      "sampleProduct": "Sandrift Expandable Office Bag (Olive)",
+      "productCount": 3,
+      "discoveredAt": "2026-10-01T06:37:25.615Z",
+      "runNumber": 6,
+      "searchAxis": "Slow fashion and sustainable labels",
+      "sourceQuery": "Zouk India vegan leather handbag brand official website storefront",
+      "sourcePosition": 1,
+      "score": 3,
+      "scoreDetails": {
+        "isStorefront": true,
+        "isIndian": true,
+        "aesthetic": 3,
+        "briefMatch": 3,
+        "quality": 3
+      },
+      "evaluatorNotes": "Legitimate Indian D2C brand with India-inspired prints but uses vegan leather, not genuine leather — reduces relevance for a leather handbag brief specifically.",
+      "underperforming": false
+    },
+    {
+      "id": "korakari-com",
+      "name": "Korakari",
+      "url": "https://www.korakari.com",
+      "reason": "A Mumbai-based brand rooted in the Kolhapuri leather craft tradition, offering handstitched leather bags, sandals, and accessories made by skilled artisans — a sustainable, artisan-led label celebrating India's regional leather heritage.",
+      "isShopify": true,
+      "sampleProduct": "Men Fusion Kolhapuri Sandal with Five Braided Grey Upper",
+      "productCount": 3,
+      "discoveredAt": "2026-10-01T06:37:25.615Z",
+      "runNumber": 6,
+      "searchAxis": "Slow fashion and sustainable labels",
+      "sourceQuery": "Kolhapuri leather craft handbag India brand official website",
+      "sourcePosition": 3,
+      "score": 4,
+      "scoreDetails": {
+        "isStorefront": true,
+        "isIndian": true,
+        "aesthetic": 5,
+        "briefMatch": 3,
+        "quality": 4
+      },
+      "evaluatorNotes": "Beautifully artisan-led Kolhapuri craft label but sample product is sandals not handbags, suggesting leather bags may be secondary to their core footwear offering.",
       "underperforming": false
     }
   ],
