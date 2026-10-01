@@ -57,6 +57,25 @@ _Checked 2026-10-01 against https://curated-xi.vercel.app. Code review and publi
 
 _ToS = HTTP status only. Policy sizes = characters of policy body text._
 
+
+### Brands added 2026-10-01 (9 new → 22 total)
+
+| Brand | Products (real) | Main product types (page 1) | Refund | Shipping |
+|---|---|---|---|---|
+| Terra Luna India | 1,398 | shirts, pants, tees, jackets | ✅ 2.4k | ✅ 1.7k |
+| Charkha Tales | 565 | co-ords, kurta sets, sarees, fabric | ✅ 1.8k | ⚠️ empty |
+| Tjori | 2,373 | suits & sets, kurtas, bottoms (+ rakhis) | ✅ 2.1k | ✅ 3.7k |
+| Khamir | 551 | fabric, sarees, dupattas, stoles | ✅ 6.5k | ✅ 3.5k |
+| Bagh India | 313 | kurtas, pants, shirts, dresses | ✅ 3.6k | ✅ 5.0k |
+| Nolabels | 1,262 | co-ords, dresses, tops, skirts | ✅ 2.2k | ⚠️ empty |
+| Hidesign | ~4,000 | **bags, wallets** (leather) | ✅ 2.2k | ✅ 1.0k |
+| Tan & Loom | 205 | **bags** (slings, totes) | ✅ 2.1k | ⚠️ empty |
+| Nappa Dori | 533 | clothing, bags, accessories | ✅ 1.7k | ✅ 1.8k |
+
+- **The real catalog is now about 20,800 products.** Hidesign alone is about 4,000 (roughly 20%) and is almost all bags, which outnumber clothing in some queries. Possible fixes: exclude non-apparel `productType`s at sync time, or keep them and let the agent filter. This is a decision for step 1.3.
+- 4 of the new brands have more than 1,250 products and would be cut off by the current feed's 5-page limit.
+- Shipping text to paste by hand in 1.4 is now needed for: Farog, Ganga Fashions, Okhai, SREYA SAMANTA, Doodlage, Charkha Tales, Nolabels, Tan & Loom.
+
 ## 4. Environment variables
 
 | Var | Used by | Status |
@@ -76,6 +95,11 @@ _ToS = HTTP status only. Policy sizes = characters of policy body text._
 ## 5. Missing pieces, in the order Phase 1 fixes them
 
 1. 1.2: `lib/github.js` (+ branch decision, gap 2), `lib/pricing.js`, dependencies, confirm model IDs
-2. 1.3: Algolia catalog with descriptions, no 5-page cap (about 9.6k records) + `vercel.json` durations + daily sync cron
-3. 1.4: `policies.json`; paste shipping text by hand for Farog, Ganga Fashions, Okhai, SREYA SAMANTA, Doodlage
+2. 1.3: Algolia catalog with descriptions, no 5-page cap (about 20.8k records; decide on non-apparel) + `vercel.json` durations + daily sync cron
+3. 1.4: `policies.json`; paste shipping text by hand for the 8 brands listed above
 4. 1.5: search tools · 1.6: traces · 1.7: eval harness + baseline
+
+## Later (outside the Stylist build)
+
+- **Brand Scout doesn't look at images.** `discover.js` sends the model only text: search snippets plus one sample product *name*. Its "aesthetic" scores are inferred from wording. Improvement: send 3–4 product image URLs from `/products.json` to the scoring call as image inputs.
+- **`/admin` returns 404**; only `/admin.html` works. Fix the route in `vercel.json`.
