@@ -359,30 +359,6 @@
       "underperforming": false
     },
     {
-      "id": "pinklay-com",
-      "name": "Pinklay",
-      "url": "https://www.pinklay.com",
-      "reason": "Hyderabad-based lifestyle brand made by 1000+ Indian artisans — block-printed clothing in cotton and mulmul alongside quilts and home furnishings, so the same craft aesthetic flows through what you wear and how you live.",
-      "isShopify": true,
-      "sampleProduct": "Set of 2 - Aurora Oversized Long Shirt & Salwar Set",
-      "productCount": 3,
-      "discoveredAt": "2026-06-15T10:29:25.305Z",
-      "runNumber": 4,
-      "searchAxis": "Inclusive and niche demographic fashion",
-      "sourceQuery": "handwoven linen clothing brand India official website storefront",
-      "sourcePosition": 4,
-      "score": 5,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 5,
-        "briefMatch": 5,
-        "quality": 5
-      },
-      "evaluatorNotes": "Hyderabad artisan-led brand with block-printed clothing and home goods that create a seamless craft aesthetic across wardrobe and living space — excellent brief match.",
-      "underperforming": false
-    },
-    {
       "id": "shop-khamir-org",
       "name": "Khamir",
       "url": "https://shop.khamir.org",
