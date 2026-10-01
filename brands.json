@@ -129,5 +129,14 @@
     "acceptedAt": "2026-10-01T06:36:05.370Z",
     "runNumber": 3,
     "searchAxis": "Specific garment categories"
+  },
+  {
+    "id": "hidesign-com",
+    "name": "Hidesign",
+    "url": "https://hidesign.com",
+    "discoveredAt": "2026-10-01T06:37:25.614Z",
+    "acceptedAt": "2026-10-01T07:35:16.136Z",
+    "runNumber": 6,
+    "searchAxis": "Slow fashion and sustainable labels"
   }
 ]
