@@ -215,30 +215,6 @@
       "underperforming": false
     },
     {
-      "id": "baghindia-com",
-      "name": "Bagh India",
-      "url": "https://baghindia.com",
-      "reason": "A Jaipur-rooted Indian brand specialising in Ajrakh and hand block printed clothing — kurtas, kurtis and parallels in natural fabrics at ~₹3,500–4,500. Distinctive traditional craft aesthetics with a clean, confident storefront.",
-      "isShopify": true,
-      "sampleProduct": "Black Cotton Ajrakh Print Short Kurti",
-      "productCount": 3,
-      "discoveredAt": "2026-06-15T10:18:21.664Z",
-      "runNumber": 3,
-      "searchAxis": "Specific garment categories",
-      "sourceQuery": "hand block printed kurta brand India official storefront website",
-      "sourcePosition": 3,
-      "score": 5,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 5,
-        "briefMatch": 5,
-        "quality": 5
-      },
-      "evaluatorNotes": "Excellent Jaipur-rooted indie label with strong Ajrakh/block print identity, natural fabrics, and a clean curated storefront perfectly aligned with artisanal ethnic garment categories.",
-      "underperforming": false
-    },
-    {
       "id": "houseofthehandblock-com",
       "name": "House of the Handblock",
       "url": "https://www.houseofthehandblock.com",
