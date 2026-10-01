@@ -111,5 +111,14 @@
     "acceptedAt": "2026-10-01T06:35:47.019Z",
     "runNumber": 4,
     "searchAxis": "Inclusive and niche demographic fashion"
+  },
+  {
+    "id": "baghindia-com",
+    "name": "Bagh India",
+    "url": "https://baghindia.com",
+    "discoveredAt": "2026-06-15T10:18:21.664Z",
+    "acceptedAt": "2026-10-01T06:35:53.270Z",
+    "runNumber": 3,
+    "searchAxis": "Specific garment categories"
   }
 ]
