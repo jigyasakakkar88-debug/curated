@@ -575,30 +575,6 @@
       "underperforming": false
     },
     {
-      "id": "tanandloom-com",
-      "name": "Tan & Loom",
-      "url": "https://www.tanandloom.com",
-      "reason": "A homegrown Indian label specialising in premium vegetable-tanned leather handbags woven with authentic Indian handloom fabrics — beautifully crafted totes and satchels tailored for the modern Indian woman, priced largely in the ₹5K–12K sweet spot.",
-      "isShopify": true,
-      "sampleProduct": "Skinny Baguette (Tuscany Tan)",
-      "productCount": 3,
-      "discoveredAt": "2026-10-01T06:37:25.615Z",
-      "runNumber": 6,
-      "searchAxis": "Slow fashion and sustainable labels",
-      "sourceQuery": "vegetable tanned leather handbag brand India official website",
-      "sourcePosition": 4,
-      "score": 5,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 5,
-        "briefMatch": 5,
-        "quality": 5
-      },
-      "evaluatorNotes": "Standout artisanal label fusing vegetable-tanned leather with Indian handloom fabrics — earthy, slow-fashion, and perfectly aligned with the brief.",
-      "underperforming": false
-    },
-    {
       "id": "zouk-co-in",
       "name": "Zouk",
       "url": "https://zouk.co.in",
