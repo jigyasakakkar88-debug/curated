@@ -810,6 +810,161 @@
         }
       ],
       "axisScore": 3.33
+    },
+    {
+      "runId": "0e38a1f6-4876-4d4f-ae4d-a3015612bccf",
+      "timestamp": "2026-10-01T06:37:33.030Z",
+      "brief": "FIND ME LEATHER HANDBAGS BRANDS",
+      "axis": "Slow fashion and sustainable labels",
+      "turns": 9,
+      "searchLog": [
+        "Indian leather handbag brand official website storefront",
+        "handcrafted leather bag India indie label official storefront",
+        "vegetable tanned leather handbag brand India official website",
+        "Hidesign India leather handbag official website",
+        "Tan and Loom leather bag India brand official storefront",
+        "artisan handmade leather bag India brand mid range official website storefront",
+        "Kolhapuri leather craft handbag India brand official website",
+        "hidesign.com official India leather handbag brand Pondicherry",
+        "tanandloom.com India leather handbag brand storefront",
+        "korakari.com India leather Kolhapuri brand storefront",
+        "\"made in India\" leather tote structured bag independent brand official website ₹5000 ₹12000",
+        "Hidesign official website India leather bags Pondicherry brand",
+        "Tann Trim India vegan leather handbag brand official website storefront",
+        "Da Milano India leather handbag official website brand storefront",
+        "Nappa Dori India leather accessories brand official website storefront Delhi",
+        "Eske India leather handbag brand official website storefront",
+        "Baggit India handbag brand official website storefront",
+        "nappadora.com OR nappadori.com Nappa Dori India leather brand official site",
+        "indie leather crossbody tote handbag India brand ₹5000 ₹10000 official website storefront 2024",
+        "Baggit official website India vegan leather handbag brand baggit.com",
+        "Tan and Loom tanandloom.com India leather handbag brand handcrafted storefront",
+        "baggit.com India handbag brand official storefront vegan leather women",
+        "Zouk India vegan leather handbag brand official website storefront"
+      ],
+      "recommendations": [
+        {
+          "id": "hidesign-com",
+          "name": "Hidesign",
+          "url": "https://hidesign.com",
+          "reason": "India's most iconic leather handbag brand, founded in Pondicherry in 1978, using vegetable-tanned leather and solar energy in production — a premium heritage label with structured totes, satchels, and everyday carry bags in the ₹5K–15K range.",
+          "isShopify": true,
+          "sampleProduct": "Marquise 04 Olive Leather Tote Bag",
+          "productCount": 3,
+          "discoveredAt": "2026-10-01T06:37:25.614Z",
+          "runNumber": 6,
+          "searchAxis": "Slow fashion and sustainable labels",
+          "sourceQuery": "vegetable tanned leather handbag brand India official website",
+          "sourcePosition": 1,
+          "score": 5,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 4,
+            "briefMatch": 5,
+            "quality": 5
+          },
+          "evaluatorNotes": "India's most iconic leather handbag heritage brand with premium vegetable-tanned leather and strong artisanal credentials — a textbook match for the brief.",
+          "underperforming": false
+        },
+        {
+          "id": "nappadori-com",
+          "name": "Nappa Dori",
+          "url": "https://www.nappadori.com",
+          "reason": "A Delhi-based heritage leather goods house handcrafting bags, trunks, and accessories that blend quintessential Indian sensibilities with contemporary design — loved for its distinctive craftsmanship and elevated mid-range positioning.",
+          "isShopify": true,
+          "sampleProduct": "Merchant Wallet",
+          "productCount": 3,
+          "discoveredAt": "2026-10-01T06:37:25.615Z",
+          "runNumber": 6,
+          "searchAxis": "Slow fashion and sustainable labels",
+          "sourceQuery": "nappadora.com OR nappadori.com Nappa Dori India leather brand official site",
+          "sourcePosition": 1,
+          "score": 5,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 5,
+            "briefMatch": 5,
+            "quality": 5
+          },
+          "evaluatorNotes": "Delhi-based indie leather goods house with exceptional handcrafted quality, distinctive aesthetic, and strong Indian identity — highly relevant and curated.",
+          "underperforming": false
+        },
+        {
+          "id": "tanandloom-com",
+          "name": "Tan & Loom",
+          "url": "https://www.tanandloom.com",
+          "reason": "A homegrown Indian label specialising in premium vegetable-tanned leather handbags woven with authentic Indian handloom fabrics — beautifully crafted totes and satchels tailored for the modern Indian woman, priced largely in the ₹5K–12K sweet spot.",
+          "isShopify": true,
+          "sampleProduct": "Skinny Baguette (Tuscany Tan)",
+          "productCount": 3,
+          "discoveredAt": "2026-10-01T06:37:25.615Z",
+          "runNumber": 6,
+          "searchAxis": "Slow fashion and sustainable labels",
+          "sourceQuery": "vegetable tanned leather handbag brand India official website",
+          "sourcePosition": 4,
+          "score": 5,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 5,
+            "briefMatch": 5,
+            "quality": 5
+          },
+          "evaluatorNotes": "Standout artisanal label fusing vegetable-tanned leather with Indian handloom fabrics — earthy, slow-fashion, and perfectly aligned with the brief.",
+          "underperforming": false
+        },
+        {
+          "id": "zouk-co-in",
+          "name": "Zouk",
+          "url": "https://zouk.co.in",
+          "reason": "An Indian D2C brand making PETA-approved vegan leather handbags, slings, and totes with India-inspired prints — a great option for cruelty-free everyday carry with strong Indian design identity, priced accessibly at ₹2K–6K.",
+          "isShopify": true,
+          "sampleProduct": "Sandrift Expandable Office Bag (Olive)",
+          "productCount": 3,
+          "discoveredAt": "2026-10-01T06:37:25.615Z",
+          "runNumber": 6,
+          "searchAxis": "Slow fashion and sustainable labels",
+          "sourceQuery": "Zouk India vegan leather handbag brand official website storefront",
+          "sourcePosition": 1,
+          "score": 3,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 3,
+            "briefMatch": 3,
+            "quality": 3
+          },
+          "evaluatorNotes": "Legitimate Indian D2C brand with India-inspired prints but uses vegan leather, not genuine leather — reduces relevance for a leather handbag brief specifically.",
+          "underperforming": false
+        },
+        {
+          "id": "korakari-com",
+          "name": "Korakari",
+          "url": "https://www.korakari.com",
+          "reason": "A Mumbai-based brand rooted in the Kolhapuri leather craft tradition, offering handstitched leather bags, sandals, and accessories made by skilled artisans — a sustainable, artisan-led label celebrating India's regional leather heritage.",
+          "isShopify": true,
+          "sampleProduct": "Men Fusion Kolhapuri Sandal with Five Braided Grey Upper",
+          "productCount": 3,
+          "discoveredAt": "2026-10-01T06:37:25.615Z",
+          "runNumber": 6,
+          "searchAxis": "Slow fashion and sustainable labels",
+          "sourceQuery": "Kolhapuri leather craft handbag India brand official website",
+          "sourcePosition": 3,
+          "score": 4,
+          "scoreDetails": {
+            "isStorefront": true,
+            "isIndian": true,
+            "aesthetic": 5,
+            "briefMatch": 3,
+            "quality": 4
+          },
+          "evaluatorNotes": "Beautifully artisan-led Kolhapuri craft label but sample product is sandals not handbags, suggesting leather bags may be secondary to their core footwear offering.",
+          "underperforming": false
+        }
+      ],
+      "axisScore": 4.4
     }
   ]
 }
