@@ -431,30 +431,6 @@
       "underperforming": false
     },
     {
-      "id": "charkhatales-com",
-      "name": "Charkha Tales",
-      "url": "https://charkhatales.com",
-      "reason": "Affordable Indian brand built entirely around khadi, offering women's dresses, co-ord sets and tunics in handwoven fabric — ideal for everyday wear at accessible price points.",
-      "isShopify": true,
-      "sampleProduct": "Women Cotton Chikankari Dress - Green",
-      "productCount": 3,
-      "discoveredAt": "2026-06-17T04:19:45.057Z",
-      "runNumber": 5,
-      "searchAxis": "Specific garment categories",
-      "sourceQuery": "indie khadi dress label India slow fashion women storefront official website",
-      "sourcePosition": 3,
-      "score": 4,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 4,
-        "briefMatch": 4,
-        "quality": 4
-      },
-      "evaluatorNotes": "Khadi-centric brand with women's dresses at accessible price points, though the sample product references Chikankari rather than pure khadi, slightly diluting the brief alignment.",
-      "underperforming": false
-    },
-    {
       "id": "khaddarvas-com",
       "name": "Khadi Sadan",
       "url": "https://khaddarvas.com",
