@@ -477,30 +477,6 @@
       },
       "evaluatorNotes": "Strong artisanal and slow-fashion aesthetic with beautiful hand block-printed dresses, but fabric is natural cotton not specifically khadi, weakening direct brief alignment.",
       "underperforming": false
-    },
-    {
-      "id": "tjori-com",
-      "name": "Tjori",
-      "url": "https://www.tjori.com",
-      "reason": "Made-in-India everyday-ethnic brand with a well-stocked khadi dress line for women — relaxed silhouettes, handcrafted details, and mid-range pricing that fits the brief perfectly.",
-      "isShopify": true,
-      "sampleProduct": "Sage Green Striped Cotton Shirt Maxi Dress",
-      "productCount": 3,
-      "discoveredAt": "2026-06-17T04:19:45.058Z",
-      "runNumber": 5,
-      "searchAxis": "Specific garment categories",
-      "sourceQuery": "\"khadi dress\" women India indie artisan label mid-range brand official website storefront 2023 2024",
-      "sourcePosition": 7,
-      "score": 3,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 3,
-        "briefMatch": 3,
-        "quality": 3
-      },
-      "evaluatorNotes": "Real Indian brand with a khadi line but operates at a more mass-market scale with broad ethnic-wear inventory, reducing its standing as a curated khadi-specialist label.",
-      "underperforming": false
     }
   ],
   "rejected": [
