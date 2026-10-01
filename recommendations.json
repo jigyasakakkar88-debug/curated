@@ -383,30 +383,6 @@
       "underperforming": false
     },
     {
-      "id": "shop-khamir-org",
-      "name": "Khamir",
-      "url": "https://shop.khamir.org",
-      "reason": "Kutch, Gujarat's renowned craft-conservation platform with its own direct storefront — authentic Ajrakh, bandhani and handwoven Kutchi textiles turned into clothing and home furnishings, sourced straight from the artisans who make them.",
-      "isShopify": true,
-      "sampleProduct": "Authentic Kutch Handwoven Kala Cotton Silk Saree",
-      "productCount": 3,
-      "discoveredAt": "2026-06-15T10:29:25.305Z",
-      "runNumber": 4,
-      "searchAxis": "Inclusive and niche demographic fashion",
-      "sourceQuery": "Kutch weave women clothing brand India official storefront",
-      "sourcePosition": 2,
-      "score": 5,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 5,
-        "briefMatch": 5,
-        "quality": 5
-      },
-      "evaluatorNotes": "Authentic Kutch craft-conservation storefront selling directly from artisans, with Ajrakh and handwoven textiles that are as earthy and genuinely artisanal as it gets.",
-      "underperforming": false
-    },
-    {
       "id": "cottoncottageindia-com",
       "name": "Cotton Cottage",
       "url": "https://cottoncottageindia.com",
