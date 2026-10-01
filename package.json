@@ -6,6 +6,8 @@
     "dev": "vercel dev"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
+    "algoliasearch": "^5.59.0",
     "node-fetch": "^3.3.2"
   }
 }
