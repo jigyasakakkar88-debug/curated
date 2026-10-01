@@ -551,30 +551,6 @@
       "underperforming": false
     },
     {
-      "id": "nappadori-com",
-      "name": "Nappa Dori",
-      "url": "https://www.nappadori.com",
-      "reason": "A Delhi-based heritage leather goods house handcrafting bags, trunks, and accessories that blend quintessential Indian sensibilities with contemporary design — loved for its distinctive craftsmanship and elevated mid-range positioning.",
-      "isShopify": true,
-      "sampleProduct": "Merchant Wallet",
-      "productCount": 3,
-      "discoveredAt": "2026-10-01T06:37:25.615Z",
-      "runNumber": 6,
-      "searchAxis": "Slow fashion and sustainable labels",
-      "sourceQuery": "nappadora.com OR nappadori.com Nappa Dori India leather brand official site",
-      "sourcePosition": 1,
-      "score": 5,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 5,
-        "briefMatch": 5,
-        "quality": 5
-      },
-      "evaluatorNotes": "Delhi-based indie leather goods house with exceptional handcrafted quality, distinctive aesthetic, and strong Indian identity — highly relevant and curated.",
-      "underperforming": false
-    },
-    {
       "id": "zouk-co-in",
       "name": "Zouk",
       "url": "https://zouk.co.in",
