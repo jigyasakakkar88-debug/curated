@@ -282,6 +282,21 @@
       "searchAxis": "Slow fashion and sustainable labels",
       "runNumber": 6,
       "discoveryScore": 5
+    },
+    {
+      "id": "b0e4fb5b-5f4d-4aa4-baf7-1912c59fca3d",
+      "timestamp": "2026-10-01T07:53:42.462Z",
+      "storefrontId": "zouk-co-in",
+      "storefrontName": "Zouk",
+      "storefrontUrl": "https://zouk.co.in",
+      "vibe": "not_for_me",
+      "rating": "not_relevant",
+      "price": "premium",
+      "design": null,
+      "comment": "feels too mass",
+      "searchAxis": "Slow fashion and sustainable labels",
+      "runNumber": 6,
+      "discoveryScore": 3
     }
   ]
 }
