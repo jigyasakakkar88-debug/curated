@@ -147,5 +147,14 @@
     "acceptedAt": "2026-10-01T07:36:16.566Z",
     "runNumber": 6,
     "searchAxis": "Slow fashion and sustainable labels"
+  },
+  {
+    "id": "nappadori-com",
+    "name": "Nappa Dori",
+    "url": "https://www.nappadori.com",
+    "discoveredAt": "2026-10-01T06:37:25.615Z",
+    "acceptedAt": "2026-10-01T07:38:15.129Z",
+    "runNumber": 6,
+    "searchAxis": "Slow fashion and sustainable labels"
   }
 ]
