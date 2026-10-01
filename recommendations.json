@@ -551,30 +551,6 @@
       "underperforming": false
     },
     {
-      "id": "zouk-co-in",
-      "name": "Zouk",
-      "url": "https://zouk.co.in",
-      "reason": "An Indian D2C brand making PETA-approved vegan leather handbags, slings, and totes with India-inspired prints — a great option for cruelty-free everyday carry with strong Indian design identity, priced accessibly at ₹2K–6K.",
-      "isShopify": true,
-      "sampleProduct": "Sandrift Expandable Office Bag (Olive)",
-      "productCount": 3,
-      "discoveredAt": "2026-10-01T06:37:25.615Z",
-      "runNumber": 6,
-      "searchAxis": "Slow fashion and sustainable labels",
-      "sourceQuery": "Zouk India vegan leather handbag brand official website storefront",
-      "sourcePosition": 1,
-      "score": 3,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 3,
-        "briefMatch": 3,
-        "quality": 3
-      },
-      "evaluatorNotes": "Legitimate Indian D2C brand with India-inspired prints but uses vegan leather, not genuine leather — reduces relevance for a leather handbag brief specifically.",
-      "underperforming": false
-    },
-    {
       "id": "korakari-com",
       "name": "Korakari",
       "url": "https://www.korakari.com",
@@ -604,6 +580,7 @@
     "prathaa-in",
     "tamarindchutney-in",
     "sueestore-com",
-    "theikatstory-com"
+    "theikatstory-com",
+    "zouk-co-in"
   ]
 }
