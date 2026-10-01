@@ -551,30 +551,6 @@
       "underperforming": false
     },
     {
-      "id": "hidesign-com",
-      "name": "Hidesign",
-      "url": "https://hidesign.com",
-      "reason": "India's most iconic leather handbag brand, founded in Pondicherry in 1978, using vegetable-tanned leather and solar energy in production — a premium heritage label with structured totes, satchels, and everyday carry bags in the ₹5K–15K range.",
-      "isShopify": true,
-      "sampleProduct": "Marquise 04 Olive Leather Tote Bag",
-      "productCount": 3,
-      "discoveredAt": "2026-10-01T06:37:25.614Z",
-      "runNumber": 6,
-      "searchAxis": "Slow fashion and sustainable labels",
-      "sourceQuery": "vegetable tanned leather handbag brand India official website",
-      "sourcePosition": 1,
-      "score": 5,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 4,
-        "briefMatch": 5,
-        "quality": 5
-      },
-      "evaluatorNotes": "India's most iconic leather handbag heritage brand with premium vegetable-tanned leather and strong artisanal credentials — a textbook match for the brief.",
-      "underperforming": false
-    },
-    {
       "id": "nappadori-com",
       "name": "Nappa Dori",
       "url": "https://www.nappadori.com",
