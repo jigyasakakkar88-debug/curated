@@ -156,5 +156,14 @@
     "acceptedAt": "2026-10-01T07:38:15.129Z",
     "runNumber": 6,
     "searchAxis": "Slow fashion and sustainable labels"
+  },
+  {
+    "id": "pinklay-com",
+    "name": "Pinklay",
+    "url": "https://www.pinklay.com",
+    "discoveredAt": "2026-06-15T10:29:25.305Z",
+    "acceptedAt": "2026-10-01T07:55:09.130Z",
+    "runNumber": 4,
+    "searchAxis": "Inclusive and niche demographic fashion"
   }
 ]
