@@ -431,30 +431,6 @@
       "underperforming": false
     },
     {
-      "id": "terralunaindia-com",
-      "name": "Terra Luna India",
-      "url": "https://www.terralunaindia.com",
-      "reason": "Indian sustainable label founded by Stuti Dhanuka crafting 100% pure khadi and linen dresses for women — GOTS-certified, contemporary silhouettes in the ₹5–12K sweet spot.",
-      "isShopify": true,
-      "sampleProduct": "Ara",
-      "productCount": 3,
-      "discoveredAt": "2026-06-17T04:19:45.057Z",
-      "runNumber": 5,
-      "searchAxis": "Specific garment categories",
-      "sourceQuery": "indie khadi dress label India slow fashion women storefront official website",
-      "sourcePosition": 1,
-      "score": 5,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 5,
-        "briefMatch": 5,
-        "quality": 5
-      },
-      "evaluatorNotes": "GOTS-certified indie label by a named Indian founder with explicit 100% pure khadi dresses — textbook match for the brief.",
-      "underperforming": false
-    },
-    {
       "id": "charkhatales-com",
       "name": "Charkha Tales",
       "url": "https://charkhatales.com",
