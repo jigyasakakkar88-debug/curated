@@ -120,5 +120,14 @@
     "acceptedAt": "2026-10-01T06:35:53.270Z",
     "runNumber": 3,
     "searchAxis": "Specific garment categories"
+  },
+  {
+    "id": "nolabels-in",
+    "name": "Nolabels",
+    "url": "https://nolabels.in",
+    "discoveredAt": "2026-06-15T10:18:21.665Z",
+    "acceptedAt": "2026-10-01T06:36:05.370Z",
+    "runNumber": 3,
+    "searchAxis": "Specific garment categories"
   }
 ]
