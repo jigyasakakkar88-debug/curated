@@ -1,6 +1,6 @@
 # Setup status — Stylist build, step 1.1
 
-_Checked 2026-10-01. Code review is complete. **Live checks are pending**: the cloud session's network policy blocked outbound requests to the live site (`curated-xi.vercel.app`) and to every brand storefront (proxy 403)._
+_Checked 2026-10-01 against https://curated-xi.vercel.app. Code review and public live checks are done; the authenticated check (`/api/recommendations`) is pending._
 
 ## 1. What works (from the code)
 
@@ -23,30 +23,39 @@ _Checked 2026-10-01. Code review is complete. **Live checks are pending**: the c
 7. **Model IDs in the manual**: `claude-sonnet-5` must be confirmed against the current models list before 1.2. Keep it behind `STYLIST_MODEL` so it can change without a code edit.
 8. **Function time limits**: only `discover.js` has a raised `maxDuration`. `catalog.js` (sync of about 7k products), `policies.js` and `eval.js` will need entries in `vercel.json`.
 
-## 3. Live checks — pending (run from a machine with network access)
+## 3. Live checks
 
-- [ ] `GET /` loads
-- [ ] `GET /api/products`: total products, per-brand counts, `meta.errors`, response time
-- [ ] `/admin` loads
-- [ ] `GET /api/recommendations` with auth responds (don't run discovery)
+| Check | Result |
+|---|---|
+| `GET /` | ✅ 200, 0.5 s |
+| `GET /api/products` | ✅ 200, 3.7–5.4 s uncached. **6,730 products**, 98 new, 985 on sale, 13 brands, no brand errors |
+| `GET /admin` | ❌ **404**. The `vercel.json` route isn't taking effect. `GET /admin.html` works (200), so the panel is reachable there |
+| `GET /api/recommendations` (no auth) | ✅ 401, as expected. Authenticated check pending |
+
+### Findings
+- **The feed is truncated for 2 brands.** The 5-page limit (1,250 products) cuts off Khara Kapas (real total 1,574) and **Okhai (real total 3,750)**. The real catalog is about **9,630 products**, not 6,730. The 1.3 sync should raise or drop the page limit. Check that Okhai's 3,750 isn't padded with non-clothing items.
+- **Descriptions are confirmed absent** from `/api/products` (0 of 6,730 products).
+- **Every brand has a refund policy.** Shipping policy is **missing for Farog** (404) and **empty for Ganga Fashions, Okhai, SREYA SAMANTA and Doodlage** (the page exists but the body is blank). For those 5, shipping info lives elsewhere (FAQ or a custom page) and needs pasting by hand in 1.4.
 
 ### Per-brand table
 
-| Brand | URL | `/products.json` | Products | refund-policy | shipping-policy | terms-of-service |
+| Brand | `/products.json` | Products (real) | In feed | Refund | Shipping | ToS |
 |---|---|---|---|---|---|---|
-| Ganga Fashions | gangafashions.com | ? | ? | ? | ? | ? |
-| Khara Kapas | kharakapas.com | ? | ? | ? | ? | ? |
-| Farog | farog.one | ? | ? | ? | ? | ? |
-| Okhai | okhai.org | ? | ? | ? | ? | ? |
-| SREYA SAMANTA | sreyasamanta.com | ? | ? | ? | ? | ? |
-| SURMA | surma.in | ? | ? | ? | ? | ? |
-| THE BURNT SOUL | www.theburntsoul.com | ? | ? | ? | ? | ? |
-| Dhuni | labeldhuni.com | ? | ? | ? | ? | ? |
-| No Nasties | www.nonasties.in | ? | ? | ? | ? | ? |
-| Dressfolk | dressfolk.com | ? | ? | ? | ? | ? |
-| Doodlage | doodlage.in | ? | ? | ? | ? | ? |
-| The Summer House | thesummerhouse.in | ? | ? | ? | ? | ? |
-| IndieFab | indiefabstore.com | ? | ? | ? | ? | ? |
+| Ganga Fashions | ✅ 0.6 s | 486 | 486 | ✅ 1.5k chars | ⚠️ empty | ✅ |
+| Khara Kapas | ✅ 0.4 s | 1,574 | **1,250** | ✅ 2.8k | ✅ 1.4k | ✅ |
+| Farog | ✅ 0.7 s | 228 | 228 | ✅ 2.1k | ❌ 404 | ✅ |
+| Okhai | ✅ 0.5 s | 3,750 | **1,250** | ✅ 2.9k | ⚠️ empty | ✅ |
+| SREYA SAMANTA | ✅ 0.6 s | 127 | 127 | ✅ 9.1k | ⚠️ empty | ✅ |
+| SURMA | ✅ 0.7 s | 394 | 394 | ✅ 1.8k | ✅ 0.4k | ✅ |
+| THE BURNT SOUL | ✅ 0.6 s | 248 | 248 | ✅ 6.3k | ✅ 2.8k | ✅ |
+| Dhuni | ✅ 0.4 s | 87 | 87 | ✅ 1.4k ("No Refunds / Exchanges") | ✅ 1.0k | ✅ |
+| No Nasties | ✅ 1.8 s | 959 | 959 | ✅ 0.8k | ✅ 0.6k | ✅ |
+| Dressfolk | ✅ 0.3 s | 577 | 577 | ✅ 1.7k | ✅ 2.8k | ✅ |
+| Doodlage | ✅ 0.8 s | 246 | 246 | ✅ 2.6k | ⚠️ empty | ✅ |
+| The Summer House | ✅ 1.4 s | 457 | 457 | ✅ 0.5k | ✅ 0.2k | ✅ |
+| IndieFab | ✅ 0.4 s | 421 | 421 | ✅ 4.5k | ✅ 1.7k | ✅ |
+
+_ToS = HTTP status only. Policy sizes = characters of policy body text._
 
 ## 4. Environment variables
 
@@ -67,6 +76,6 @@ _Checked 2026-10-01. Code review is complete. **Live checks are pending**: the c
 ## 5. Missing pieces, in the order Phase 1 fixes them
 
 1. 1.2: `lib/github.js` (+ branch decision, gap 2), `lib/pricing.js`, dependencies, confirm model IDs
-2. 1.3: Algolia catalog with descriptions + `vercel.json` durations + daily sync cron
-3. 1.4: `policies.json`; the brands with no standard policy pages get filled in once the table above is complete
+2. 1.3: Algolia catalog with descriptions, no 5-page cap (about 9.6k records) + `vercel.json` durations + daily sync cron
+3. 1.4: `policies.json`; paste shipping text by hand for Farog, Ganga Fashions, Okhai, SREYA SAMANTA, Doodlage
 4. 1.5: search tools · 1.6: traces · 1.7: eval harness + baseline
