@@ -1,54 +1,60 @@
 {
-  "summary": "Specific garment category queries and direct brand name lookups with official website/storefront anchors are consistently yielding the highest quality scores (4-5), while broader slow fashion and sustainable label queries underperform at 3.58 average. Highly specific queries — naming a craft technique, fiber, or brand directly alongside 'official website storefront' — reliably surface score-5 brands, whereas generic category or site-operator queries like site:shopify.com perform poorly at score 3. Query specificity and craft/material anchoring are the clearest performance drivers across all runs.",
+  "summary": "Craft-specific and material-focused queries (hand block print, vegetable tanned leather, handwoven linen) consistently yield the highest quality scores, suggesting that precise technique or material descriptors outperform broad category terms. Inclusive and niche demographic fashion leads axis performance, while slow fashion and sustainable labels show strong consistency across multiple runs. Brand-name-anchored queries and site-domain hints (e.g., .in, shopify.com) underperform compared to descriptive craft-led queries, indicating that discovery works better when searching for product types rather than known brand names.",
   "emphasizeAxes": [
-    "Specific garment categories",
-    "Slow fashion and sustainable labels"
+    "Inclusive and niche demographic fashion",
+    "Slow fashion and sustainable labels",
+    "Specific garment categories"
   ],
   "newAxes": [
     {
       "theme": "Regional craft and state-specific fashion labels",
       "angles": [
-        "Kerala handloom kasavu contemporary womenswear indie brand",
-        "Northeast India Manipur Nagaland traditional textile modern fashion label",
-        "Karnataka Ilkal or Dharwad handloom indie clothing brand"
+        "Kerala kasavu and set mundu contemporary fashion brands",
+        "Northeast India handloom brand Manipuri or Naga weave official storefront",
+        "Karnataka Ilkal or Dharwad weave independent clothing label India"
       ]
     },
     {
-      "theme": "Luxury handloom and bridal Indian fashion",
+      "theme": "Indian luxury accessories and artisan leather goods",
       "angles": [
-        "luxury handwoven Banarasi or Kanjeevaram bridal label India independent brand",
-        "contemporary Indian bridal trousseau indie designer official storefront",
-        "high-end handloom saree and occasion wear independent India brand website"
+        "handcrafted leather bag India independent artisan brand official website",
+        "silver dhokra jewelry India independent label official storefront",
+        "luxury embroidered clutch India zardozi brand official website"
       ]
     },
     {
-      "theme": "Inclusive and niche demographic fashion",
+      "theme": "Indian menswear indie and handloom labels",
       "angles": [
-        "plus-size Indian ethnic wear independent brand official website storefront",
-        "Indian kidswear organic cotton independent label official website",
-        "Indian menswear handloom kurta independent brand official storefront"
+        "handloom kurta menswear independent label India official storefront",
+        "slow fashion Indian men linen or khadi shirt brand official website",
+        "indie menswear ethnic fusion brand India shopify or .in storefront"
       ]
     }
   ],
   "topQueryPatterns": [
-    "[specific brand name] India [craft/material] brand official website storefront",
-    "[craft technique e.g. hand block print / ajrakh / ikat] [garment type] brand India official storefront website",
-    "[material e.g. organic cotton / natural dye / handwoven linen] indie label India clothing brand official website",
-    "[garment category e.g. co-ord set / kurta / resort wear] affordable independent label brand India storefront",
-    "[regional craft or technique] slow fashion India brand official website"
+    "[craft technique or material] [garment type] brand India official website storefront",
+    "[regional weave or print style] clothing brand India official storefront website",
+    "[material process e.g. vegetable tanned / naturally dyed] [product type] brand India official website",
+    "indie [fabric type e.g. khadi / linen / handwoven] [garment] label India slow fashion [gender] storefront official website",
+    "[brand name variations e.g. alt spellings or domain guesses] [brand name] India [category] official site"
   ],
-  "searchPositionInsight": "Positions 3, 5, 7, and 8 yield the highest average brand quality scores (all at 4.0), suggesting that the top two results often surface well-known or commercial brands while genuinely high-quality indie discoveries are more reliably found from position 3 onward.",
-  "lastAnalyzed": "2026-06-15T10:18:48.280Z",
-  "runsAnalyzed": 3,
+  "searchPositionInsight": "Search result position 2 yields the highest average brand quality score (4.17), suggesting that the top result is often a brand's own homepage with limited discovery value, while position 2 more reliably surfaces high-quality independent brand storefronts worth evaluating.",
+  "lastAnalyzed": "2026-10-01T06:37:47.565Z",
+  "runsAnalyzed": 6,
   "axisPerformance": [
     {
-      "axis": "Specific garment categories",
-      "avgScore": 4.2,
+      "axis": "Inclusive and niche demographic fashion",
+      "avgScore": 4,
       "runs": 1
     },
     {
       "axis": "Slow fashion and sustainable labels",
-      "avgScore": 3.58,
+      "avgScore": 3.86,
+      "runs": 3
+    },
+    {
+      "axis": "Specific garment categories",
+      "avgScore": 3.77,
       "runs": 2
     }
   ],
@@ -64,6 +70,21 @@
       "uses": 2
     },
     {
+      "query": "Kutch weave women clothing brand India official storefront",
+      "avgScore": 5,
+      "uses": 1
+    },
+    {
+      "query": "vegetable tanned leather handbag brand India official website",
+      "avgScore": 5,
+      "uses": 2
+    },
+    {
+      "query": "nappadora.com OR nappadori.com Nappa Dori India leather brand official site",
+      "avgScore": 5,
+      "uses": 1
+    },
+    {
       "query": "Iro Iro India upcycled handwoven fashion brand official website storefront",
       "avgScore": 4,
       "uses": 1
@@ -77,6 +98,21 @@
       "query": "Indian linen co-ord set affordable independent label brand India storefront",
       "avgScore": 4,
       "uses": 2
+    },
+    {
+      "query": "handwoven linen clothing brand India official website storefront",
+      "avgScore": 4,
+      "uses": 4
+    },
+    {
+      "query": "indie khadi dress label India slow fashion women storefront official website",
+      "avgScore": 4,
+      "uses": 3
+    },
+    {
+      "query": "Kolhapuri leather craft handbag India brand official website",
+      "avgScore": 4,
+      "uses": 1
     },
     {
       "query": "Nicobar India clothing brand official website",
@@ -97,53 +133,43 @@
       "query": "Sui slow fashion India handloom brand official website",
       "avgScore": 3,
       "uses": 1
-    },
-    {
-      "query": "ikat handloom indie clothing brand India women official website storefront",
-      "avgScore": 3,
-      "uses": 1
-    },
-    {
-      "query": "natural dye indie label India clothing brand official website",
-      "avgScore": 3,
-      "uses": 1
-    },
-    {
-      "query": "Indian resort vacation wear brand storefront India website",
-      "avgScore": 3,
-      "uses": 1
     }
   ],
   "searchPositionInsights": [
     {
       "position": 1,
-      "avgScore": 3.25,
-      "count": 4
+      "avgScore": 3.67,
+      "count": 9
     },
     {
       "position": 2,
-      "avgScore": 3.75,
-      "count": 4
+      "avgScore": 4.17,
+      "count": 6
     },
     {
       "position": 3,
-      "avgScore": 4,
-      "count": 2
+      "avgScore": 3.8,
+      "count": 5
     },
     {
       "position": 4,
-      "avgScore": 3,
-      "count": 2
+      "avgScore": 3.8,
+      "count": 5
     },
     {
       "position": 5,
-      "avgScore": 4,
-      "count": 3
+      "avgScore": 3.8,
+      "count": 5
+    },
+    {
+      "position": 6,
+      "avgScore": 2,
+      "count": 1
     },
     {
       "position": 7,
-      "avgScore": 4,
-      "count": 1
+      "avgScore": 3.5,
+      "count": 2
     },
     {
       "position": 8,
