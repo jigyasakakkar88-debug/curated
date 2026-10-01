@@ -267,6 +267,21 @@
       "searchAxis": "Inclusive and niche demographic fashion",
       "runNumber": 4,
       "discoveryScore": 5
+    },
+    {
+      "id": "a5cb2571-afd0-4f21-a8da-842097aca2a6",
+      "timestamp": "2026-10-01T07:35:12.009Z",
+      "storefrontId": "hidesign-com",
+      "storefrontName": "Hidesign",
+      "storefrontUrl": "https://hidesign.com",
+      "vibe": "yes",
+      "rating": "thumbs_up",
+      "price": "premium",
+      "design": "familiar",
+      "comment": null,
+      "searchAxis": "Slow fashion and sustainable labels",
+      "runNumber": 6,
+      "discoveryScore": 5
     }
   ]
 }
