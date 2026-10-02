@@ -58,7 +58,7 @@ The Stylist design and build plan is in `docs/STYLIST.md`; the health check, ope
 
 ### Frontends (`public/`)
 - `index.html` — the main product feed, calls `GET /api/products`
-- `admin.html` — admin panel (password-gated), calls all admin/discover/recommendations/catalog endpoints (Stylist Catalog panel: sync, freeze, status; Brand Policies panel: fetch, extract, review/edit). Served at `/admin.html` (the `/admin` route in `vercel.json` currently returns 404)
+- `admin.html` — admin panel (password-gated; Stylist panels are in the right column), calls all admin/discover/recommendations/catalog endpoints (Stylist Catalog panel: sync, freeze, status; Brand Policies panel: fetch, extract, review/edit). Served at `/admin.html` (the `/admin` route in `vercel.json` currently returns 404)
 
 ### Auth
 All API routes check `Authorization: Bearer <ADMIN_PASSWORD>`. The refresh endpoint also accepts `Bearer <CRON_SECRET>` for the Vercel cron.

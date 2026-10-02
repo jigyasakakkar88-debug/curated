@@ -50,14 +50,15 @@ header { background:var(--ink); color:var(--paper); display:flex; align-items:ce
 .pol-badge.bad { color:var(--err); border-color:var(--err); }
 .pol-badge.warn { color:var(--warn); border-color:var(--warn); }
 .pol-body { padding:4px 0 16px; }
-.pol-field { display:grid; grid-template-columns:150px 90px 1fr 22px; gap:8px; align-items:start; margin-bottom:8px; font-size:12px; }
-.pol-field label { font-size:12px; color:var(--ink); padding-top:5px; }
+.pol-field { display:grid; grid-template-columns:1fr 96px 16px; gap:4px 8px; align-items:center; margin-bottom:10px; font-size:12px; }
+.pol-field input[data-q] { grid-column:1 / -1; grid-row:2; }
+.pol-field > span { grid-column:3; grid-row:1; }
+.pol-field label { font-size:12px; color:var(--ink); letter-spacing:0; text-transform:none; font-family:'Jost',sans-serif; }
 .pol-field input, .pol-field select, .pol-section textarea { width:100%; padding:5px 7px; border:1px solid var(--border); background:var(--warm); font-family:'Jost',sans-serif; font-size:12px; }
 .pol-section { margin:10px 0; }
 .pol-section summary { font-family:'DM Mono',monospace; font-size:10px; cursor:pointer; color:var(--accent); }
 .pol-section textarea { height:160px; margin-top:6px; font-size:11px; line-height:1.5; }
 .pol-hint { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); line-height:1.8; }
-@media (max-width:700px) { .pol-field { grid-template-columns:1fr 1fr; } .pol-field input[data-q] { grid-column:1 / -1; } }
 
 /* LAYOUT */
 .container { max-width:1100px; margin:0 auto; padding:48px 48px 80px; display:grid; grid-template-columns:1fr 380px; gap:40px; }
@@ -242,26 +243,6 @@ input:focus { border-color:var(--accent); }
     </div>
 
     <!-- HOW IT WORKS -->
-    <!-- BRAND POLICIES -->
-    <div class="panel" id="policiesPanel">
-      <div class="panel-head">
-        <div class="panel-title">Brand Policies</div>
-        <div class="panel-meta" id="polMeta"></div>
-      </div>
-      <div class="panel-body">
-        <div class="pol-actions">
-          <button class="btn-test" id="polIngestBtn" onclick="policyAction('ingest')">1 · Fetch policy pages</button>
-          <button class="btn-test" id="polExtractBtn" onclick="policyAction('extract')">2 · Extract fields (Claude Haiku)</button>
-        </div>
-        <div class="pol-hint" style="margin-bottom:12px">
-          Open a brand to check each field against its quote. ✗ = the quote isn't found in the policy text — check it.
-          Paste text for missing or empty sections, fix any field, tick Reviewed, Save. Edits are never overwritten by a later fetch/extract.
-          After saving, run <strong>Sync Catalog</strong> so returnable/COD/etc. reach the products.
-        </div>
-        <div id="polList"><div class="pol-hint">Loading…</div></div>
-      </div>
-    </div>
-
     <div class="panel">
       <div class="panel-head"><div class="panel-title">How it works</div></div>
       <div class="panel-body" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);line-height:2.2">
@@ -353,6 +334,26 @@ input:focus { border-color:var(--accent); }
           <button class="btn-test" style="flex:0 0 auto;padding:7px 16px" onclick="runSearchTest()">Search</button>
         </div>
         <pre id="catalogOut" style="font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;white-space:pre-wrap;margin-top:12px;max-height:320px;overflow:auto;display:none"></pre>
+      </div>
+    </div>
+
+    <!-- BRAND POLICIES -->
+    <div class="panel" id="policiesPanel">
+      <div class="panel-head">
+        <div class="panel-title">Brand Policies</div>
+        <div class="panel-meta" id="polMeta"></div>
+      </div>
+      <div class="panel-body">
+        <div class="pol-actions">
+          <button class="btn-test" id="polIngestBtn" onclick="policyAction('ingest')">1 · Fetch policy pages</button>
+          <button class="btn-test" id="polExtractBtn" onclick="policyAction('extract')">2 · Extract fields (Claude Haiku)</button>
+        </div>
+        <div class="pol-hint" style="margin-bottom:12px">
+          Open a brand to check each field against its quote. ✗ = the quote isn't found in the policy text — check it.
+          Paste text for missing or empty sections, fix any field, tick Reviewed, Save. Edits are never overwritten by a later fetch/extract.
+          After saving, run <strong>Sync Catalog</strong> so returnable/COD/etc. reach the products.
+        </div>
+        <div id="polList"><div class="pol-hint">Loading…</div></div>
       </div>
     </div>
 
