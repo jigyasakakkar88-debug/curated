@@ -1,0 +1,106 @@
+{
+  "runId": "2026-10-02-17-37-C-3ufr",
+  "label": "",
+  "system": "C",
+  "model": "claude-sonnet-5-5",
+  "index": "products",
+  "runs": 1,
+  "createdAt": "2026-10-02T17:37:46.036Z",
+  "wishlistIds": [
+    "tjori-com-8624603562206",
+    "dressfolk-com-8915449118937",
+    "okhai-org-10857781133505"
+  ],
+  "queue": [
+    {
+      "queryId": "S01",
+      "repeat": 1
+    },
+    {
+      "queryId": "S05",
+      "repeat": 1
+    },
+    {
+      "queryId": "S06",
+      "repeat": 1
+    },
+    {
+      "queryId": "S09",
+      "repeat": 1
+    },
+    {
+      "queryId": "S12",
+      "repeat": 1
+    },
+    {
+      "queryId": "S14",
+      "repeat": 1
+    },
+    {
+      "queryId": "S17",
+      "repeat": 1
+    },
+    {
+      "queryId": "S25",
+      "repeat": 1
+    },
+    {
+      "queryId": "S26",
+      "repeat": 1
+    },
+    {
+      "queryId": "S29",
+      "repeat": 1
+    },
+    {
+      "queryId": "S32",
+      "repeat": 1
+    },
+    {
+      "queryId": "S33",
+      "repeat": 1
+    },
+    {
+      "queryId": "S38",
+      "repeat": 1
+    },
+    {
+      "queryId": "S39",
+      "repeat": 1
+    },
+    {
+      "queryId": "S40",
+      "repeat": 1
+    },
+    {
+      "queryId": "S42",
+      "repeat": 1
+    },
+    {
+      "queryId": "S44",
+      "repeat": 1
+    },
+    {
+      "queryId": "S45",
+      "repeat": 1
+    },
+    {
+      "queryId": "S46",
+      "repeat": 1
+    },
+    {
+      "queryId": "S50",
+      "repeat": 1
+    },
+    {
+      "queryId": "G01",
+      "repeat": 1
+    },
+    {
+      "queryId": "G02",
+      "repeat": 1
+    }
+  ],
+  "results": [],
+  "summary": null
+}
