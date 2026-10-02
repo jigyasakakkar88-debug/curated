@@ -701,6 +701,33 @@ function getFiltered() {
 function ep(p) { return p.isSale && p.price ? p.price : (p.price || 9999); }
 
 // ── RENDER ────────────────────────────────────────────────
+// Draw cards in batches: the first batch now, more as the end of the grid scrolls into view.
+// Filtering, sorting and counts still use the full product list; only drawing is batched.
+const GRID_BATCH = 60;
+const gridQueue = {};                 // gridId → items not yet drawn
+const gridObserver = new IntersectionObserver(entries => {
+  for (const e of entries) if (e.isIntersecting) drawMore(e.target.dataset.grid);
+}, { rootMargin: '1200px 0px' });
+
+function renderGrid(id, items) {
+  const el = document.getElementById(id);
+  gridQueue[id] = items.slice(GRID_BATCH);
+  el.innerHTML = items.slice(0, GRID_BATCH).map((p, i) => card(p, Math.min(i, 12) * 25)).join('');
+  let sentinel = document.getElementById(id + 'More');
+  if (!sentinel) {
+    sentinel = document.createElement('div');
+    sentinel.id = id + 'More'; sentinel.dataset.grid = id; sentinel.style.height = '1px';
+    el.after(sentinel);
+    gridObserver.observe(sentinel);
+  }
+}
+
+function drawMore(id) {
+  const queue = gridQueue[id];
+  if (!queue || !queue.length) return;
+  document.getElementById(id).insertAdjacentHTML('beforeend', queue.splice(0, GRID_BATCH).map(p => card(p, 0)).join(''));
+}
+
 function render() {
   const list = getFiltered();
   const showSections = (navFilter === 'all');
@@ -716,8 +743,8 @@ function render() {
   document.getElementById('saleMeta').textContent = `${saleItems.length} items`;
   document.getElementById('allMeta').textContent  = `${restItems.length} items`;
 
-  document.getElementById('newGrid').innerHTML  = newItems.map((p,i)  => card(p, i*25)).join('');
-  document.getElementById('saleGrid').innerHTML = saleItems.map((p,i) => card(p, i*25)).join('');
+  renderGrid('newGrid', newItems);
+  renderGrid('saleGrid', saleItems);
 
   if (restItems.length === 0) {
     document.getElementById('allGrid').innerHTML = `
@@ -731,7 +758,7 @@ function render() {
         }</p>
       </div>`;
   } else {
-    document.getElementById('allGrid').innerHTML = restItems.map((p,i) => card(p, i*20)).join('');
+    renderGrid('allGrid', restItems);
   }
 }
 
@@ -792,7 +819,7 @@ function openModal(id) {
     ? `<div class="modal-sizes-label">Available sizes</div><div class="modal-sizes-grid">${sizes.map(s=>`<span class="size-pill">${esc(s)}</span>`).join('')}</div>`
     : '';
 
-  document.getElementById('mCta').href = p.productUrl || p.brandUrl;
+  document.getElementById('mCta').href = p.productUrl || (p.brandUrl || '#');
   document.getElementById('mFooter').innerHTML = `
     Brand: ${esc(p.brandName)}<br>
     Category: ${esc(p.category||'Clothing')}<br>

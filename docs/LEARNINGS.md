@@ -66,6 +66,10 @@ Three problems this week looked like success or nothing: a sync timing out (garb
 The plan builds tracing (cost, steps, time per question) and an eval set with a no-AI baseline *before* the agent exists, so the agent's first run already has something to beat.
 *Lesson:* without a baseline, "it seems good" is the only evidence you'll have.
 
+**15. "Slow" usually has more than one cause, so measure each part.**
+The site got slow after adding 10 brands. Two unrelated causes: the product list grew past the size Vercel will cache (10.3 MB), so every visit refetched 23 stores; and the page drew all 15,000 cards at once (65 s on a simulated phone). Trimming unused fields and drawing cards as you scroll brought drawing to about 2 s. Neither was the new AI feature.
+*Lesson:* time each step (download, cache, drawing, AI answer) before blaming the newest change.
+
 ## Vocabulary I picked up
 
 - **Baseline**: the simplest non-AI version, used only in evals as the floor to beat. Not a product.
