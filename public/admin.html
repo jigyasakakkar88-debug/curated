@@ -60,6 +60,16 @@ header { background:var(--ink); color:var(--paper); display:flex; align-items:ce
 .pol-section textarea { height:160px; margin-top:6px; font-size:11px; line-height:1.5; }
 .pol-hint { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); line-height:1.8; }
 
+/* STYLIST TEST */
+.sty-thread { max-height:520px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; margin-bottom:12px; }
+.sty-q { align-self:flex-end; background:var(--ink); color:var(--paper); padding:8px 12px; font-size:13px; max-width:85%; }
+.sty-a { font-size:13px; line-height:1.55; }
+.sty-caveat { font-family:'DM Mono',monospace; font-size:10px; color:var(--warn); margin-top:6px; }
+.sty-quote { border-left:2px solid var(--accent); padding:4px 8px; margin-top:6px; font-size:11px; color:var(--muted); }
+.sty-prod { display:flex; gap:8px; align-items:center; margin-top:6px; font-size:12px; text-decoration:none; color:var(--ink); }
+.sty-prod img { width:40px; height:52px; object-fit:cover; background:var(--warm); }
+.sty-trace { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); margin-top:6px; line-height:1.6; }
+
 /* LAYOUT */
 .container { max-width:1100px; margin:0 auto; padding:48px 48px 80px; display:grid; grid-template-columns:1fr 380px; gap:40px; }
 
@@ -334,6 +344,23 @@ input:focus { border-color:var(--accent); }
           <button class="btn-test" style="flex:0 0 auto;padding:7px 16px" onclick="runSearchTest()">Search</button>
         </div>
         <pre id="catalogOut" style="font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;white-space:pre-wrap;margin-top:12px;max-height:320px;overflow:auto;display:none"></pre>
+      </div>
+    </div>
+
+    <!-- STYLIST TEST -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Test the Stylist</div>
+        <div class="panel-meta">admin only · no daily limit</div>
+      </div>
+      <div class="panel-body">
+        <div class="sty-thread" id="styThread"><div class="pol-hint">Ask anything a shopper would. Your saved (hearted) items on this browser are sent as the wishlist.</div></div>
+        <textarea id="styInput" maxlength="500" placeholder="Cotton kurta under ₹3,000 for office" style="width:100%;height:60px;padding:8px;border:1px solid var(--border);background:var(--warm);font-family:'Jost',sans-serif;font-size:13px"></textarea>
+        <input id="styAnchor" placeholder="optional: product id the question is about" style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid var(--border);background:var(--warm);font-size:11px">
+        <div class="btn-row" style="margin-top:8px">
+          <button class="btn-test" onclick="styNewChat()">New chat</button>
+          <button class="btn-add" id="stySend" onclick="styAsk()">Ask</button>
+        </div>
       </div>
     </div>
 
@@ -695,6 +722,52 @@ async function savePolicy(brandId) {
     document.querySelector(`.pol-row[data-brand="${CSS.escape(brandId)}"]`).open = true;
     showToast('✓ Saved — run Sync Catalog when done reviewing');
   } catch (e) { showToast('Error: ' + e.message); }
+}
+
+let styHistory = [];
+
+function styNewChat() {
+  styHistory = [];
+  document.getElementById('styThread').innerHTML = '<div class="pol-hint">New chat.</div>';
+}
+
+async function styAsk() {
+  const input = document.getElementById('styInput');
+  const q = input.value.trim();
+  if (!q) return;
+  const thread = document.getElementById('styThread');
+  const btn = document.getElementById('stySend');
+  thread.insertAdjacentHTML('beforeend', `<div class="sty-q">${esc(q)}</div><div class="sty-a pol-hint" id="styPending">Looking through the brands… (usually 5–20s)</div>`);
+  thread.scrollTop = thread.scrollHeight;
+  input.value = ''; btn.disabled = true;
+  styHistory.push({ role: 'user', content: q });
+  let wishlistIds = [];
+  try { wishlistIds = JSON.parse(localStorage.getItem('wishlist') || '[]'); } catch {}
+  const anchorId = document.getElementById('styAnchor').value.trim() || undefined;
+  let html;
+  try {
+    const res = await fetch('/api/stylist', {
+      method: 'POST', headers: { Authorization: `Bearer ${password}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: styHistory.slice(-6), wishlistIds, anchorId }),
+    });
+    const d = await readJsonOrError(res);
+    if (d.error) throw new Error(d.error + (d.detail ? ` (${d.detail})` : ''));
+    styHistory.push({ role: 'assistant', content: d.answer });
+    const t = d.trace || {};
+    const steps = (t.steps || []).filter(s => s.tool !== 'respond')
+      .map(s => `${s.tool}${s.input && s.input.query !== undefined ? `("${s.input.query}"${s.input.maxPrice ? ` ≤₹${s.input.maxPrice}` : ''}${s.input.size ? ` ${s.input.size}` : ''})` : ''}→${s.resultCount ?? '!'}${s.relaxed ? ` [${s.relaxed}]` : ''}${s.error ? ` ERR ${s.error}` : ''}`).join(' · ');
+    html = `<div>${esc(d.answer)}</div>`
+      + (d.caveats || []).map(c => `<div class="sty-caveat">⚠ ${esc(c)}</div>`).join('')
+      + (d.policy_quotes || []).map(pq => `<div class="sty-quote">“${esc(pq.quote)}” — ${esc(pq.brandId)}</div>`).join('')
+      + (d.products || []).map(p => `<a class="sty-prod" href="${esc(p.productUrl)}" target="_blank"><img src="${esc(p.image || '')}" alt=""><span>${esc(p.name)}<br><span class="pol-hint">${esc(p.brandName)} · ₹${p.price}${p.discountPct ? ` (-${p.discountPct}%)` : ''}</span></span></a>`).join('')
+      + `<div class="sty-trace">${esc(steps || 'no tool calls')}<br>${(t.latencyMs / 1000).toFixed(1)}s · ₹${t.costINR} · ${t.llmCalls} model calls · ${t.tokens ? t.tokens.in + t.tokens.cacheRead : 0} in / ${t.tokens ? t.tokens.out : 0} out tokens · ${esc(d.finishedBy)}${t.invalidIds && t.invalidIds.length ? ` · dropped invented ids: ${t.invalidIds.length}` : ''}</div>`;
+  } catch (e) {
+    styHistory.pop();
+    html = `<div style="color:var(--err)">Error: ${esc(e.message)}</div>`;
+  }
+  document.getElementById('styPending').outerHTML = `<div class="sty-a">${html}</div>`;
+  thread.scrollTop = thread.scrollHeight;
+  btn.disabled = false;
 }
 
 function renderCatalogResult(data) {

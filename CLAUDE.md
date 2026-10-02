@@ -39,7 +39,7 @@ There are no tests and no linter configured.
 | `refresh.js` | Weekly cron (Monday 6am UTC via `vercel.json`) — counts products per brand, used to confirm brands are still live. |
 | `policies.js` | Brand policy database (admin). `POST ?action=ingest` fetches each brand's refund/shipping/terms pages; `?action=extract` has Claude Haiku pull 9 fields, each with an exact quote that's then verified against the text (`quoteVerified`); `?action=save` stores hand edits (`source: manual`, never overwritten by later ingest/extract). `GET` returns `policies.json`. Optional `&brandId=`. |
 | `search.js` | Admin: runs the Stylist's `search_products` tool directly from query params (`query, maxPrice, minPrice, size, brandIds, excludeBrandIds, minDiscount, returnableOnly, departments, limit, index`); returns results + trace and logs a `TRACE` line. |
-| `stylist.js` | Public Stylist endpoint. Phase 2 adds the agent; today only `POST ?feedback=1 {traceId, rating: up|down}` is live (logs a `FEEDBACK` line). |
+| `stylist.js` | Public Stylist endpoint. `POST {messages (last 6 turns), wishlistIds?, anchorId?}` → `{answer, products (feed card shape), caveats, policy_quotes, traceId}`. Per-IP daily limit (`STYLIST_DAILY_LIMIT`, in-memory), 500-char input cap; admin Bearer skips the limit, may pass `index`, and gets the full trace. Drops product ids no tool returned. `POST ?feedback=1 {traceId, rating}` logs a `FEEDBACK` line. Up to 120s. |
 | `catalog.js` | Stylist catalog. `POST ?action=sync` updates the Algolia `products` index in place from every brand (all pages, descriptions, department label, policy fields from `policies.json`); **only in-stock products are indexed**; stale records are deleted; a failed store's records are left untouched; the sync is refused if the new catalog is under half the old one (`&force=1` overrides). `POST ?action=freeze` copies it to `products_eval_<date>` and deletes older eval copies. Algolia free plan = 50,000 records, so never build a second full copy (no `replaceAllObjects`). `GET` = index status, or a sync when called by the daily cron (1:30am UTC). Up to 300s. |
 
 ### Shared modules (`lib/`) — Stylist build, in progress
@@ -51,6 +51,8 @@ There are no tests and no linter configured.
 | `algolia.js` | Algolia client (`getClient('admin'|'search')`), index settings, synonyms from `evals/synonyms.json`, policy-field mapping. |
 | `policies.js` | Policy page fetch/parse (`shopify-policy__body`), field definitions, Haiku extraction with JSON-schema output, quote verification, token count. |
 | `tools.js` | The Stylist's tools (Anthropic definitions + implementations): `search_products` (exact Algolia filters, default department clothing, auto-relaxes ONE filter — size → minDiscount → maxPrice +20% — when <3 hits, never returnable/brand exclusions), `get_product`, `get_policies`, `get_wishlist`, `respond`. `createToolbox({index, wishlistIds, trace})`; `run(name, input)` never throws and records a trace step. Index must match `products` or `products_eval_<date>`. |
+| `agent.js` | Option C loop: Sonnet 5.5 (`STYLIST_MODEL`), adaptive thinking at effort `medium`, up to 6 model calls, parallel tool calls, finishes via `respond`. Forced `tool_choice` is rejected on Sonnet 5.5, so a plain-text reply gets one nudge and round 5's tool results carry a "last step" note. History is append-only (assistant turns pushed unchanged — required for thinking blocks). System prompt + brand list cached. Server-side refusal fallback (`fallbacks: "default"`); a refusal returns a polite decline. |
+| `prompt.js` | The Stylist system prompt (static, cacheable) and brand-list block. |
 | `trace.js` | One trace per question: steps (tool, input, resultCount, relaxed, ms), tokens, ₹ cost, latency, productIds, invalidIds (ids the agent named that no tool returned). Live traces → one `TRACE {json}` log line. |
 | `pricing.js` | Claude prices (USD/MTok) for `claude-sonnet-5-5`, `claude-sonnet-5`, `claude-haiku-4-5`, plus `USD_INR` and `costINR(model, usage)`. Re-check `checkedOn` against the pricing page when models change. |
 
@@ -58,7 +60,7 @@ The Stylist design and build plan is in `docs/STYLIST.md`; the health check, ope
 
 ### Frontends (`public/`)
 - `index.html` — the main product feed, calls `GET /api/products`
-- `admin.html` — admin panel (password-gated; Stylist panels are in the right column), calls all admin/discover/recommendations/catalog endpoints (Stylist Catalog panel: sync, freeze, status; Brand Policies panel: fetch, extract, review/edit). Served at `/admin.html` (the `/admin` route in `vercel.json` currently returns 404)
+- `admin.html` — admin panel (password-gated; Stylist panels are in the right column), calls all admin/discover/recommendations/catalog endpoints (Stylist Catalog: sync, freeze, status, search tester; Test the Stylist: chat with the agent, shows steps/₹/time per answer; Brand Policies: fetch, extract, review/edit). Served at `/admin.html` (the `/admin` route in `vercel.json` currently returns 404)
 
 ### Auth
 All API routes check `Authorization: Bearer <ADMIN_PASSWORD>`. The refresh endpoint also accepts `Bearer <CRON_SECRET>` for the Vercel cron.
