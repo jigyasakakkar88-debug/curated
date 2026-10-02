@@ -658,7 +658,8 @@ async function policyAction(action, brandId) {
     const data = await readJsonOrError(res);
     if (data.error) throw new Error(data.error);
     const errs = (data.errors || []).length;
-    showToast(action === 'ingest' ? '✓ Policy pages fetched' : `✓ Fields extracted${errs ? ` (${errs} errors)` : ''}`);
+    showToast(action === 'ingest' ? '✓ Policy pages fetched'
+      : errs ? `Extracted with ${errs} errors — first: ${data.errors[0].error}` : '✓ Fields extracted');
     await loadPolicies();
   } catch (e) { showToast('Error: ' + e.message); }
   if (btn) { btn.textContent = label; btn.disabled = false; }

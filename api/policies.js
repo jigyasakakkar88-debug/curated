@@ -74,12 +74,17 @@ async function extract(brandId) {
   const ids = brandId ? [brandId] : Object.keys(current.brands || {});
   if (!ids.length) throw new Error("No policy text yet — run ingest first.");
 
-  const results = await mapLimit(ids, 4, id => policies.extractBrand(client, current.brands[id]));
+  // Two at a time: a low-tier API key has a small tokens-per-minute allowance.
+  const results = await mapLimit(ids, 2, id => policies.extractBrand(client, current.brands[id]));
   const updated = {};
   const errors = [];
   results.forEach((r, i) => {
-    if (r.status === "fulfilled") updated[ids[i]] = r.value;
-    else errors.push({ brandId: ids[i], error: r.reason?.message });
+    if (r.status === "fulfilled") { updated[ids[i]] = r.value; return; }
+    const error = r.reason?.message || String(r.reason);
+    console.error(`policy extract failed for ${ids[i]}: ${error}`);
+    errors.push({ brandId: ids[i], error });
+    // Keep the brand's existing fields, but record why this run failed so the panel can show it.
+    updated[ids[i]] = { ...current.brands[ids[i]], extractError: error };
   });
 
   let totalTokens = current.meta?.totalTokens ?? null;
