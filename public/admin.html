@@ -639,6 +639,7 @@ function renderPolicies() {
         ${e.reviewed ? '<span class="pol-badge ok">reviewed</span>' : ''}
       </summary><div class="pol-body">
         ${e.extractError ? `<div class="pol-hint" style="color:var(--err)">${esc(e.extractError)}</div>` : ''}
+        ${e.extractMode && e.extractMode !== 'structured' ? `<div class="pol-hint" style="color:var(--warn)">Extracted via ${esc(e.extractMode)}</div>` : ''}
         ${fieldRows}${sections}
         <div style="display:flex;gap:12px;align-items:center;margin-top:12px">
           <label class="pol-hint"><input type="checkbox" data-reviewed ${e.reviewed ? 'checked' : ''}> Reviewed</label>
