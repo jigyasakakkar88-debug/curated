@@ -278,14 +278,21 @@ footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-
 }
 
 /* ── STYLIST ─────────────────────────────────────────────── */
-.ask-bar { background:var(--card); border-bottom:1px solid var(--border); padding:18px 48px; display:flex; gap:12px; align-items:center; }
-.ask-bar-label { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; white-space:nowrap; }
+.ask-bar { background:var(--card); border-bottom:1px solid var(--border); padding:18px 48px; display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1.3fr); gap:16px; align-items:center; }
+.search-box { position:relative; }
+.search-box input { width:100%; padding:12px 34px 12px 38px; border:1px solid var(--border); background:var(--paper); font-family:'Jost',sans-serif; font-size:14px; outline:none; -webkit-appearance:none; }
+.search-box input:focus { border-color:var(--accent); }
+.search-box svg { position:absolute; left:13px; top:50%; transform:translateY(-50%); width:15px; height:15px; color:var(--muted); pointer-events:none; }
+.search-box button { position:absolute; right:6px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--muted); font-size:14px; cursor:pointer; padding:4px 8px; display:none; }
+.search-box.has-text button { display:block; }
+.search-box input::-webkit-search-cancel-button { display:none; }
+.ask-bar-label { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:300; white-space:nowrap; color:var(--muted); }
 .ask-bar-label em { color:var(--accent); font-style:italic; }
-.ask-bar form { flex:1; display:flex; gap:0; }
-.ask-bar input { flex:1; padding:12px 16px; border:1px solid var(--border); border-right:none; background:var(--paper); font-family:'Jost',sans-serif; font-size:14px; outline:none; min-width:0; }
-.ask-bar input:focus { border-color:var(--accent); }
-.ask-bar button, .sty-send { padding:0 22px; background:var(--ink); color:var(--paper); border:none; font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
-.ask-bar button:hover, .sty-send:hover { background:var(--accent); }
+.ask-bar form { display:flex; gap:0; min-width:0; }
+.ask-bar form input { flex:1; padding:12px 16px; border:1px solid var(--border); border-right:none; background:var(--paper); font-family:'Jost',sans-serif; font-size:14px; outline:none; min-width:0; }
+.ask-bar form input:focus { border-color:var(--accent); }
+.ask-bar form button, .sty-send { padding:0 22px; background:var(--ink); color:var(--paper); border:none; font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.ask-bar form button:hover, .sty-send:hover { background:var(--accent); }
 .ask-fab { position:fixed; right:24px; bottom:24px; z-index:1500; background:var(--ink); color:var(--paper); border:none; padding:14px 20px; font-family:'Jost',sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; box-shadow:0 12px 30px rgba(26,23,20,0.25); opacity:0; transform:translateY(12px); pointer-events:none; transition:all 0.25s; }
 .ask-fab.show { opacity:1; transform:none; pointer-events:all; }
 .sty-overlay { position:fixed; inset:0; background:rgba(26,23,20,0.35); z-index:1900; opacity:0; pointer-events:none; transition:opacity 0.25s; }
@@ -330,8 +337,8 @@ body.sty-open .toast { bottom:auto; top:76px; }
 .modal-ask { display:block; width:100%; margin-top:10px; padding:12px; background:none; border:1px solid var(--ink); color:var(--ink); font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
 .modal-ask:hover { background:var(--ink); color:var(--paper); }
 @media(max-width:768px){
-  .ask-bar { padding:14px 16px; flex-direction:column; align-items:stretch; gap:8px; }
-  .ask-bar-label { font-size:19px; }
+  .ask-bar { padding:14px 16px; grid-template-columns:1fr; gap:8px; }
+  .ask-bar-label { font-size:17px; }
   .sty-drawer { width:100%; }
   .ask-fab { right:16px; bottom:16px; }
 }
@@ -466,7 +473,12 @@ body.sty-open .toast { bottom:auto; top:76px; }
 
 <!-- STYLIST ASK BAR -->
 <div class="ask-bar" id="askBar">
-  <div class="ask-bar-label">Ask the <em>Stylist</em></div>
+  <div class="search-box" id="searchBox">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input id="searchInput" type="search" autocomplete="off" placeholder="Search products, brands, fabrics…" oninput="onSearchInput(this.value)">
+    <button onclick="clearSearch()" aria-label="Clear search">✕</button>
+  </div>
+  <div class="ask-bar-label">or ask the <em>Stylist</em></div>
   <form onsubmit="event.preventDefault(); styOpen(document.getElementById('askInput').value)">
     <input id="askInput" maxlength="500" autocomplete="off" placeholder="Cotton kurta under ₹3,000">
     <button type="submit">Ask</button>
@@ -634,7 +646,9 @@ function updateBreadcrumb() {
 
 function updateSectionTitle() {
   const el = document.getElementById('allTitle');
-  if (navSubcat) {
+  if (searchQuery) {
+    el.innerHTML = `Results for <em>“${esc(searchQuery)}”</em>`;
+  } else if (navSubcat) {
     el.innerHTML = `<em>${navSubcat}</em>`;
   } else if (navFilter === 'women') {
     el.innerHTML = `Women's <em>Wear</em>`;
@@ -645,6 +659,59 @@ function updateSectionTitle() {
   } else {
     el.innerHTML = `Full <em>Selection</em>`;
   }
+}
+
+// ── SEARCH ────────────────────────────────────────────────
+// Instant keyword search over the loaded feed: every word must match name, brand, category or tags.
+// Combines with brand chips, menu filters and sort. Free: no server or Algolia calls.
+let searchQuery = '';
+let searchTimer = null;
+const SEARCH_SYNONYMS = [
+  ['saree', 'sari'], ['kurta', 'kurti'], ['dupatta', 'stole'], ['coord', 'co-ord', 'co ord'],
+  ['lehenga', 'lehnga'], ['trouser', 'pant'], ['tee', 't-shirt', 'tshirt'], ['jewellery', 'jewelry'],
+];
+
+function onSearchInput(v) {
+  document.getElementById('searchBox').classList.toggle('has-text', !!v);
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    searchQuery = v.trim().slice(0, 80);
+    updateSectionTitle();
+    render();
+  }, 150);
+}
+
+function clearSearch() {
+  const input = document.getElementById('searchInput');
+  input.value = '';
+  onSearchInput('');
+  input.focus();
+}
+
+function searchTerms() {
+  if (!searchQuery) return [];
+  return searchQuery.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, ' ').split(/\s+/).filter(Boolean).map(w => {
+    const base = w.length > 3 ? w.replace(/(es|s)$/, '') : w;           // kurtas → kurta, sarees → saree
+    const group = SEARCH_SYNONYMS.find(g => g.some(x => x === w || x === base));
+    return group ? group : [base];
+  });
+}
+
+// Name matches count most, then category, then tags and brand.
+function searchScore(p, terms) {
+  const name = p.name.toLowerCase(), cat = (p.category || '').toLowerCase();
+  let score = 0;
+  for (const alts of terms) {
+    if (alts.some(a => name.includes(a))) score += 3;
+    else if (alts.some(a => cat.includes(a))) score += 2;
+    else score += 1;
+  }
+  return score;
+}
+
+function matchesSearch(p, terms) {
+  const hay = p._hay || (p._hay = [p.name, p.brandName, p.category, ...(p.tags || [])].join(' ').toLowerCase());
+  return terms.every(alts => alts.some(a => hay.includes(a)));
 }
 
 // ── FILTERING ─────────────────────────────────────────────
@@ -684,14 +751,21 @@ function matchesNav(p) {
 }
 
 function getFiltered() {
+  const terms = searchTerms();
   let list = products.filter(p => {
     if (brandFilter !== 'all' && p.brandId !== brandFilter) return false;
+    if (terms.length && !matchesSearch(p, terms)) return false;
     return matchesNav(p);
   });
 
   if (sort === 'price-asc')  list.sort((a,b) => ep(a) - ep(b));
   if (sort === 'price-desc') list.sort((a,b) => ep(b) - ep(a));
   if (sort === 'newest')     list.sort((a,b) => new Date(b.publishedAt||0) - new Date(a.publishedAt||0));
+  // While searching with the default sort, best match first (newest breaks ties).
+  if (terms.length && sort === 'newest') {
+    const score = new Map(list.map(p => [p, searchScore(p, terms)]));
+    list.sort((a, b) => score.get(b) - score.get(a));
+  }
   if (sort === 'discount')   list.sort((a,b) => b.discountPct - a.discountPct);
   if (sort === 'az')         list.sort((a,b) => a.name.localeCompare(b.name));
 
@@ -730,7 +804,7 @@ function drawMore(id) {
 
 function render() {
   const list = getFiltered();
-  const showSections = (navFilter === 'all');
+  const showSections = (navFilter === 'all' && !searchQuery);
 
   const newItems  = showSections ? list.filter(p => p.isNew)  : [];
   const saleItems = showSections ? list.filter(p => p.isSale) : [];
@@ -754,6 +828,8 @@ function render() {
           ? 'Click ♡ on any product to save it here.'
           : navSubcat
           ? `No products matched "${navSubcat}" — the brands may not carry this category yet, or try browsing All.`
+          : searchQuery
+          ? `Nothing matched every word. <a href="#" onclick="event.preventDefault(); styOpen('${esc(searchQuery).replace(/'/g, '&#39;')}')">Ask the Stylist about “${esc(searchQuery)}”</a>`
           : 'Try a different filter or refresh the feed.'
         }</p>
       </div>`;
