@@ -582,7 +582,7 @@ let policyData = null;
 async function loadPolicies() {
   try {
     const res = await fetch('/api/policies', { headers: { Authorization: `Bearer ${password}` } });
-    policyData = await res.json();
+    policyData = await readJsonOrError(res);
     if (policyData.error) throw new Error(policyData.error);
     renderPolicies();
   } catch (e) {
@@ -654,7 +654,7 @@ async function policyAction(action, brandId) {
   try {
     const q = `action=${action}${brandId ? `&brandId=${encodeURIComponent(brandId)}` : ''}`;
     const res = await fetch(`/api/policies?${q}`, { method: 'POST', headers: { Authorization: `Bearer ${password}` } });
-    const data = await res.json();
+    const data = await readJsonOrError(res);
     if (data.error) throw new Error(data.error);
     const errs = (data.errors || []).length;
     showToast(action === 'ingest' ? '✓ Policy pages fetched' : `✓ Fields extracted${errs ? ` (${errs} errors)` : ''}`);
@@ -685,7 +685,7 @@ async function savePolicy(brandId) {
       method: 'POST', headers: { Authorization: `Bearer ${password}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ brandId, fields, sections, reviewed }),
     });
-    const data = await res.json();
+    const data = await readJsonOrError(res);
     if (data.error) throw new Error(data.error);
     policyData.brands[brandId] = data.brand;
     renderPolicies();
@@ -718,6 +718,12 @@ function renderCatalogResult(data) {
   }
 }
 
+async function readJsonOrError(res) {
+  const text = await res.text();
+  try { return JSON.parse(text); }
+  catch { return { error: `HTTP ${res.status}: ${text.replace(/\s+/g, ' ').slice(0, 300)}` }; }
+}
+
 async function runSearchTest() {
   const params = new URLSearchParams({ query: document.getElementById('stQuery').value.trim() });
   const max = document.getElementById('stMax').value, size = document.getElementById('stSize').value.trim();
@@ -730,7 +736,7 @@ async function runSearchTest() {
   out.style.display = 'block'; out.textContent = 'Searching…';
   try {
     const res = await fetch(`/api/search?${params}`, { headers: { Authorization: `Bearer ${password}` } });
-    const data = await res.json();
+    const data = await readJsonOrError(res);
     if (data.error) throw new Error(data.error);
     const step = data.trace.steps[0] || {};
     out.textContent = [`${data.totalHits} matches · ${step.ms} ms${data.relaxed ? ` · relaxed: ${data.relaxed}` : ''}`, '',
@@ -742,7 +748,7 @@ async function runSearchTest() {
 async function catalogStatus() {
   try {
     const res = await fetch('/api/catalog', { headers: { Authorization: `Bearer ${password}` } });
-    renderCatalogResult(await res.json());
+    renderCatalogResult(await readJsonOrError(res));
   } catch (e) { renderCatalogResult({ error: e.message }); }
 }
 
@@ -752,7 +758,7 @@ async function catalogAction(action) {
   btn.textContent = action === 'sync' ? 'Syncing… (1–2 min)' : 'Freezing…'; btn.disabled = true;
   try {
     const res = await fetch(`/api/catalog?action=${action}`, { method: 'POST', headers: { Authorization: `Bearer ${password}` } });
-    const data = await res.json();
+    const data = await readJsonOrError(res);
     renderCatalogResult(data);
     showToast(data.error ? 'Error: ' + data.error : (action === 'sync' ? `✓ ${data.total} products synced` : `✓ Frozen ${data.indexName}`));
   } catch (e) { renderCatalogResult({ error: e.message }); }

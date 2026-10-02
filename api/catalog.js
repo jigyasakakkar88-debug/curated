@@ -52,7 +52,13 @@ async function sync({ force }) {
   if (!brands.length) throw new Error("brands.json is empty — refusing to sync.");
   const policies = await github.readJson('policies.json', null);
 
-  const results = await mapLimit(brands, BRAND_CONCURRENCY, b => fetchBrandRecords(b));
+  const lap = label => console.log(`catalog sync: ${label} at ${Math.round((Date.now() - started) / 1000)}s`);
+  // Read what's already in the index while the stores download.
+  const [results, existing] = await Promise.all([
+    mapLimit(brands, BRAND_CONCURRENCY, b => fetchBrandRecords(b)),
+    algolia.existingRecordBrands(client),
+  ]);
+  lap(`shopify fetched, ${existing.size} existing records read`);
 
   const records = [];
   const perBrand = {};
@@ -82,7 +88,6 @@ async function sync({ force }) {
     records.push(...recs);
   }
 
-  const existing = await algolia.existingRecordBrands(client);
   const keptFromFailed = [...existing.values()].filter(b => failedBrandIds.has(b)).length;
   const previous = existing.size;
   const nextTotal = records.length + keptFromFailed;
@@ -96,10 +101,14 @@ async function sync({ force }) {
     .map(([id]) => id);
 
   await algolia.applyIndexConfig(client);
-  await client.saveObjects({ indexName: algolia.INDEX, objects: records, batchSize: 1000, waitForTasks: true });
+  lap('settings applied');
+  // Send every batch, then wait once: Algolia applies an index's tasks in order, so the last one finishing means all have.
+  const batches = await client.saveObjects({ indexName: algolia.INDEX, objects: records, batchSize: 1000, waitForTasks: false });
   if (stale.length) {
-    await client.deleteObjects({ indexName: algolia.INDEX, objectIDs: stale, batchSize: 1000, waitForTasks: true });
+    batches.push(...await client.deleteObjects({ indexName: algolia.INDEX, objectIDs: stale, batchSize: 1000, waitForTasks: false }));
   }
+  if (batches.length) await client.waitForTask({ indexName: algolia.INDEX, taskID: batches[batches.length - 1].taskID });
+  lap(`saved ${records.length}, removed ${stale.length}`);
   for (const id of failedBrandIds) {
     perBrand[id].count = [...existing.values()].filter(b => b === id).length;
   }
