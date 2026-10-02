@@ -1,0 +1,16 @@
+{
+  "runs": [
+    {
+      "runId": "2026-10-02-17-37-C-3ufr",
+      "label": "",
+      "system": "C",
+      "model": "claude-sonnet-5-5",
+      "index": "products",
+      "runs": 1,
+      "createdAt": "2026-10-02T17:37:46.036Z",
+      "total": 22,
+      "finished": false,
+      "summary": null
+    }
+  ]
+}
