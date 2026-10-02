@@ -60,7 +60,7 @@ There are no tests and no linter configured.
 The Stylist design and build plan is in `docs/STYLIST.md`; the health check, open issues and later list are in `docs/SETUP_STATUS.md`; lessons about building with AI are in `docs/LEARNINGS.md` (add to it when something non-obvious is learned).
 
 ### Frontends (`public/`)
-- `index.html` — the main product feed, calls `GET /api/products`
+- `index.html` — the main product feed, calls `GET /api/products`. Stylist UI: ask bar above the stats row, right-hand drawer (full-screen on mobile) reusing `card()` and the product modal (which also looks up `styProducts`), "Ask about this piece" in the modal (sends `anchorId`), floating Ask button, thumbs feedback, last 6 turns + localStorage wishlist sent with each question.
 - `admin.html` — admin panel (password-gated; Stylist panels are in the right column), calls all admin/discover/recommendations/catalog endpoints (Stylist Catalog: sync, freeze, status, search tester; Test the Stylist: chat with the agent, shows steps/₹/time per answer; Brand Policies: fetch, extract, review/edit). Served at `/admin.html` (the `/admin` route in `vercel.json` currently returns 404)
 
 ### Auth

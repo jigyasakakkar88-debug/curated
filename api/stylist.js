@@ -78,8 +78,9 @@ module.exports = async function handler(req, res) {
   const trace = startTrace({ source: body.source === 'eval' && isAdmin ? 'eval' : 'live', system: 'C',
                              query: last.content, model, index,
                              runId: isAdmin ? body.runId || null : null, queryId: isAdmin ? body.queryId || null : null });
+  let brands = [];
   try {
-    const brands = await loadBrands();
+    brands = await loadBrands();
     const { answer, finishedBy } = await runAgent({ history, wishlistIds, anchorId, index, brands, trace, model });
 
     // Guardrail: only show products a tool actually returned in this turn.
@@ -95,8 +96,11 @@ module.exports = async function handler(req, res) {
       products = results.filter(Boolean).map(toCard);
     }
 
+    const brandNames = Object.fromEntries(brands.map(b => [b.id, b.name]));
+    const policy_quotes = answer.policy_quotes.map(q => ({ ...q, brandName: brandNames[q.brandId] || q.brandId }));
+
     return res.status(200).json({
-      answer: answer.text, products, caveats: answer.caveats, policy_quotes: answer.policy_quotes,
+      answer: answer.text, products, caveats: answer.caveats, policy_quotes,
       traceId: t.traceId, finishedBy,
       ...(isAdmin ? { trace: t } : {}),
     });

@@ -276,6 +276,65 @@ footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-
   .brand-bar,.breadcrumb { padding-left:20px; padding-right:20px; }
   .error-banner { margin-left:20px; margin-right:20px; }
 }
+
+/* ── STYLIST ─────────────────────────────────────────────── */
+.ask-bar { background:var(--card); border-bottom:1px solid var(--border); padding:18px 48px; display:flex; gap:12px; align-items:center; }
+.ask-bar-label { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; white-space:nowrap; }
+.ask-bar-label em { color:var(--accent); font-style:italic; }
+.ask-bar form { flex:1; display:flex; gap:0; }
+.ask-bar input { flex:1; padding:12px 16px; border:1px solid var(--border); border-right:none; background:var(--paper); font-family:'Jost',sans-serif; font-size:14px; outline:none; min-width:0; }
+.ask-bar input:focus { border-color:var(--accent); }
+.ask-bar button, .sty-send { padding:0 22px; background:var(--ink); color:var(--paper); border:none; font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.ask-bar button:hover, .sty-send:hover { background:var(--accent); }
+.ask-fab { position:fixed; right:24px; bottom:24px; z-index:1500; background:var(--ink); color:var(--paper); border:none; padding:14px 20px; font-family:'Jost',sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; box-shadow:0 12px 30px rgba(26,23,20,0.25); opacity:0; transform:translateY(12px); pointer-events:none; transition:all 0.25s; }
+.ask-fab.show { opacity:1; transform:none; pointer-events:all; }
+.sty-overlay { position:fixed; inset:0; background:rgba(26,23,20,0.35); z-index:1900; opacity:0; pointer-events:none; transition:opacity 0.25s; }
+.sty-overlay.open { opacity:1; pointer-events:all; }
+.sty-drawer { position:fixed; top:0; right:0; bottom:0; width:440px; max-width:100%; background:var(--paper); z-index:2000; display:flex; flex-direction:column; transform:translateX(100%); transition:transform 0.3s ease; visibility:hidden; }
+.sty-drawer.open { transform:none; visibility:visible; box-shadow:-20px 0 60px rgba(26,23,20,0.15); }
+.sty-head { background:var(--ink); color:var(--paper); padding:16px 20px; display:flex; align-items:center; gap:12px; }
+.sty-title { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:300; flex:1; }
+.sty-title em { color:var(--accent); font-style:normal; }
+.sty-head button { background:none; border:1px solid #444; color:#bbb; padding:6px 12px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; cursor:pointer; }
+.sty-head button:hover { border-color:var(--paper); color:var(--paper); }
+.sty-thread { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:18px; }
+.sty-empty { font-size:13px; color:var(--muted); line-height:1.7; }
+.sty-empty button { display:block; margin:8px 0 0; background:var(--card); border:1px solid var(--border); padding:8px 12px; font-family:'Jost',sans-serif; font-size:13px; color:var(--ink); cursor:pointer; text-align:left; width:100%; }
+.sty-empty button:hover { border-color:var(--accent); }
+.sty-msg-user { align-self:flex-end; max-width:85%; background:var(--ink); color:var(--paper); padding:10px 14px; font-size:14px; line-height:1.5; }
+.sty-msg-ai { font-size:14px; line-height:1.65; }
+.sty-caveat { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-top:8px; line-height:1.6; }
+.sty-quote { border-left:2px solid var(--accent); padding:4px 10px; margin-top:8px; font-size:12px; color:#5c544c; font-style:italic; }
+.sty-quote span { font-style:normal; font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); display:block; margin-top:2px; }
+.sty-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:2px; margin-top:12px; }
+.sty-grid .card:hover { transform:none; box-shadow:none; }
+.sty-grid .card-name { font-size:12px; }
+.sty-rate { margin-top:10px; display:flex; gap:6px; align-items:center; font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); }
+.sty-rate button { background:none; border:1px solid var(--border); padding:3px 8px; cursor:pointer; font-size:12px; }
+.sty-rate button.on { border-color:var(--accent); background:var(--warm); }
+.sty-loading { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); }
+.sty-loading::after { content:''; animation:dots 1.4s infinite; }
+@keyframes dots { 0%{content:''} 33%{content:'.'} 66%{content:'..'} 100%{content:'...'} }
+.sty-error { font-size:13px; color:var(--sale-red); }
+.sty-error button { margin-left:8px; background:none; border:1px solid var(--sale-red); color:var(--sale-red); padding:3px 10px; cursor:pointer; font-size:11px; }
+.sty-compose { border-top:1px solid var(--border); background:var(--card); padding:12px; }
+.sty-chip { display:none; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:10px; background:var(--warm); padding:6px 10px; margin-bottom:8px; }
+.sty-chip.show { display:flex; }
+.sty-chip span { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.sty-chip button { background:none; border:none; cursor:pointer; color:var(--muted); }
+.sty-compose form { display:flex; }
+.sty-compose textarea { flex:1; resize:none; height:46px; padding:12px; border:1px solid var(--border); border-right:none; background:var(--paper); font-family:'Jost',sans-serif; font-size:14px; outline:none; }
+.sty-compose textarea:focus { border-color:var(--accent); }
+.sty-note { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); margin-top:6px; }
+body.sty-open .toast { bottom:auto; top:76px; }
+.modal-ask { display:block; width:100%; margin-top:10px; padding:12px; background:none; border:1px solid var(--ink); color:var(--ink); font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.modal-ask:hover { background:var(--ink); color:var(--paper); }
+@media(max-width:768px){
+  .ask-bar { padding:14px 16px; flex-direction:column; align-items:stretch; gap:8px; }
+  .ask-bar-label { font-size:19px; }
+  .sty-drawer { width:100%; }
+  .ask-fab { right:16px; bottom:16px; }
+}
 </style>
 </head>
 <body>
@@ -405,6 +464,15 @@ footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-
 <!-- TICKER -->
 <div class="ticker"><div class="ticker-track" id="tickerTrack">Loading sale items…&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Loading sale items…</div></div>
 
+<!-- STYLIST ASK BAR -->
+<div class="ask-bar" id="askBar">
+  <div class="ask-bar-label">Ask the <em>Stylist</em></div>
+  <form onsubmit="event.preventDefault(); styOpen(document.getElementById('askInput').value)">
+    <input id="askInput" maxlength="500" autocomplete="off" placeholder="Cotton kurta under ₹3,000">
+    <button type="submit">Ask</button>
+  </form>
+</div>
+
 <!-- STATS -->
 <div class="stats">
   <div class="stat"><div class="stat-n" id="sTotal">—</div><div class="stat-l">Items Tracked</div></div>
@@ -455,10 +523,31 @@ footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-
       <div class="modal-tags" id="mTags"></div>
       <div class="modal-sizes" id="mSizes"></div>
       <a class="modal-cta" id="mCta" href="#" target="_blank" rel="noopener">View on Brand Site →</a>
+      <button class="modal-ask" onclick="styAskAboutModal()">✦ Ask about this piece</button>
       <div class="modal-footer" id="mFooter"></div>
     </div>
   </div>
 </div>
+
+<!-- STYLIST DRAWER -->
+<button class="ask-fab" id="askFab" onclick="styOpen()">✦ Ask the Stylist</button>
+<div class="sty-overlay" id="styOverlay" onclick="styClose()"></div>
+<aside class="sty-drawer" id="styDrawer" aria-label="Stylist">
+  <div class="sty-head">
+    <div class="sty-title">Stylist<em>.</em></div>
+    <button onclick="styNewChat()">New chat</button>
+    <button onclick="styClose()" aria-label="Close">✕</button>
+  </div>
+  <div class="sty-thread" id="styThread"></div>
+  <div class="sty-compose">
+    <div class="sty-chip" id="styChip"><span id="styChipText"></span><button onclick="stySetAnchor(null)" aria-label="Remove">✕</button></div>
+    <form onsubmit="event.preventDefault(); stySend()">
+      <textarea id="styInput" maxlength="500" placeholder="Ask about outfits, occasions, sizes or returns" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();stySend()}"></textarea>
+      <button class="sty-send" type="submit">Send</button>
+    </form>
+    <div class="sty-note">Answers come from live products and brand policies. Check details on the brand's site before buying.</div>
+  </div>
+</aside>
 
 <script>
 // ── Category taxonomy ─────────────────────────────────────
@@ -678,8 +767,9 @@ function card(p, delay = 0) {
 
 // ── MODAL ─────────────────────────────────────────────────
 function openModal(id) {
-  const p = products.find(x => x.id === id);
+  const p = products.find(x => x.id === id) || styProducts.get(id);
   if (!p) return;
+  currentModalId = id;
 
   const imgHtml = p.image
     ? `<img src="${p.image}" alt="${esc(p.name)}" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block">`
@@ -727,6 +817,7 @@ function toggleWish(e, id) {
   else                  { wishlist.add(id);    showToast('♥ Saved to your collection'); }
   localStorage.setItem('wishlist', JSON.stringify([...wishlist]));
   render();
+  styRefreshCards();
 }
 
 // ── BRAND CHIPS ───────────────────────────────────────────
@@ -825,6 +916,161 @@ function timeAgo(d) {
 
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 loadProducts();
+
+// ── STYLIST ───────────────────────────────────────────────
+const STY_EXAMPLES = [
+  'Something for a mehendi in Jaipur in May',
+  'Which brands offer 14-day returns?',
+  'Cotton kurta under ₹3,000',
+  'Linen co-ord for a beach holiday',
+  'A silk saree I can return',
+  'What goes with a red festive kurta?',
+];
+const styProducts = new Map();     // id → card data for products shown by the Stylist
+let styHistory = [];               // [{role, content}] — last 6 turns are sent
+let styAnchor = null;              // product the next question is about
+let styBusy = false;
+let currentModalId = null;
+
+(function rotatePlaceholder() {
+  let i = 0;
+  const input = document.getElementById('askInput');
+  setInterval(() => { if (document.activeElement !== input && !input.value) { i = (i + 1) % STY_EXAMPLES.length; input.placeholder = STY_EXAMPLES[i]; } }, 3500);
+})();
+
+// Floating button once the ask bar scrolls out of view.
+new IntersectionObserver(([e]) => {
+  document.getElementById('askFab').classList.toggle('show', !e.isIntersecting && !document.getElementById('styDrawer').classList.contains('open'));
+}).observe(document.getElementById('askBar'));
+
+function styOpen(question) {
+  document.getElementById('styDrawer').classList.add('open');
+  document.getElementById('styOverlay').classList.add('open');
+  document.body.classList.add('sty-open');
+  document.getElementById('askFab').classList.remove('show');
+  if (!styHistory.length && !document.querySelector('#styThread .sty-msg-ai, #styThread .sty-msg-user')) styRenderEmpty();
+  const q = (question || '').trim();
+  if (q) { document.getElementById('askInput').value = ''; stySend(q); }
+  else setTimeout(() => document.getElementById('styInput').focus(), 300);
+}
+
+function styClose() {
+  document.getElementById('styDrawer').classList.remove('open');
+  document.getElementById('styOverlay').classList.remove('open');
+  document.body.classList.remove('sty-open');
+  const bar = document.getElementById('askBar').getBoundingClientRect();
+  document.getElementById('askFab').classList.toggle('show', bar.bottom < 0 || bar.top > innerHeight);
+}
+
+function styNewChat() {
+  styHistory = []; stySetAnchor(null); styRenderEmpty();
+}
+
+function styRenderEmpty() {
+  document.getElementById('styThread').innerHTML = `<div class="sty-empty">
+    Ask me to find pieces for an occasion, a budget or a size, or about a brand's returns and shipping. Try:
+    ${STY_EXAMPLES.slice(0, 4).map(q => `<button onclick="stySend(this.textContent)">${esc(q)}</button>`).join('')}
+  </div>`;
+}
+
+function stySetAnchor(p) {
+  styAnchor = p ? p.id : null;
+  document.getElementById('styChip').classList.toggle('show', !!p);
+  document.getElementById('styChipText').textContent = p ? `About: ${p.name} — ${p.brandName}` : '';
+}
+
+function styAskAboutModal() {
+  const p = products.find(x => x.id === currentModalId) || styProducts.get(currentModalId);
+  closeModal();
+  if (styHistory.length) styNewChat();
+  stySetAnchor(p || null);
+  styOpen();
+  document.getElementById('styInput').placeholder = 'e.g. Is this returnable? What would go with it?';
+}
+
+async function stySend(text) {
+  const input = document.getElementById('styInput');
+  const q = (text ?? input.value).trim();
+  if (!q || styBusy) return;
+  if (q.length > 500) { showToast('Please keep it under 500 characters'); return; }
+  input.value = '';
+  const thread = document.getElementById('styThread');
+  thread.querySelector('.sty-empty')?.remove();
+  thread.insertAdjacentHTML('beforeend', `<div class="sty-msg-user">${esc(q)}</div>`);
+  styHistory.push({ role: 'user', content: q });
+  await styRequest();
+}
+
+async function styRequest() {
+  const thread = document.getElementById('styThread');
+  const brandCount = document.getElementById('sBrands').textContent;
+  const pending = document.createElement('div');
+  pending.className = 'sty-loading';
+  pending.textContent = `Looking through ${/\d/.test(brandCount) ? brandCount + ' brands' : 'the brands'} (usually 5–15s)`;
+  thread.appendChild(pending);
+  thread.scrollTop = thread.scrollHeight;
+  styBusy = true;
+  let wishlistIds = [];
+  try { wishlistIds = JSON.parse(localStorage.getItem('wishlist') || '[]'); } catch {}
+  try {
+    const res = await fetch('/api/stylist', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: styHistory.slice(-6), wishlistIds, anchorId: styAnchor || undefined }),
+    });
+    let d; try { d = await res.json(); } catch { d = { error: `Something went wrong (${res.status}).` }; }
+    if (!res.ok || d.error) throw new Error(d.error || `Something went wrong (${res.status}).`);
+    styHistory.push({ role: 'assistant', content: d.answer });
+    (d.products || []).forEach(p => styProducts.set(p.id, p));
+    pending.outerHTML = styAnswerHtml(d);
+  } catch (e) {
+    styHistory.pop();   // let the user retry the same question
+    const lastQ = thread.querySelectorAll('.sty-msg-user');
+    const q = lastQ.length ? lastQ[lastQ.length - 1].textContent : '';
+    pending.outerHTML = `<div class="sty-error">${esc(e.message || 'Something went wrong.')}<button onclick="styRetry(this, ${JSON.stringify(q).replace(/"/g, '&quot;')})">Retry</button></div>`;
+  }
+  styBusy = false;
+  thread.scrollTop = thread.scrollHeight;
+}
+
+function styRetry(btn, q) {
+  btn.parentElement.previousElementSibling?.remove();   // the failed question bubble
+  btn.parentElement.remove();
+  stySend(q);
+}
+
+function styAnswerHtml(d) {
+  const quotes = (d.policy_quotes || []).map(q => {
+    const brand = q.brandName || (brands.find(b => b.id === q.brandId) || {}).name || q.brandId;
+    return `<div class="sty-quote">“${esc(q.quote)}”<span>${esc(brand)} policy</span></div>`;
+  }).join('');
+  const caveats = (d.caveats || []).map(c => `<div class="sty-caveat">· ${esc(c)}</div>`).join('');
+  const ids = (d.products || []).map(p => p.id);
+  const cards = ids.length ? `<div class="sty-grid" data-ids="${esc(ids.join(','))}">${ids.map((id, i) => card(styProducts.get(id), i * 40)).join('')}</div>` : '';
+  return `<div class="sty-msg-ai">
+    <div>${esc(d.answer).replace(/\n/g, '<br>')}</div>${quotes}${caveats}${cards}
+    <div class="sty-rate" data-trace="${esc(d.traceId || '')}">Helpful?
+      <button onclick="styRate(this,'up')" aria-label="Helpful">👍</button><button onclick="styRate(this,'down')" aria-label="Not helpful">👎</button>
+    </div></div>`;
+}
+
+function styRefreshCards() {
+  document.querySelectorAll('.sty-grid').forEach(g => {
+    g.innerHTML = g.dataset.ids.split(',').map(id => styProducts.get(id)).filter(Boolean).map(p => card(p, 0)).join('');
+  });
+}
+
+async function styRate(btn, rating) {
+  const box = btn.parentElement;
+  if (box.dataset.rated) return;
+  box.dataset.rated = rating;
+  btn.classList.add('on');
+  try {
+    await fetch('/api/stylist?feedback=1', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ traceId: box.dataset.trace, rating }) });
+  } catch {}
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('styDrawer').classList.contains('open')) styClose(); });
 </script>
 </body>
 </html>
