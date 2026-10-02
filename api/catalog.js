@@ -1,6 +1,8 @@
 // Catalog admin: Shopify → Algolia sync, and frozen copies of the index for evals.
-//   POST /api/catalog?action=sync     rebuild the `products` index from every brand (admin)
+//   POST /api/catalog?action=sync     update the `products` index from every brand (admin)
 //   POST /api/catalog?action=freeze   copy `products` → `products_eval_<YYYY-MM-DD>` (admin)
+// Free Algolia plan = 50,000 records, so: only in-stock products are indexed, the sync updates in
+// place (no temporary second copy), and freezing replaces the previous eval copy.
 //   GET  /api/catalog                 index status (admin) — or a sync when called by the Vercel cron
 const github = require('../lib/github');
 const algolia = require('../lib/algolia');
@@ -55,42 +57,62 @@ async function sync({ force }) {
   const records = [];
   const perBrand = {};
   const failures = [];
+  const failedBrandIds = new Set();
+  let soldOut = 0;
   for (let i = 0; i < brands.length; i++) {
     const brand = brands[i];
-    let recs, source = "shopify";
-    if (results[i].status === "fulfilled") {
-      recs = results[i].value;
-    } else {
-      // A store that's down shouldn't vanish from search: keep yesterday's records for it.
-      recs = await algolia.recordsForBrand(client, brand.id);
-      source = "kept-previous";
-      failures.push({ brandId: brand.id, error: results[i].reason?.message, keptPrevious: recs.length });
+    if (results[i].status !== "fulfilled") {
+      // A store that's down shouldn't vanish from search: its existing records are left untouched.
+      failedBrandIds.add(brand.id);
+      failures.push({ brandId: brand.id, error: results[i].reason?.message });
+      perBrand[brand.id] = { name: brand.name, count: null, source: "kept-previous" };
+      continue;
     }
+    const all  = results[i].value;
+    const recs = all.filter(r => r.inStock);
+    soldOut += all.length - recs.length;
     const policy = algolia.policyFieldsFor(policies, brand.id);
     const departments = {};
     for (const r of recs) {
       Object.assign(r, policy);
       departments[r.department] = (departments[r.department] || 0) + 1;
     }
-    perBrand[brand.id] = { name: brand.name, count: recs.length, source, departments, hasPolicy: Object.keys(policy).length > 0 };
+    perBrand[brand.id] = { name: brand.name, count: recs.length, soldOut: all.length - recs.length,
+                           source: "shopify", departments, hasPolicy: Object.keys(policy).length > 0 };
     records.push(...recs);
   }
 
-  const previous = await algolia.countRecords(client);
-  if (!force && previous > 0 && records.length < previous * MIN_KEEP_RATIO) {
-    throw new Error(`New catalog has ${records.length} records vs ${previous} in the index — refusing to replace. Re-run with &force=1 if this is expected.`);
+  const existing = await algolia.existingRecordBrands(client);
+  const keptFromFailed = [...existing.values()].filter(b => failedBrandIds.has(b)).length;
+  const previous = existing.size;
+  const nextTotal = records.length + keptFromFailed;
+  if (!force && previous > 0 && nextTotal < previous * MIN_KEEP_RATIO) {
+    throw new Error(`New catalog has ${nextTotal} records vs ${previous} in the index — refusing to replace. Re-run with &force=1 if this is expected.`);
   }
 
+  const newIds = new Set(records.map(r => r.objectID));
+  const stale  = [...existing.entries()]
+    .filter(([id, brandId]) => !newIds.has(id) && !failedBrandIds.has(brandId))
+    .map(([id]) => id);
+
   await algolia.applyIndexConfig(client);
-  await client.replaceAllObjects({ indexName: algolia.INDEX, objects: records, batchSize: 1000 });
+  await client.saveObjects({ indexName: algolia.INDEX, objects: records, batchSize: 1000, waitForTasks: true });
+  if (stale.length) {
+    await client.deleteObjects({ indexName: algolia.INDEX, objectIDs: stale, batchSize: 1000, waitForTasks: true });
+  }
+  for (const id of failedBrandIds) {
+    perBrand[id].count = [...existing.values()].filter(b => b === id).length;
+  }
 
   const departments = {};
   for (const r of records) departments[r.department] = (departments[r.department] || 0) + 1;
 
   return {
     indexName: algolia.INDEX,
-    total: records.length,
+    total: nextTotal,
     previous,
+    removed: stale.length,
+    soldOutSkipped: soldOut,
     departments,
     brands: perBrand,
     failures,
@@ -104,12 +126,16 @@ async function freeze() {
   const count  = await algolia.countRecords(client);
   if (!count) throw new Error("`products` index is empty — run a sync first.");
   const destination = `${algolia.INDEX}_eval_${new Date().toISOString().slice(0, 10)}`;
+  // Keep one eval copy at a time (record limit). Re-run the baseline on each new copy.
+  const { items = [] } = await client.listIndices();
+  const removed = items.map(i => i.name).filter(n => n.startsWith(`${algolia.INDEX}_eval_`) && n !== destination);
+  for (const indexName of removed) await client.deleteIndex({ indexName });
   const op = await client.operationIndex({
     indexName: algolia.INDEX,
     operationIndexParams: { operation: "copy", destination },
   });
   await client.waitForTask({ indexName: algolia.INDEX, taskID: op.taskID });
-  return { indexName: destination, records: count };
+  return { indexName: destination, records: count, replaced: removed };
 }
 
 async function status() {

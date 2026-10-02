@@ -296,7 +296,7 @@ input:focus { border-color:var(--accent); }
         </div>
         <div class="cron-info" style="margin-top:12px">
           Auto-sync: <strong>Daily 1:30am UTC</strong> (production only)<br>
-          Sync takes about 1–2 minutes. Freeze copies today's index for evals.
+          Sync takes about 1–2 minutes; only in-stock products are indexed. Freeze copies today's index for evals (one copy kept — free plan is 50,000 records).
         </div>
         <pre id="catalogOut" style="font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;white-space:pre-wrap;margin-top:12px;max-height:320px;overflow:auto;display:none"></pre>
       </div>
@@ -518,10 +518,12 @@ function renderCatalogResult(data) {
   out.style.display = 'block';
   if (data.error) { out.textContent = 'Error: ' + data.error; return; }
   if (data.brands) {
-    const lines = [`${data.total} products (was ${data.previous}) in ${data.seconds}s`,
+    const lines = [`${data.total} in-stock products (was ${data.previous}) in ${data.seconds}s · ${data.soldOutSkipped} sold out skipped · ${data.removed} removed`,
       'Departments: ' + Object.entries(data.departments).map(([k, v]) => `${k} ${v}`).join(' · '), ''];
     for (const [id, b] of Object.entries(data.brands)) {
-      lines.push(`${b.source === 'shopify' ? '✓' : '⚠'} ${b.name}: ${b.count}${b.source !== 'shopify' ? ' (kept previous — store failed)' : ''}${b.hasPolicy ? '' : ' · no policy yet'}`);
+      lines.push(b.source === 'shopify'
+        ? `✓ ${b.name}: ${b.count}${b.soldOut ? ` (+${b.soldOut} sold out)` : ''}${b.hasPolicy ? '' : ' · no policy yet'}`
+        : `⚠ ${b.name}: store failed — kept ${b.count} previous records`);
     }
     if (!data.policiesLoaded) lines.push('', 'policies.json not found — policy fields not attached yet (step 1.4).');
     out.textContent = lines.join('\n');
@@ -530,7 +532,8 @@ function renderCatalogResult(data) {
       ? data.indices.map(i => `${i.name}: ${i.records} records · updated ${new Date(i.updatedAt).toLocaleString()}`).join('\n')
       : 'No catalog index yet — run a sync.';
   } else {
-    out.textContent = `Frozen: ${data.indexName} (${data.records} records)`;
+    out.textContent = `Frozen: ${data.indexName} (${data.records} records)` +
+      (data.replaced && data.replaced.length ? `\nReplaced older copy: ${data.replaced.join(', ')}` : '');
   }
 }
 

@@ -20,7 +20,7 @@ _Sections 1–3 and 5–7 of the Stylist build manual, plus the Phase 3 UX spec,
 | Decision | Choice | Why |
 |---|---|---|
 | Keyword search API | **Algolia** (free Build plan) | Typo tolerance and synonyms are configuration, not code. Already your chosen tool. |
-| Catalog store | The Algolia index **is** the catalog: `products` (live) + frozen copies `products_eval_<date>` for evals | No extra database. Frozen copies keep eval runs comparable. |
+| Catalog store | The Algolia index **is** the catalog: `products` (live, in-stock only) + **one** frozen copy `products_eval_<date>` for evals | No extra database. Frozen copies keep eval runs comparable. Free plan is 50,000 records, so a new freeze replaces the old one; re-run the baseline on each new copy so baseline and C are always compared on the same index. Sold-out items aren't indexed: a saved item that sells out is reported as unavailable. |
 | Semantic half of "hybrid" | **Not now.** Keyword + synonyms + the agent rewriting vocabulary first | Evals show whether semantic search earns its place. (Update the build plan text: "filters + keyword; semantic added if evals show vocabulary misses".) |
 | Policy database | `policies.json` in the repo (shipping text pasted by hand for 8 brands whose shipping page is missing or blank; see `docs/SETUP_STATUS.md`): full text per brand + structured fields, each with its source quote. Fields copied onto every Algolia product record. | 13 brands is small. Copied fields make "returnable" an exact filter. |
 | Auto-retry | Inside the search tool: if < 3 results, relax one filter, once, and say what was relaxed | Fair to A and B later. |

@@ -78,7 +78,7 @@ _ToS = HTTP status only. Policy sizes = characters of policy body text._
 
 ### Full catalog, measured 2026-10-02 (23 brands, Pinklay added)
 
-Fetched with no page limit: **26,835 products** (median record 1.3 KB, 34 MB total). Largest: Hidesign 7,435, Okhai 4,999, Tjori 2,337, Khara Kapas 1,571, Pinklay 1,478. Departments: clothing 14,176 · accessories 10,648 · home 1,239 · fabric 433 · other 339. A full fetch takes about 45 s.
+Fetched with no page limit: **26,835 products** (median record 1.3 KB, 34 MB total). Largest: Hidesign 7,435, Okhai 4,999, Tjori 2,337, Khara Kapas 1,571, Pinklay 1,478. Departments: clothing 14,176 · accessories 10,648 · home 1,239 · fabric 433 · other 339. A full fetch takes about 45 s. **9,210 are sold out** (Hidesign 6,057 of 7,435), so the index holds only in-stock products: about 17,600 records. Algolia free plan = 50,000 records: live index plus one frozen eval copy is about 35,000.
 
 ## 4. Environment variables
 
