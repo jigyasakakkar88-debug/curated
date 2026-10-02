@@ -282,6 +282,26 @@ input:focus { border-color:var(--accent); }
       </div>
     </div>
 
+    <!-- STYLIST CATALOG -->
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Stylist Catalog</div>
+        <div class="panel-meta" id="catalogMeta"></div>
+      </div>
+      <div class="panel-body">
+        <button class="btn-big-refresh" id="catalogSyncBtn" onclick="catalogAction('sync')">⇪ Sync Catalog to Algolia</button>
+        <div class="btn-row" style="margin-top:0">
+          <button class="btn-test" onclick="catalogStatus()">Index status</button>
+          <button class="btn-test" id="catalogFreezeBtn" onclick="catalogAction('freeze')">Freeze eval copy</button>
+        </div>
+        <div class="cron-info" style="margin-top:12px">
+          Auto-sync: <strong>Daily 1:30am UTC</strong> (production only)<br>
+          Sync takes about 1–2 minutes. Freeze copies today's index for evals.
+        </div>
+        <pre id="catalogOut" style="font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;white-space:pre-wrap;margin-top:12px;max-height:320px;overflow:auto;display:none"></pre>
+      </div>
+    </div>
+
     <!-- SETTINGS -->
     <div class="panel">
       <div class="panel-head"><div class="panel-title">Settings</div></div>
@@ -491,6 +511,47 @@ async function triggerRefresh() {
     }
   } catch(e) { showToast('Error: ' + e.message); }
   btn.textContent = '↻ Refresh All Brands Now'; btn.disabled = false;
+}
+
+function renderCatalogResult(data) {
+  const out = document.getElementById('catalogOut');
+  out.style.display = 'block';
+  if (data.error) { out.textContent = 'Error: ' + data.error; return; }
+  if (data.brands) {
+    const lines = [`${data.total} products (was ${data.previous}) in ${data.seconds}s`,
+      'Departments: ' + Object.entries(data.departments).map(([k, v]) => `${k} ${v}`).join(' · '), ''];
+    for (const [id, b] of Object.entries(data.brands)) {
+      lines.push(`${b.source === 'shopify' ? '✓' : '⚠'} ${b.name}: ${b.count}${b.source !== 'shopify' ? ' (kept previous — store failed)' : ''}${b.hasPolicy ? '' : ' · no policy yet'}`);
+    }
+    if (!data.policiesLoaded) lines.push('', 'policies.json not found — policy fields not attached yet (step 1.4).');
+    out.textContent = lines.join('\n');
+  } else if (data.indices) {
+    out.textContent = data.indices.length
+      ? data.indices.map(i => `${i.name}: ${i.records} records · updated ${new Date(i.updatedAt).toLocaleString()}`).join('\n')
+      : 'No catalog index yet — run a sync.';
+  } else {
+    out.textContent = `Frozen: ${data.indexName} (${data.records} records)`;
+  }
+}
+
+async function catalogStatus() {
+  try {
+    const res = await fetch('/api/catalog', { headers: { Authorization: `Bearer ${password}` } });
+    renderCatalogResult(await res.json());
+  } catch (e) { renderCatalogResult({ error: e.message }); }
+}
+
+async function catalogAction(action) {
+  const btn = document.getElementById(action === 'sync' ? 'catalogSyncBtn' : 'catalogFreezeBtn');
+  const label = btn.textContent;
+  btn.textContent = action === 'sync' ? 'Syncing… (1–2 min)' : 'Freezing…'; btn.disabled = true;
+  try {
+    const res = await fetch(`/api/catalog?action=${action}`, { method: 'POST', headers: { Authorization: `Bearer ${password}` } });
+    const data = await res.json();
+    renderCatalogResult(data);
+    showToast(data.error ? 'Error: ' + data.error : (action === 'sync' ? `✓ ${data.total} products synced` : `✓ Frozen ${data.indexName}`));
+  } catch (e) { renderCatalogResult({ error: e.message }); }
+  btn.textContent = label; btn.disabled = false;
 }
 
 function renderBrandList() {

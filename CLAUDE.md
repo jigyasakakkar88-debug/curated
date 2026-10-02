@@ -26,6 +26,7 @@ There are no tests and no linter configured.
 - `recommendations.json` — `{ pending: [...], rejected: [...] }` from the Discover feature
 - `settings.json` — `{ saleThreshold: number, newDays: number }` (used by `products.js`)
 - `user_feedback.json`, `discovery_log.json`, `discovery_learnings.json` — Brand Scout feedback, run log and learnings
+- `evals/synonyms.json` — search synonym groups, pushed to Algolia on every catalog sync
 
 ### Vercel serverless functions (`api/`)
 | File | Purpose |
@@ -35,18 +36,22 @@ There are no tests and no linter configured.
 | `recommendations.js` | GET pending recs; POST to accept (→ adds to `brands.json`) or reject (→ adds id to `rejected[]`). |
 | `discover.js` | Agentic brand discovery loop: Claude (claude-sonnet-4-6) uses `search_web` (SerpAPI) and `save_recommendations` tools across up to 12 turns to find new Indian fashion brand storefronts matching an optional style brief. Runs up to 120s. |
 | `refresh.js` | Weekly cron (Monday 6am UTC via `vercel.json`) — counts products per brand, used to confirm brands are still live. |
+| `catalog.js` | Stylist catalog. `POST ?action=sync` rebuilds the Algolia `products` index from every brand (all pages, descriptions, department label, policy fields from `policies.json`); a failed store keeps its previous records, and the replace is refused if the new catalog is under half the old one (`&force=1` overrides). `POST ?action=freeze` copies it to `products_eval_<date>`. `GET` = index status, or a sync when called by the daily cron (1:30am UTC). Up to 300s. |
 
 ### Shared modules (`lib/`) — Stylist build, in progress
 | File | Purpose |
 |------|---------|
 | `github.js` | Shared GitHub Contents API helpers: `readFileWithSha`, `readJson`, `writeJson`, `updateJson` (retries once on a 409 SHA conflict). Branch from `GITHUB_BRANCH` (default `main`). Existing `api/*.js` handlers still carry their own copies; new code should use this. |
+| `shopify.js` | Full-catalog fetcher for the Stylist: paginates until a short page, strips HTML descriptions (600 chars), sizes from the "Size" option, one retry on 429/5xx. Record id `<brandId>-<shopifyId>` matches the feed and wishlist. |
+| `departments.js` | Rule-based `department` label (clothing / accessories / fabric / home / other) from product type, then name. Tags are ignored (too noisy). |
+| `algolia.js` | Algolia client (`getClient('admin'|'search')`), index settings, synonyms from `evals/synonyms.json`, policy-field mapping. |
 | `pricing.js` | Claude prices (USD/MTok) for `claude-sonnet-5-5`, `claude-sonnet-5`, `claude-haiku-4-5`, plus `USD_INR` and `costINR(model, usage)`. Re-check `checkedOn` against the pricing page when models change. |
 
 The Stylist design and build plan is in `docs/STYLIST.md`; the health check, open issues and later list are in `docs/SETUP_STATUS.md`.
 
 ### Frontends (`public/`)
 - `index.html` — the main product feed, calls `GET /api/products`
-- `admin.html` — admin panel (password-gated), calls all admin/discover/recommendations endpoints. Served at `/admin.html` (the `/admin` route in `vercel.json` currently returns 404)
+- `admin.html` — admin panel (password-gated), calls all admin/discover/recommendations/catalog endpoints (Stylist Catalog panel: sync, freeze, status). Served at `/admin.html` (the `/admin` route in `vercel.json` currently returns 404)
 
 ### Auth
 All API routes check `Authorization: Bearer <ADMIN_PASSWORD>`. The refresh endpoint also accepts `Bearer <CRON_SECRET>` for the Vercel cron.
