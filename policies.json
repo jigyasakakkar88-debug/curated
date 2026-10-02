@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updatedAt": "2026-10-02T16:02:36.019Z",
+    "updatedAt": "2026-10-02T16:04:19.520Z",
     "totalTokens": 81726,
     "extractModel": "claude-haiku-4-5"
   },
@@ -51,7 +51,7 @@
         },
         "saleItemsReturnable": {
           "value": false,
-          "quote": "All Products which are on SALE are not valid for return unless its a manufacturing defect",
+          "quote": "All Products which are on SALE are not valid for return unless its a manufacturing defect.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -75,7 +75,7 @@
         },
         "international": {
           "value": false,
-          "quote": "Please note that international orders are not eligible for returns",
+          "quote": "Please note that international orders are not eligible for returns.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -88,7 +88,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:01:54.828Z"
+      "extractedAt": "2026-10-02T16:03:39.413Z"
     },
     "kharakapas": {
       "name": "Khara Kapas",
@@ -172,7 +172,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:01:56.386Z"
+      "extractedAt": "2026-10-02T16:03:40.727Z"
     },
     "farog-one": {
       "name": "Farog",
@@ -257,7 +257,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:01:58.071Z"
+      "extractedAt": "2026-10-02T16:03:42.653Z"
     },
     "okhai-org": {
       "name": "Okhai",
@@ -327,8 +327,8 @@
           "source": "auto"
         },
         "international": {
-          "value": false,
-          "quote": "Made-to-order/custom products /international order cannot be replaced or returned.",
+          "value": true,
+          "quote": "For international orders, shipping charges may differ according to location of deliver and weight of the item/s to be shipped.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -341,7 +341,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:01:59.206Z"
+      "extractedAt": "2026-10-02T16:03:43.462Z"
     },
     "sreyasamanta-com": {
       "name": "SREYA SAMANTA",
@@ -412,20 +412,20 @@
         },
         "international": {
           "value": true,
-          "quote": "We understand you'll like your order to reach you at the earliest. So our runners at Aramex, FEDEX & UPS make sure your goods reach you, no matter where you are in the world, within 7-10 days (*Excluding Sundays & Public Holidays).",
+          "quote": "So our runners at Aramex, FEDEX & UPS make sure your goods reach you, no matter where you are in the world, within 7-10 days",
           "quoteVerified": true,
           "source": "auto"
         },
         "dispatchDays": {
-          "value": 6,
-          "quote": "Since most of our products are made to order, we ship our Blouses & Ready to wear pieces within 4-6 weeks' working days from the date of order confirmation",
+          "value": 12,
+          "quote": "Sarees on order may take 8 -12 weeks to be made from the date of order confirmation, post which they shall be shipped out.",
           "quoteVerified": true,
           "source": "auto"
         }
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:02.147Z"
+      "extractedAt": "2026-10-02T16:03:46.466Z"
     },
     "surma-in": {
       "name": "SURMA",
@@ -490,7 +490,7 @@
         },
         "freeShippingThreshold": {
           "value": 0,
-          "quote": "We ship all orders in 1-2 business days. It'll take another 3-7 days for the order to reach you depending on your pincode.",
+          "quote": "That's all you need to do. Oh right, and we don't charge for shipping.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -509,7 +509,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:02.726Z"
+      "extractedAt": "2026-10-02T16:03:46.936Z"
     },
     "www-theburntsoul-com": {
       "name": "THE BURNT SOUL",
@@ -538,7 +538,7 @@
       "fields": {
         "returnable": {
           "value": false,
-          "quote": "NOTE :- Any case other than above , we can only exchange or provide credit note.",
+          "quote": "Any case other than above , we can only exchange or provide credit note.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -551,7 +551,7 @@
         },
         "exchangeOnly": {
           "value": true,
-          "quote": "NOTE :- Any case other than above , we can only exchange or provide credit note.",
+          "quote": "Any case other than above , we can only exchange or provide credit note.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -594,7 +594,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:06.829Z"
+      "extractedAt": "2026-10-02T16:03:50.704Z"
     },
     "labeldhuni-com": {
       "name": "Dhuni",
@@ -679,7 +679,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:05.545Z"
+      "extractedAt": "2026-10-02T16:03:49.784Z"
     },
     "nonasties-in": {
       "name": "No Nasties",
@@ -708,13 +708,13 @@
       "fields": {
         "returnable": {
           "value": true,
-          "quote": "If you are unhappy with the fit or the garment is faulty, we will provide 100% store credit after we get it back from you.",
+          "quote": "we will provide 100% store credit after we get it back from you",
           "quoteVerified": true,
           "source": "auto"
         },
         "returnWindowDays": {
           "value": 30,
-          "quote": "We will happily accept returns and exchange them for the correct size, depending on availability, and within 30 days of order delivery.",
+          "quote": "within 30 days of order delivery",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -726,7 +726,7 @@
         },
         "saleItemsReturnable": {
           "value": false,
-          "quote": "There are no returns or exchanges for items on sale, on towels, on bedsheets and on gift cards.",
+          "quote": "There are no returns or exchanges for items on sale",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -750,20 +750,20 @@
         },
         "international": {
           "value": true,
-          "quote": "For International orders: All International orders are typically shipped within 5 business days from our Goa warehouse via a commercial courier or the postal service.",
+          "quote": "All International orders are typically shipped within 5 business days from our Goa warehouse",
           "quoteVerified": true,
           "source": "auto"
         },
         "dispatchDays": {
-          "value": 5,
-          "quote": "For International orders: All International orders are typically shipped within 5 business days from our Goa warehouse via a commercial courier or the postal service.",
+          "value": 3,
+          "quote": "All India orders are typically shipped within 3 business days from our Goa warehouse",
           "quoteVerified": true,
           "source": "auto"
         }
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:08.082Z"
+      "extractedAt": "2026-10-02T16:03:51.696Z"
     },
     "dressfolk-com": {
       "name": "Dressfolk",
@@ -810,7 +810,7 @@
         },
         "saleItemsReturnable": {
           "value": false,
-          "quote": "Products on sale are not eligible for refund. They can only be exchanged at additional shipping costs of INR 150.",
+          "quote": "Products on sale are not eligible for refund.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -847,7 +847,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:10.127Z"
+      "extractedAt": "2026-10-02T16:03:53.573Z"
     },
     "doodlage-in": {
       "name": "Doodlage",
@@ -931,7 +931,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:11.590Z"
+      "extractedAt": "2026-10-02T16:03:55.106Z"
     },
     "thesummerhouse-in": {
       "name": "The Summer House",
@@ -1015,7 +1015,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:14.119Z"
+      "extractedAt": "2026-10-02T16:03:57.690Z"
     },
     "indiefabstore-com": {
       "name": "IndieFab",
@@ -1055,9 +1055,9 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "If you're not satisfied with the item and do not wish to exchange sizes, you may request a return for store credit (in the form of a discount coupon).",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "saleItemsReturnable": {
@@ -1068,14 +1068,14 @@
         },
         "customisedReturnable": {
           "value": false,
-          "quote": "3XL, 4XL and all customised / made-to-order sizes are non-returnable — store credit is not available on these sizes.",
-          "quoteVerified": true,
+          "quote": "3XL, 4XL and all customised / made-to-order sizes are non-returnable and non-exchangeable — size exchange is also not available on these sizes.",
+          "quoteVerified": false,
           "source": "auto"
         },
         "cod": {
-          "value": null,
-          "quote": null,
-          "quoteVerified": null,
+          "value": true,
+          "quote": "On COD orders there is an additional fee and free delivery for prepaid orders.",
+          "quoteVerified": true,
           "source": "auto"
         },
         "freeShippingThreshold": {
@@ -1099,7 +1099,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:14.917Z"
+      "extractedAt": "2026-10-02T16:03:58.624Z"
     },
     "terralunaindia-com": {
       "name": "Terra Luna India",
@@ -1183,7 +1183,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:18.536Z"
+      "extractedAt": "2026-10-02T16:04:02.198Z"
     },
     "charkhatales-com": {
       "name": "Charkha Tales",
@@ -1267,7 +1267,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:18.528Z"
+      "extractedAt": "2026-10-02T16:04:01.778Z"
     },
     "tjori-com": {
       "name": "Tjori",
@@ -1352,7 +1352,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:24.034Z"
+      "extractedAt": "2026-10-02T16:04:07.227Z"
     },
     "shop-khamir-org": {
       "name": "Khamir",
@@ -1436,7 +1436,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:23.084Z"
+      "extractedAt": "2026-10-02T16:04:06.901Z"
     },
     "baghindia-com": {
       "name": "Bagh India",
@@ -1465,7 +1465,7 @@
       "fields": {
         "returnable": {
           "value": false,
-          "quote": "Bagh India offers a free exchange policy; if you are unhappy with the size, fit, style, colour, we can exchange the garment for you with another garment of the same or higher value, the difference amount to paid.",
+          "quote": "Bagh India offers a free exchange policy; if you are unhappy with the size, fit, style, colour, we can exchange the garment for you with another garment of the same or higher value, the difference amount to paid. No exchange will be done for discounted products.",
           "quoteVerified": true,
           "source": "auto",
           "note": "implied by exchange-only"
@@ -1478,7 +1478,7 @@
         },
         "exchangeOnly": {
           "value": true,
-          "quote": "Bagh India offers a free exchange policy; if you are unhappy with the size, fit, style, colour, we can exchange the garment for you with another garment of the same or higher value, the difference amount to paid.",
+          "quote": "Bagh India offers a free exchange policy; if you are unhappy with the size, fit, style, colour, we can exchange the garment for you with another garment of the same or higher value, the difference amount to paid. No exchange will be done for discounted products.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -1502,7 +1502,7 @@
         },
         "freeShippingThreshold": {
           "value": 3000,
-          "quote": "All online orders below bill value of INR 3000 carry a INR 100 shipping charge.",
+          "quote": "BAGH INDIA has a non-refundable flat shipping rate of INR 100 for orders below INR 3000.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -1521,7 +1521,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:26.764Z"
+      "extractedAt": "2026-10-02T16:04:10.560Z"
     },
     "nolabels-in": {
       "name": "Nolabels",
@@ -1556,9 +1556,9 @@
           "note": "implied by exchange-only"
         },
         "returnWindowDays": {
-          "value": 7,
-          "quote": "Report the issue within 7 working days.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "exchangeOnly": {
@@ -1575,7 +1575,7 @@
         },
         "customisedReturnable": {
           "value": false,
-          "quote": "Please note that the customized items are not eligible for a refund.",
+          "quote": "No Labels does not support the return of any personalized items bought from our website.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -1606,7 +1606,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:27.574Z"
+      "extractedAt": "2026-10-02T16:04:10.401Z"
     },
     "hidesign-com": {
       "name": "Hidesign",
@@ -1646,9 +1646,9 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": null,
-          "quote": null,
-          "quoteVerified": null,
+          "value": false,
+          "quote": "Exchanges The fastest way to process an exchange is to return the item you have, and once the return is accepted, we will ship the new product.",
+          "quoteVerified": true,
           "source": "auto"
         },
         "saleItemsReturnable": {
@@ -1659,7 +1659,7 @@
         },
         "customisedReturnable": {
           "value": false,
-          "quote": "Certain types of items cannot be returned, like custom products (such as special orders or personalized items)",
+          "quote": "Certain types of items cannot be returned, like custom products (such as special orders or personalized items) and personal hygiene product (such as masks & diary).",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -1690,7 +1690,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:32.214Z"
+      "extractedAt": "2026-10-02T16:04:15.629Z"
     },
     "tanandloom-com": {
       "name": "Tan & Loom",
@@ -1774,7 +1774,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:30.628Z"
+      "extractedAt": "2026-10-02T16:04:13.816Z"
     },
     "nappadori-com": {
       "name": "Nappa Dori",
@@ -1859,7 +1859,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:32.831Z"
+      "extractedAt": "2026-10-02T16:04:16.072Z"
     },
     "pinklay-com": {
       "name": "Pinklay",
@@ -1943,7 +1943,7 @@
       },
       "extractError": null,
       "extractMode": "structured",
-      "extractedAt": "2026-10-02T16:02:35.672Z"
+      "extractedAt": "2026-10-02T16:04:19.208Z"
     }
   }
 }
