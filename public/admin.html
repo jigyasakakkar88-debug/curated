@@ -308,7 +308,7 @@ input:focus { border-color:var(--accent); }
           <input id="evalLabel" placeholder="label (optional)" style="width:140px">
           <button class="btn-add" id="evalRunBtn" style="flex:0 0 auto;padding:8px 18px" onclick="startEval()">Run evals</button>
         </div>
-        <div class="pol-hint" id="evalProgress" style="margin-bottom:10px">The agent run costs about ₹2 per question (22 questions ≈ ₹30–60) and takes 2–5 minutes. The baseline is free.</div>
+        <div class="pol-hint" id="evalProgress" style="margin-bottom:10px">The agent run costs about ₹3 per question (22 questions ≈ ₹60–70) and takes 2–5 minutes. The baseline is free.</div>
         <div style="overflow-x:auto"><table class="ins-table" id="evalRuns"></table></div>
         <div id="evalDetail" style="margin-top:18px"></div>
       </div>
@@ -906,11 +906,11 @@ async function loadEvalIndexes() {
 async function loadEvalRuns() {
   try {
     const { runs } = await insights('?view=runs');
-    document.getElementById('evalRuns').innerHTML = runs.length ? `<tr><th>Run</th><th>System</th><th>Auto checks</th><th>Your grades</th><th>Median time</th><th>Cost</th><th>₹ / answer</th><th>₹ / good answer</th><th>≤2 calls</th></tr>` +
+    document.getElementById('evalRuns').innerHTML = runs.length ? `<tr><th>Run</th><th>System</th><th>Auto checks</th><th>Your grades</th><th>Median time</th><th>Cost</th><th>₹ / answer</th><th>₹ / good answer</th><th>≤2 calls</th><th></th></tr>` +
       runs.map(r => { const s = r.summary || {}; return `<tr class="click" onclick="openEvalRun('${esc(r.runId)}')">
         <td>${new Date(r.createdAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}${r.label ? ' · ' + esc(r.label) : ''}${r.finished ? '' : ' <span style="color:var(--warn)">(unfinished)</span>'}</td>
         <td>${r.system === 'C' ? 'Agent' : 'Baseline'} ×${r.runs}</td><td><b>${pctTxt(s.codeCheckPassRate)}</b></td><td>${s.graded ? pctTxt(s.humanPassRate) + ` (${s.graded})` : '—'}</td>
-        <td>${s.latencySec && s.latencySec.p50 != null ? s.latencySec.p50 + 's' : '—'}</td><td>₹${s.costINR ? s.costINR.total : 0}</td><td>${s.costINR && s.costINR.mean != null ? '₹' + s.costINR.mean : '—'}</td><td>${s.costINR && s.costINR.perPass != null ? '₹' + s.costINR.perPass : '—'}</td><td>${pctTxt(s.within2ToolCalls)}</td></tr>`; }).join('')
+        <td>${s.latencySec && s.latencySec.p50 != null ? s.latencySec.p50 + 's' : '—'}</td><td>₹${s.costINR ? s.costINR.total : 0}</td><td>${s.costINR && s.costINR.mean != null ? '₹' + s.costINR.mean : '—'}</td><td>${s.costINR && s.costINR.perPass != null ? '₹' + s.costINR.perPass : '—'}</td><td>${pctTxt(s.within2ToolCalls)}</td><td><b style="color:var(--accent);white-space:nowrap">Open &amp; grade ›</b></td></tr>`; }).join('')
       : '<tr><td class="pol-hint">No eval runs yet. Run the baseline (free) and the agent, then compare.</td></tr>';
   } catch (e) { document.getElementById('evalRuns').innerHTML = `<tr><td>Error: ${esc(e.message)}</td></tr>`; }
 }
@@ -940,6 +940,7 @@ let evalRun = null, evalCriteria = null;   // criteria: the test set's must / mu
 async function openEvalRun(runId) {
   const box = document.getElementById('evalDetail');
   box.innerHTML = '<div class="pol-hint">Loading run…</div>';
+  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
   try {
     if (!evalCriteria) evalCriteria = Object.fromEntries(((await insights('?view=testset')).queries || []).map(q => [q.id, q]));
     evalRun = await insights(`?view=run&runId=${encodeURIComponent(runId)}`);
