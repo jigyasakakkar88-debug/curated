@@ -27,6 +27,7 @@ There are no tests and no linter configured.
 - `settings.json` — `{ saleThreshold: number, newDays: number }` (used by `products.js`)
 - `user_feedback.json`, `discovery_log.json`, `discovery_learnings.json` — Brand Scout feedback, run log and learnings
 - `policies.json` — per-brand policy text (refund/shipping/terms) and extracted fields with source quotes; fields are copied onto Algolia records at catalog sync
+- `catalog-hints.json` — per-brand hints applied at sync (e.g. `gender` for brands whose products never say who they're for)
 - `evals/synonyms.json` — search synonym groups, pushed to Algolia on every catalog sync
 
 ### Vercel serverless functions (`api/`)
@@ -47,10 +48,10 @@ There are no tests and no linter configured.
 |------|---------|
 | `github.js` | Shared GitHub Contents API helpers: `readFileWithSha`, `readJson`, `writeJson`, `updateJson` (retries once on a 409 SHA conflict). Branch from `GITHUB_BRANCH` (default `main`). Existing `api/*.js` handlers still carry their own copies; new code should use this. |
 | `shopify.js` | Full-catalog fetcher for the Stylist: paginates until a short page, strips HTML descriptions (600 chars) and splits styling text ("Pair with…") into `stylingNotes` (stored, not searchable — keeps accessories out of clothing searches but available to the Stylist for pairing/occasion advice), sizes from the "Size" option, one retry on 429/5xx. Record id `<brandId>-<shopifyId>` matches the feed and wishlist. |
-| `departments.js` | Rule-based `department` label (clothing / accessories / fabric / home / other) from product type, then name. Tags are ignored (too noisy). |
+| `departments.js` | Rule-based `department` label (clothing / accessories / fabric / home / other) from product type, then name (tags ignored — too noisy); `gender` label (women / men / kids / unisex / unknown) from whole words in type, name and tags. |
 | `algolia.js` | Algolia client (`getClient('admin'|'search')`), index settings, synonyms from `evals/synonyms.json`, policy-field mapping. |
 | `policies.js` | Policy page fetch/parse (`shopify-policy__body`), field definitions, Haiku extraction with JSON-schema output, quote verification, token count. |
-| `tools.js` | The Stylist's tools (Anthropic definitions + implementations): `search_products` (exact Algolia filters, default department clothing, auto-relaxes ONE filter — size → minDiscount → maxPrice +20% — when <3 hits, never returnable/brand exclusions), `get_product`, `get_policies`, `get_wishlist`, `respond`. `createToolbox({index, wishlistIds, trace})`; `run(name, input)` never throws and records a trace step. Index must match `products` or `products_eval_<date>`. |
+| `tools.js` | The Stylist's tools (Anthropic definitions + implementations): `search_products` (exact Algolia filters, default department clothing, `gender` excludes the opposite gender + kids so unlabelled products stay in, auto-relaxes ONE filter — size → minDiscount → maxPrice +20% — when <3 hits, never returnable/brand exclusions), `get_product`, `get_policies`, `get_wishlist`, `respond`. `createToolbox({index, wishlistIds, trace})`; `run(name, input)` never throws and records a trace step. Index must match `products` or `products_eval_<date>`. |
 | `agent.js` | Option C loop: Sonnet 5.5 (`STYLIST_MODEL`), adaptive thinking at effort `medium`, up to 6 model calls, parallel tool calls, finishes via `respond`. Forced `tool_choice` is rejected on Sonnet 5.5, so a plain-text reply gets one nudge and round 5's tool results carry a "last step" note. History is append-only (assistant turns pushed unchanged — required for thinking blocks). System prompt + brand list cached. Server-side refusal fallback (`fallbacks: "default"`); a refusal returns a polite decline. |
 | `prompt.js` | The Stylist system prompt (static, cacheable) and brand-list block. |
 | `trace.js` | One trace per question: steps (tool, input, resultCount, relaxed, ms), tokens, ₹ cost, latency, productIds, invalidIds (ids the agent named that no tool returned). Live traces → one `TRACE {json}` log line. |

@@ -48,6 +48,10 @@ Search couldn't correct "cotn" to "cotton". Adding that exact misspelling as a s
 Simple keyword rules sorted 27,000 products into clothing / accessories / fabric / home / other. Each check of the leftovers found a new pattern: tags are noisy, "Apparel & Accessories" says nothing, and Indian jewellery words (nath, maang tikka) weren't covered.
 *Lesson:* start with rules, inspect what lands in the wrong bucket, iterate. No ML needed yet.
 
+**14. Your first real test question finds what your test set missed.**
+"Cotton kurta for office" returned a mix of men's and women's kurtas. Nothing in the 20-question eval set asks the agent to work out *who* something is for, and the catalog had no gender data at all. One real question from the owner found it.
+*Lesson:* try the agent yourself before trusting the eval set; then add what you found to it.
+
 ## Building and shipping
 
 **11. Free tiers shape the architecture.**

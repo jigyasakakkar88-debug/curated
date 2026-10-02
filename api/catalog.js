@@ -7,6 +7,7 @@
 const github = require('../lib/github');
 const algolia = require('../lib/algolia');
 const { fetchBrandRecords, mapLimit } = require('../lib/shopify');
+const catalogHints = require('../catalog-hints.json');
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "changeme123";
 const BRAND_CONCURRENCY = 6;
@@ -55,7 +56,7 @@ async function sync({ force }) {
   const lap = label => console.log(`catalog sync: ${label} at ${Math.round((Date.now() - started) / 1000)}s`);
   // Read what's already in the index while the stores download.
   const [results, existing] = await Promise.all([
-    mapLimit(brands, BRAND_CONCURRENCY, b => fetchBrandRecords(b)),
+    mapLimit(brands, BRAND_CONCURRENCY, b => fetchBrandRecords(b, catalogHints.brands?.[b.id] || {})),
     algolia.existingRecordBrands(client),
   ]);
   lap(`shopify fetched, ${existing.size} existing records read`);
