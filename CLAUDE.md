@@ -42,7 +42,7 @@ There are no tests and no linter configured.
 | File | Purpose |
 |------|---------|
 | `github.js` | Shared GitHub Contents API helpers: `readFileWithSha`, `readJson`, `writeJson`, `updateJson` (retries once on a 409 SHA conflict). Branch from `GITHUB_BRANCH` (default `main`). Existing `api/*.js` handlers still carry their own copies; new code should use this. |
-| `shopify.js` | Full-catalog fetcher for the Stylist: paginates until a short page, strips HTML descriptions (600 chars), sizes from the "Size" option, one retry on 429/5xx. Record id `<brandId>-<shopifyId>` matches the feed and wishlist. |
+| `shopify.js` | Full-catalog fetcher for the Stylist: paginates until a short page, strips HTML descriptions (600 chars) and splits styling text ("Pair with…") into `stylingNotes` (stored, not searchable — keeps accessories out of clothing searches but available to the Stylist for pairing/occasion advice), sizes from the "Size" option, one retry on 429/5xx. Record id `<brandId>-<shopifyId>` matches the feed and wishlist. |
 | `departments.js` | Rule-based `department` label (clothing / accessories / fabric / home / other) from product type, then name. Tags are ignored (too noisy). |
 | `algolia.js` | Algolia client (`getClient('admin'|'search')`), index settings, synonyms from `evals/synonyms.json`, policy-field mapping. |
 | `pricing.js` | Claude prices (USD/MTok) for `claude-sonnet-5-5`, `claude-sonnet-5`, `claude-haiku-4-5`, plus `USD_INR` and `costINR(model, usage)`. Re-check `checkedOn` against the pricing page when models change. |
