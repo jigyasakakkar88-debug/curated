@@ -1,6 +1,8 @@
 {
   "meta": {
-    "updatedAt": "2026-10-02T12:26:26.317Z"
+    "updatedAt": "2026-10-02T12:26:40.948Z",
+    "totalTokens": 81726,
+    "extractModel": "claude-haiku-4-5"
   },
   "brands": {
     "gangafashions": {
