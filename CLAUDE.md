@@ -26,6 +26,7 @@ There are no tests and no linter configured.
 - `recommendations.json` — `{ pending: [...], rejected: [...] }` from the Discover feature
 - `settings.json` — `{ saleThreshold: number, newDays: number }` (used by `products.js`)
 - `user_feedback.json`, `discovery_log.json`, `discovery_learnings.json` — Brand Scout feedback, run log and learnings
+- `policies.json` — per-brand policy text (refund/shipping/terms) and extracted fields with source quotes; fields are copied onto Algolia records at catalog sync
 - `evals/synonyms.json` — search synonym groups, pushed to Algolia on every catalog sync
 
 ### Vercel serverless functions (`api/`)
@@ -36,6 +37,7 @@ There are no tests and no linter configured.
 | `recommendations.js` | GET pending recs; POST to accept (→ adds to `brands.json`) or reject (→ adds id to `rejected[]`). |
 | `discover.js` | Agentic brand discovery loop: Claude (claude-sonnet-4-6) uses `search_web` (SerpAPI) and `save_recommendations` tools across up to 12 turns to find new Indian fashion brand storefronts matching an optional style brief. Runs up to 120s. |
 | `refresh.js` | Weekly cron (Monday 6am UTC via `vercel.json`) — counts products per brand, used to confirm brands are still live. |
+| `policies.js` | Brand policy database (admin). `POST ?action=ingest` fetches each brand's refund/shipping/terms pages; `?action=extract` has Claude Haiku pull 9 fields, each with an exact quote that's then verified against the text (`quoteVerified`); `?action=save` stores hand edits (`source: manual`, never overwritten by later ingest/extract). `GET` returns `policies.json`. Optional `&brandId=`. |
 | `catalog.js` | Stylist catalog. `POST ?action=sync` updates the Algolia `products` index in place from every brand (all pages, descriptions, department label, policy fields from `policies.json`); **only in-stock products are indexed**; stale records are deleted; a failed store's records are left untouched; the sync is refused if the new catalog is under half the old one (`&force=1` overrides). `POST ?action=freeze` copies it to `products_eval_<date>` and deletes older eval copies. Algolia free plan = 50,000 records, so never build a second full copy (no `replaceAllObjects`). `GET` = index status, or a sync when called by the daily cron (1:30am UTC). Up to 300s. |
 
 ### Shared modules (`lib/`) — Stylist build, in progress
@@ -45,13 +47,14 @@ There are no tests and no linter configured.
 | `shopify.js` | Full-catalog fetcher for the Stylist: paginates until a short page, strips HTML descriptions (600 chars) and splits styling text ("Pair with…") into `stylingNotes` (stored, not searchable — keeps accessories out of clothing searches but available to the Stylist for pairing/occasion advice), sizes from the "Size" option, one retry on 429/5xx. Record id `<brandId>-<shopifyId>` matches the feed and wishlist. |
 | `departments.js` | Rule-based `department` label (clothing / accessories / fabric / home / other) from product type, then name. Tags are ignored (too noisy). |
 | `algolia.js` | Algolia client (`getClient('admin'|'search')`), index settings, synonyms from `evals/synonyms.json`, policy-field mapping. |
+| `policies.js` | Policy page fetch/parse (`shopify-policy__body`), field definitions, Haiku extraction with JSON-schema output, quote verification, token count. |
 | `pricing.js` | Claude prices (USD/MTok) for `claude-sonnet-5-5`, `claude-sonnet-5`, `claude-haiku-4-5`, plus `USD_INR` and `costINR(model, usage)`. Re-check `checkedOn` against the pricing page when models change. |
 
 The Stylist design and build plan is in `docs/STYLIST.md`; the health check, open issues and later list are in `docs/SETUP_STATUS.md`.
 
 ### Frontends (`public/`)
 - `index.html` — the main product feed, calls `GET /api/products`
-- `admin.html` — admin panel (password-gated), calls all admin/discover/recommendations/catalog endpoints (Stylist Catalog panel: sync, freeze, status). Served at `/admin.html` (the `/admin` route in `vercel.json` currently returns 404)
+- `admin.html` — admin panel (password-gated), calls all admin/discover/recommendations/catalog endpoints (Stylist Catalog panel: sync, freeze, status; Brand Policies panel: fetch, extract, review/edit). Served at `/admin.html` (the `/admin` route in `vercel.json` currently returns 404)
 
 ### Auth
 All API routes check `Authorization: Bearer <ADMIN_PASSWORD>`. The refresh endpoint also accepts `Bearer <CRON_SECRET>` for the Vercel cron.

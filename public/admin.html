@@ -38,6 +38,27 @@ header { background:var(--ink); color:var(--paper); display:flex; align-items:ce
 .logout-btn { background:none; border:1px solid #444; color:#999; padding:6px 14px; font-size:10px; letter-spacing:1px; cursor:pointer; font-family:'DM Mono',monospace; }
 .logout-btn:hover { border-color:var(--err); color:var(--err); }
 
+/* POLICIES */
+.pol-actions { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+.pol-actions .btn-test { flex:1; min-width:160px; }
+.pol-row { border-top:1px solid var(--border); }
+.pol-row summary { list-style:none; cursor:pointer; padding:12px 0; display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:13px; }
+.pol-row summary::-webkit-details-marker { display:none; }
+.pol-name { flex:1; min-width:140px; }
+.pol-badge { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; padding:2px 6px; border:1px solid var(--border); color:var(--muted); }
+.pol-badge.ok { color:var(--ok); border-color:var(--ok); }
+.pol-badge.bad { color:var(--err); border-color:var(--err); }
+.pol-badge.warn { color:var(--warn); border-color:var(--warn); }
+.pol-body { padding:4px 0 16px; }
+.pol-field { display:grid; grid-template-columns:150px 90px 1fr 22px; gap:8px; align-items:start; margin-bottom:8px; font-size:12px; }
+.pol-field label { font-size:12px; color:var(--ink); padding-top:5px; }
+.pol-field input, .pol-field select, .pol-section textarea { width:100%; padding:5px 7px; border:1px solid var(--border); background:var(--warm); font-family:'Jost',sans-serif; font-size:12px; }
+.pol-section { margin:10px 0; }
+.pol-section summary { font-family:'DM Mono',monospace; font-size:10px; cursor:pointer; color:var(--accent); }
+.pol-section textarea { height:160px; margin-top:6px; font-size:11px; line-height:1.5; }
+.pol-hint { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); line-height:1.8; }
+@media (max-width:700px) { .pol-field { grid-template-columns:1fr 1fr; } .pol-field input[data-q] { grid-column:1 / -1; } }
+
 /* LAYOUT */
 .container { max-width:1100px; margin:0 auto; padding:48px 48px 80px; display:grid; grid-template-columns:1fr 380px; gap:40px; }
 
@@ -221,6 +242,26 @@ input:focus { border-color:var(--accent); }
     </div>
 
     <!-- HOW IT WORKS -->
+    <!-- BRAND POLICIES -->
+    <div class="panel" id="policiesPanel">
+      <div class="panel-head">
+        <div class="panel-title">Brand Policies</div>
+        <div class="panel-meta" id="polMeta"></div>
+      </div>
+      <div class="panel-body">
+        <div class="pol-actions">
+          <button class="btn-test" id="polIngestBtn" onclick="policyAction('ingest')">1 · Fetch policy pages</button>
+          <button class="btn-test" id="polExtractBtn" onclick="policyAction('extract')">2 · Extract fields (Claude Haiku)</button>
+        </div>
+        <div class="pol-hint" style="margin-bottom:12px">
+          Open a brand to check each field against its quote. ✗ = the quote isn't found in the policy text — check it.
+          Paste text for missing or empty sections, fix any field, tick Reviewed, Save. Edits are never overwritten by a later fetch/extract.
+          After saving, run <strong>Sync Catalog</strong> so returnable/COD/etc. reach the products.
+        </div>
+        <div id="polList"><div class="pol-hint">Loading…</div></div>
+      </div>
+    </div>
+
     <div class="panel">
       <div class="panel-head"><div class="panel-title">How it works</div></div>
       <div class="panel-body" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);line-height:2.2">
@@ -350,6 +391,7 @@ function doLogin() {
       document.getElementById('loginScreen').style.display = 'none';
       loadSettings();
       loadRecommendations();
+      loadPolicies();
     } else {
       document.getElementById('loginErr').style.display = 'block';
       password = '';
@@ -511,6 +553,132 @@ async function triggerRefresh() {
     }
   } catch(e) { showToast('Error: ' + e.message); }
   btn.textContent = '↻ Refresh All Brands Now'; btn.disabled = false;
+}
+
+const POL_FIELDS = {
+  returnable: 'boolean', returnWindowDays: 'integer', exchangeOnly: 'boolean', saleItemsReturnable: 'boolean',
+  customisedReturnable: 'boolean', cod: 'boolean', freeShippingThreshold: 'integer', international: 'boolean', dispatchDays: 'integer',
+};
+const POL_LABELS = {
+  returnable: 'Returns accepted', returnWindowDays: 'Return window (days)', exchangeOnly: 'Exchange only',
+  saleItemsReturnable: 'Sale items returnable', customisedReturnable: 'Custom items returnable', cod: 'Cash on delivery',
+  freeShippingThreshold: 'Free shipping above ₹', international: 'Ships internationally', dispatchDays: 'Dispatch (days)',
+};
+let policyData = null;
+
+async function loadPolicies() {
+  try {
+    const res = await fetch('/api/policies', { headers: { Authorization: `Bearer ${password}` } });
+    policyData = await res.json();
+    if (policyData.error) throw new Error(policyData.error);
+    renderPolicies();
+  } catch (e) {
+    document.getElementById('polList').innerHTML = `<div class="pol-hint">Error: ${esc(e.message)}</div>`;
+  }
+}
+
+function polSectionBadge(key, sec) {
+  const st = sec ? sec.status : 'none';
+  const cls = st === 'ok' ? 'ok' : (st === 'none' ? '' : 'bad');
+  return `<span class="pol-badge ${cls}">${key}${st === 'ok' ? '' : ' ' + st}${sec && sec.source === 'manual' ? ' ✎' : ''}</span>`;
+}
+
+function renderPolicies() {
+  const brands = (policyData && policyData.brands) || {};
+  const meta = (policyData && policyData.meta) || {};
+  document.getElementById('polMeta').textContent = meta.totalTokens
+    ? `${meta.totalTokens.toLocaleString()} policy tokens` : '';
+  const ids = currentBrands.map(b => b.id);
+  if (!Object.keys(brands).length) {
+    document.getElementById('polList').innerHTML = '<div class="pol-hint">No policies yet — click “Fetch policy pages”.</div>';
+    return;
+  }
+  document.getElementById('polList').innerHTML = ids.map(id => {
+    const e = brands[id];
+    const name = (currentBrands.find(b => b.id === id) || {}).name || id;
+    if (!e) return `<div class="pol-row"><div style="padding:12px 0;font-size:13px">${esc(name)} <span class="pol-badge">not fetched</span></div></div>`;
+    const fields = e.fields || {};
+    const found = Object.values(fields).filter(f => f.value != null).length;
+    const unverified = Object.values(fields).filter(f => f.quoteVerified === false).length;
+    const secs = ['refund', 'shipping', 'terms'].map(k => polSectionBadge(k, (e.sections || {})[k])).join(' ');
+    const fieldRows = Object.entries(POL_FIELDS).map(([name, type]) => {
+      const f = fields[name] || {};
+      const v = f.value;
+      const input = type === 'boolean'
+        ? `<select data-f="${name}"><option value="">—</option><option value="true" ${v === true ? 'selected' : ''}>yes</option><option value="false" ${v === false ? 'selected' : ''}>no</option></select>`
+        : `<input data-f="${name}" type="number" value="${v == null ? '' : v}">`;
+      const mark = f.quoteVerified === false ? '<span title="Quote not found in policy text" style="color:var(--err)">✗</span>'
+        : f.quoteVerified === true ? '<span title="Quote found in policy text" style="color:var(--ok)">✓</span>' : '';
+      return `<div class="pol-field"><label title="${name}">${POL_LABELS[name]}${f.source === 'manual' ? ' ✎' : ''}</label>${input}
+        <input data-q="${name}" placeholder="exact quote from the policy" value="${esc(f.quote || '')}">${mark}</div>`;
+    }).join('');
+    const sections = ['refund', 'shipping', 'terms'].map(k => {
+      const sec = (e.sections || {})[k] || {};
+      return `<details class="pol-section"><summary>${k} policy text — ${sec.status || 'none'}${sec.url ? ` · <a href="${esc(sec.url)}" target="_blank">page</a>` : ''}</summary>
+        <textarea data-s="${k}" placeholder="Paste the ${k} policy here if the page is missing or empty">${esc(sec.text || '')}</textarea></details>`;
+    }).join('');
+    return `<details class="pol-row" data-brand="${esc(id)}"><summary>
+        <span class="pol-name">${esc(name)}</span>${secs}
+        <span class="pol-badge ${found ? 'ok' : ''}">${found}/9 fields</span>
+        ${unverified ? `<span class="pol-badge bad">${unverified} ✗</span>` : ''}
+        ${e.extractError ? '<span class="pol-badge bad">extract error</span>' : ''}
+        ${e.reviewed ? '<span class="pol-badge ok">reviewed</span>' : ''}
+      </summary><div class="pol-body">
+        ${e.extractError ? `<div class="pol-hint" style="color:var(--err)">${esc(e.extractError)}</div>` : ''}
+        ${fieldRows}${sections}
+        <div style="display:flex;gap:12px;align-items:center;margin-top:12px">
+          <label class="pol-hint"><input type="checkbox" data-reviewed ${e.reviewed ? 'checked' : ''}> Reviewed</label>
+          <button class="btn-test" style="flex:0 0 auto;padding:8px 18px" onclick="savePolicy('${esc(id)}')">Save</button>
+          <button class="btn-test" style="flex:0 0 auto;padding:8px 18px" onclick="policyAction('extract','${esc(id)}')">Re-extract</button>
+        </div></div></details>`;
+  }).join('');
+}
+
+async function policyAction(action, brandId) {
+  const btn = brandId ? null : document.getElementById(action === 'ingest' ? 'polIngestBtn' : 'polExtractBtn');
+  const label = btn && btn.textContent;
+  if (btn) { btn.textContent = action === 'ingest' ? 'Fetching… (~20s)' : 'Extracting… (~1–2 min)'; btn.disabled = true; }
+  try {
+    const q = `action=${action}${brandId ? `&brandId=${encodeURIComponent(brandId)}` : ''}`;
+    const res = await fetch(`/api/policies?${q}`, { method: 'POST', headers: { Authorization: `Bearer ${password}` } });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const errs = (data.errors || []).length;
+    showToast(action === 'ingest' ? '✓ Policy pages fetched' : `✓ Fields extracted${errs ? ` (${errs} errors)` : ''}`);
+    await loadPolicies();
+  } catch (e) { showToast('Error: ' + e.message); }
+  if (btn) { btn.textContent = label; btn.disabled = false; }
+}
+
+async function savePolicy(brandId) {
+  const row = document.querySelector(`.pol-row[data-brand="${CSS.escape(brandId)}"]`);
+  const prev = policyData.brands[brandId] || {};
+  const fields = {}, sections = {};
+  row.querySelectorAll('[data-f]').forEach(el => {
+    const name = el.dataset.f;
+    const quote = row.querySelector(`[data-q="${name}"]`).value.trim();
+    const raw = el.value;
+    const value = raw === '' ? null : POL_FIELDS[name] === 'boolean' ? raw === 'true' : Number(raw);
+    const old = (prev.fields || {})[name] || {};
+    if (value !== (old.value ?? null) || quote !== (old.quote || '')) fields[name] = { value, quote };
+  });
+  row.querySelectorAll('[data-s]').forEach(el => {
+    const old = ((prev.sections || {})[el.dataset.s] || {}).text || '';
+    if (el.value.trim() !== old.trim()) sections[el.dataset.s] = el.value;
+  });
+  const reviewed = row.querySelector('[data-reviewed]').checked;
+  try {
+    const res = await fetch('/api/policies?action=save', {
+      method: 'POST', headers: { Authorization: `Bearer ${password}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ brandId, fields, sections, reviewed }),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    policyData.brands[brandId] = data.brand;
+    renderPolicies();
+    document.querySelector(`.pol-row[data-brand="${CSS.escape(brandId)}"]`).open = true;
+    showToast('✓ Saved — run Sync Catalog when done reviewing');
+  } catch (e) { showToast('Error: ' + e.message); }
 }
 
 function renderCatalogResult(data) {
