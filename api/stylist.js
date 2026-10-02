@@ -8,11 +8,13 @@ const algolia = require('../lib/algolia');
 const { runAgent, getModel } = require('../lib/agent');
 const { startTrace } = require('../lib/trace');
 const { INDEX_PATTERN } = require('../lib/tools');
+const { loadCards } = require('../lib/cards');
+const { waitUntil } = require('@vercel/functions');
+const observability = require('../lib/observability');
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "changeme123";
 const DAILY_LIMIT    = Number(process.env.STYLIST_DAILY_LIMIT) || 30;
 const MAX_INPUT      = 500;
-const NEW_DAYS       = 7;
 
 // Per-IP daily counter. In-memory: resets when the function instance is recycled (fine for now).
 const usage = new Map();
@@ -31,19 +33,6 @@ async function loadBrands() {
   const list = await github.readJson('brands.json', []);
   brandsCache = { at: Date.now(), list };
   return list;
-}
-
-// Algolia record → the same shape the feed's card() and product modal use.
-function toCard(r) {
-  const published = r.publishedAt ? new Date(r.publishedAt).getTime() : 0;
-  return {
-    id: r.objectID, brandId: r.brandId, brandName: r.brandName, name: r.name,
-    productUrl: r.productUrl, brandUrl: (r.productUrl || '').split('/products/')[0],
-    image: r.image, price: r.price, comparePrice: r.comparePrice || null, discountPct: r.discountPct || 0,
-    isSale: (r.discountPct || 0) >= 10, isNew: published > Date.now() - NEW_DAYS * 864e5,
-    category: r.productType || 'Clothing', tags: (r.tags || []).slice(0, 5),
-    availableSizes: r.sizesAvailable || [], publishedAt: r.publishedAt,
-  };
 }
 
 module.exports = async function handler(req, res) {
@@ -75,7 +64,7 @@ module.exports = async function handler(req, res) {
   const index = isAdmin && body.index && INDEX_PATTERN.test(body.index) ? body.index : algolia.INDEX;
 
   const model = getModel();
-  const trace = startTrace({ source: body.source === 'eval' && isAdmin ? 'eval' : 'live', system: 'C',
+  const trace = startTrace({ source: isAdmin ? 'admin' : 'live', system: 'C',
                              query: last.content, model, index,
                              runId: isAdmin ? body.runId || null : null, queryId: isAdmin ? body.queryId || null : null });
   let brands = [];
@@ -88,13 +77,9 @@ module.exports = async function handler(req, res) {
     const invalid = new Set(t.invalidIds);
     const ids = [...new Set(answer.product_ids)].filter(id => !invalid.has(id)).slice(0, 8);
 
-    let products = [];
-    if (ids.length) {
-      const { results } = await algolia.getClient('search').getObjects({
-        requests: ids.map(id => ({ indexName: index, objectID: id })),
-      });
-      products = results.filter(Boolean).map(toCard);
-    }
+    const products = await loadCards(algolia.getClient('search'), index, ids);
+    t.finishedBy = finishedBy;
+    waitUntil(observability.saveTrace(t));     // stored after the response is sent
 
     const brandNames = Object.fromEntries(brands.map(b => [b.id, b.name]));
     const policy_quotes = answer.policy_quotes.map(q => ({ ...q, brandName: brandNames[q.brandId] || q.brandId }));
@@ -107,7 +92,7 @@ module.exports = async function handler(req, res) {
   } catch (e) {
     console.error("stylist error", e);
     trace.data.error = e.message;
-    trace.finish(null);
+    waitUntil(observability.saveTrace(trace.finish(null)));
     return res.status(503).json({ error: "The stylist couldn't answer just now — please try again.", detail: isAdmin ? e.message : undefined });
   }
 };
@@ -121,5 +106,6 @@ function feedback(req, res) {
     traceId: String(traceId).slice(0, 64), rating,
     note: note ? String(note).slice(0, 500) : null, ts: new Date().toISOString(),
   }));
+  waitUntil(observability.saveFeedback(String(traceId).slice(0, 64), rating, note ? String(note).slice(0, 500) : null));
   return res.status(200).json({ ok: true });
 }
