@@ -906,11 +906,11 @@ async function loadEvalIndexes() {
 async function loadEvalRuns() {
   try {
     const { runs } = await insights('?view=runs');
-    document.getElementById('evalRuns').innerHTML = runs.length ? `<tr><th>Run</th><th>System</th><th>Auto checks</th><th>Your grades</th><th>Median time</th><th>Cost</th><th>≤2 calls</th></tr>` +
+    document.getElementById('evalRuns').innerHTML = runs.length ? `<tr><th>Run</th><th>System</th><th>Auto checks</th><th>Your grades</th><th>Median time</th><th>Cost</th><th>₹ / answer</th><th>₹ / good answer</th><th>≤2 calls</th></tr>` +
       runs.map(r => { const s = r.summary || {}; return `<tr class="click" onclick="openEvalRun('${esc(r.runId)}')">
         <td>${new Date(r.createdAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}${r.label ? ' · ' + esc(r.label) : ''}${r.finished ? '' : ' <span style="color:var(--warn)">(unfinished)</span>'}</td>
         <td>${r.system === 'C' ? 'Agent' : 'Baseline'} ×${r.runs}</td><td><b>${pctTxt(s.codeCheckPassRate)}</b></td><td>${s.graded ? pctTxt(s.humanPassRate) + ` (${s.graded})` : '—'}</td>
-        <td>${s.latencySec && s.latencySec.p50 != null ? s.latencySec.p50 + 's' : '—'}</td><td>₹${s.costINR ? s.costINR.total : 0}</td><td>${pctTxt(s.within2ToolCalls)}</td></tr>`; }).join('')
+        <td>${s.latencySec && s.latencySec.p50 != null ? s.latencySec.p50 + 's' : '—'}</td><td>₹${s.costINR ? s.costINR.total : 0}</td><td>${s.costINR && s.costINR.mean != null ? '₹' + s.costINR.mean : '—'}</td><td>${s.costINR && s.costINR.perPass != null ? '₹' + s.costINR.perPass : '—'}</td><td>${pctTxt(s.within2ToolCalls)}</td></tr>`; }).join('')
       : '<tr><td class="pol-hint">No eval runs yet. Run the baseline (free) and the agent, then compare.</td></tr>';
   } catch (e) { document.getElementById('evalRuns').innerHTML = `<tr><td>Error: ${esc(e.message)}</td></tr>`; }
 }
@@ -974,7 +974,11 @@ function renderEvalRun() {
     <div class="kpis">${[kpi(pctTxt(s.codeCheckPassRate), 'auto checks pass'), kpi(s.graded ? pctTxt(s.humanPassRate) : '—', `your grades (${s.graded || 0})`),
       kpi(r.runs > 1 ? pctTxt(s.consistency) : '—', 'consistent 3/3'), kpi(s.latencySec ? s.latencySec.p50 + 's' : '—', 'median time'),
       kpi(s.latencySec ? s.latencySec.p90 + 's' : '—', 'p90 time'), kpi(s.costINR ? '₹' + s.costINR.p50 : '—', 'median cost'),
-      kpi(s.costINR ? '₹' + s.costINR.total : '—', 'run cost'), kpi(pctTxt(s.within2ToolCalls), '≤2 tool calls'),
+      kpi(s.costINR ? '₹' + s.costINR.total : '—', 'run cost'),
+      kpi(s.costINR && s.costINR.perPass != null ? '₹' + s.costINR.perPass : '—', `₹ per good answer (${s.costINR ? s.costINR.perPassBasis || '' : ''})`),
+      kpi(s.costUSD ? '$' + s.costUSD.total : '—', 'run cost (USD)'),
+      kpi(s.tokens ? Math.round((s.tokens.in + s.tokens.cacheRead + s.tokens.cacheWrite) / 1000) + 'k / ' + Math.round(s.tokens.out / 1000) + 'k' : '—', 'tokens in / out'),
+      kpi(s.searches != null ? s.searches : '—', 'Algolia searches'), kpi(pctTxt(s.within2ToolCalls), '≤2 tool calls'),
       kpi(pctTxt(s.routeAgreement), 'right first tool'), kpi(pctTxt(s.relaxedRate), 'filter relaxed')].join('')}</div>
     <div style="margin-bottom:10px">${checks}</div>
     <div class="ins-scroll"><table class="ins-table"><tr><th>ID</th><th>Question → answer</th><th>Auto checks</th><th>Your grade</th></tr>${rows}</table></div>
@@ -992,10 +996,10 @@ async function gradeEval(i, grade) {
 
 function exportEvalCsv() {
   const q = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
-  const rows = [['id', 'repeat', 'query', 'answer', 'products', 'checks_failed', 'grade', 'seconds', 'cost_inr', 'tool_calls']]
+  const rows = [['id', 'repeat', 'query', 'answer', 'products', 'checks_failed', 'grade', 'seconds', 'cost_inr', 'tokens_in', 'tokens_out', 'cache_read', 'cache_write', 'llm_calls', 'tool_calls']]
     .concat(evalRun.results.map(x => [x.queryId, x.repeat, x.query, x.answer || x.error, (x.products || []).map(p => `${p.name} (${p.brandName} ₹${p.price})`).join('; '),
       Object.entries(x.checks || {}).filter(([, c]) => !c.pass).map(([k, c]) => `${k}: ${c.detail}`).join('; '), x.grade || '',
-      x.trace ? (x.trace.latencyMs / 1000).toFixed(1) : '', x.trace ? x.trace.costINR : '', x.trace ? x.trace.steps.filter(s => s.tool !== 'respond').length : '']));
+      x.trace ? (x.trace.latencyMs / 1000).toFixed(1) : '', x.trace ? x.trace.costINR : '', ...['in', 'out', 'cacheRead', 'cacheWrite'].map(k => x.trace && x.trace.tokens ? x.trace.tokens[k] : ''), x.trace ? x.trace.llmCalls : '', x.trace ? x.trace.steps.filter(s => s.tool !== 'respond').length : '']));
   const blob = new Blob([rows.map(r => r.map(q).join(',')).join('\n')], { type: 'text/csv' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `stylist-eval-${evalRun.runId}.csv`; a.click();
 }
