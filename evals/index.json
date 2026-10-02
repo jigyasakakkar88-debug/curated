@@ -9,8 +9,69 @@
       "runs": 1,
       "createdAt": "2026-10-02T17:37:46.036Z",
       "total": 22,
-      "finished": false,
-      "summary": null
+      "finished": true,
+      "summary": {
+        "answers": 22,
+        "errors": 0,
+        "codeCheckPassRate": 0.95,
+        "humanPassRate": null,
+        "graded": 0,
+        "consistency": null,
+        "latencySec": {
+          "p50": 7.6,
+          "p90": 12.2
+        },
+        "costINR": {
+          "p50": 1.85,
+          "p90": 6.65,
+          "total": 65.36
+        },
+        "toolCalls": {
+          "p50": 1,
+          "p90": 3
+        },
+        "within2ToolCalls": 0.73,
+        "routeAgreement": 0.61,
+        "relaxedRate": 0.09,
+        "byCheck": {
+          "maxPrice": {
+            "pass": 5,
+            "total": 5
+          },
+          "expectProducts": {
+            "pass": 11,
+            "total": 11
+          },
+          "noInventedProducts": {
+            "pass": 22,
+            "total": 22
+          },
+          "gender": {
+            "pass": 2,
+            "total": 2
+          },
+          "mustMentionBrands": {
+            "pass": 2,
+            "total": 2
+          },
+          "returnableOnly": {
+            "pass": 2,
+            "total": 3
+          },
+          "maxTotal": {
+            "pass": 1,
+            "total": 1
+          },
+          "expectNoProducts": {
+            "pass": 4,
+            "total": 4
+          },
+          "asksQuestion": {
+            "pass": 2,
+            "total": 2
+          }
+        }
+      }
     }
   ]
 }
