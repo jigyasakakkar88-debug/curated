@@ -90,6 +90,18 @@ header { background:var(--ink); color:var(--paper); display:flex; align-items:ce
 .grade-btn.on.pass { background:var(--ok); color:white; border-color:var(--ok); }
 .grade-btn.on.fail { background:var(--err); color:white; border-color:var(--err); }
 .ins-scroll { max-height:620px; overflow:auto; }
+.panel, .panel-body { min-width:0; }
+.kpis { min-width:0; }
+
+[hidden] { display:none !important; }
+/* ADMIN TABS */
+.admin-tabs { display:flex; gap:0; padding:0 48px; background:var(--card); border-bottom:1px solid var(--border); overflow-x:auto; }
+.admin-tabs button { background:none; border:none; border-bottom:2px solid transparent; padding:14px 20px 12px; cursor:pointer; font-family:'Jost',sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+.admin-tabs button span { display:block; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; text-transform:none; margin-top:2px; }
+.admin-tabs button[aria-selected="true"] { color:var(--ink); border-bottom-color:var(--accent); }
+.admin-tabs button:focus-visible { outline:2px solid var(--accent); outline-offset:-2px; }
+.container.single { grid-template-columns:1fr; }
+@media (max-width:700px) { .admin-tabs { padding:0 12px; } .admin-tabs button { padding:12px 12px 10px; } .admin-tabs button span { display:none; } }
 
 /* LAYOUT */
 .container { max-width:1100px; margin:0 auto; padding:48px 48px 80px; display:grid; grid-template-columns:1fr 380px; gap:40px; }
@@ -239,17 +251,40 @@ input:focus { border-color:var(--accent); }
   </div>
 </header>
 
-<div class="container">
+<nav class="admin-tabs" id="adminTabs" role="tablist">
+  <button role="tab" data-tabbtn="insights" onclick="setAdminTab('insights')">Insights <span>observability · evals</span></button>
+  <button role="tab" data-tabbtn="stylist" onclick="setAdminTab('stylist')">Stylist <span>test · catalog · policies</span></button>
+  <button role="tab" data-tabbtn="brands" onclick="setAdminTab('brands')">Brands <span>list · discover · settings</span></button>
+</nav>
 
-  <div style="display:flex;flex-direction:column;gap:24px">
+<div class="container" id="adminContainer">
+
+  <div class="admin-col" style="display:flex;flex-direction:column;gap:24px">
 
     <!-- CONFIG WARNING (shown if GitHub not set up) -->
     <div class="config-warn" id="configWarn">
       ⚠ GitHub is not configured yet. Changes won't be saved permanently until you set GITHUB_TOKEN and GITHUB_REPO in Vercel environment variables. See the setup guide below.
     </div>
 
+    <!-- STYLIST TEST -->
+    <div data-tab="stylist" class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Test the Stylist</div>
+        <div class="panel-meta">admin only · no daily limit</div>
+      </div>
+      <div class="panel-body">
+        <div class="sty-thread" id="styThread"><div class="pol-hint">Ask anything a shopper would. Your saved (hearted) items on this browser are sent as the wishlist.</div></div>
+        <textarea id="styInput" maxlength="500" placeholder="Cotton kurta under ₹3,000 for office" style="width:100%;height:60px;padding:8px;border:1px solid var(--border);background:var(--warm);font-family:'Jost',sans-serif;font-size:13px"></textarea>
+        <input id="styAnchor" placeholder="optional: product id the question is about" style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid var(--border);background:var(--warm);font-size:11px">
+        <div class="btn-row" style="margin-top:8px">
+          <button class="btn-test" onclick="styNewChat()">New chat</button>
+          <button class="btn-add" id="stySend" onclick="styAsk()">Ask</button>
+        </div>
+      </div>
+    </div>
+
     <!-- OBSERVABILITY -->
-    <div class="panel" id="obsPanel">
+    <div data-tab="insights" class="panel" id="obsPanel">
       <div class="panel-head"><div class="panel-title">Stylist Observability</div><div class="panel-meta" id="obsMeta"></div></div>
       <div class="panel-body">
         <div class="ins-controls">
@@ -263,7 +298,7 @@ input:focus { border-color:var(--accent); }
     </div>
 
     <!-- EVALS -->
-    <div class="panel" id="evalPanel">
+    <div data-tab="insights" class="panel" id="evalPanel">
       <div class="panel-head"><div class="panel-title">Stylist Evals</div><div class="panel-meta" id="evalMeta">22 test questions · automatic checks + your grades</div></div>
       <div class="panel-body">
         <div class="ins-controls">
@@ -274,13 +309,13 @@ input:focus { border-color:var(--accent); }
           <button class="btn-add" id="evalRunBtn" style="flex:0 0 auto;padding:8px 18px" onclick="startEval()">Run evals</button>
         </div>
         <div class="pol-hint" id="evalProgress" style="margin-bottom:10px">The agent run costs about ₹2 per question (22 questions ≈ ₹30–60) and takes 2–5 minutes. The baseline is free.</div>
-        <table class="ins-table" id="evalRuns"></table>
+        <div style="overflow-x:auto"><table class="ins-table" id="evalRuns"></table></div>
         <div id="evalDetail" style="margin-top:18px"></div>
       </div>
     </div>
 
     <!-- BRAND LIST -->
-    <div class="panel">
+    <div data-tab="brands" class="panel">
       <div class="panel-head">
         <div class="panel-title">Your Brands</div>
         <div class="panel-meta" id="brandCount">Loading…</div>
@@ -291,7 +326,7 @@ input:focus { border-color:var(--accent); }
     </div>
 
     <!-- DISCOVER -->
-    <div class="panel">
+    <div data-tab="brands" class="panel">
       <div class="panel-head">
         <div class="panel-title">Discover Brands</div>
         <div class="panel-meta" id="recCount"></div>
@@ -305,7 +340,7 @@ input:focus { border-color:var(--accent); }
     </div>
 
     <!-- HOW IT WORKS -->
-    <div class="panel">
+    <div data-tab="brands" class="panel">
       <div class="panel-head"><div class="panel-title">How it works</div></div>
       <div class="panel-body" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);line-height:2.2">
         1. Add a Shopify brand URL below →<br>
@@ -320,10 +355,10 @@ input:focus { border-color:var(--accent); }
 
   </div>
 
-  <div style="display:flex;flex-direction:column;gap:24px">
+  <div class="admin-col" style="display:flex;flex-direction:column;gap:24px">
 
     <!-- ADD BRAND -->
-    <div class="panel">
+    <div data-tab="brands" class="panel">
       <div class="panel-head">
         <div class="panel-title">Add a Brand</div>
       </div>
@@ -351,7 +386,7 @@ input:focus { border-color:var(--accent); }
     </div>
 
     <!-- REFRESH -->
-    <div class="panel">
+    <div data-tab="brands" class="panel">
       <div class="panel-head">
         <div class="panel-title">Refresh Feed</div>
       </div>
@@ -367,7 +402,7 @@ input:focus { border-color:var(--accent); }
     </div>
 
     <!-- STYLIST CATALOG -->
-    <div class="panel">
+    <div data-tab="stylist" class="panel">
       <div class="panel-head">
         <div class="panel-title">Stylist Catalog</div>
         <div class="panel-meta" id="catalogMeta"></div>
@@ -399,25 +434,8 @@ input:focus { border-color:var(--accent); }
       </div>
     </div>
 
-    <!-- STYLIST TEST -->
-    <div class="panel">
-      <div class="panel-head">
-        <div class="panel-title">Test the Stylist</div>
-        <div class="panel-meta">admin only · no daily limit</div>
-      </div>
-      <div class="panel-body">
-        <div class="sty-thread" id="styThread"><div class="pol-hint">Ask anything a shopper would. Your saved (hearted) items on this browser are sent as the wishlist.</div></div>
-        <textarea id="styInput" maxlength="500" placeholder="Cotton kurta under ₹3,000 for office" style="width:100%;height:60px;padding:8px;border:1px solid var(--border);background:var(--warm);font-family:'Jost',sans-serif;font-size:13px"></textarea>
-        <input id="styAnchor" placeholder="optional: product id the question is about" style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid var(--border);background:var(--warm);font-size:11px">
-        <div class="btn-row" style="margin-top:8px">
-          <button class="btn-test" onclick="styNewChat()">New chat</button>
-          <button class="btn-add" id="stySend" onclick="styAsk()">Ask</button>
-        </div>
-      </div>
-    </div>
-
     <!-- BRAND POLICIES -->
-    <div class="panel" id="policiesPanel">
+    <div data-tab="stylist" class="panel" id="policiesPanel">
       <div class="panel-head">
         <div class="panel-title">Brand Policies</div>
         <div class="panel-meta" id="polMeta"></div>
@@ -437,7 +455,7 @@ input:focus { border-color:var(--accent); }
     </div>
 
     <!-- SETTINGS -->
-    <div class="panel">
+    <div data-tab="brands" class="panel">
       <div class="panel-head"><div class="panel-title">Settings</div></div>
       <div class="panel-body">
         <div class="setting-row">
@@ -974,6 +992,22 @@ function exportEvalCsv() {
   const blob = new Blob([rows.map(r => r.map(q).join(',')).join('\n')], { type: 'text/csv' });
   const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `stylist-eval-${evalRun.runId}.csv`; a.click();
 }
+
+// ── ADMIN TABS ────────────────────────────────────────────
+function setAdminTab(tab) {
+  document.querySelectorAll('[data-tab]').forEach(p => { p.hidden = p.dataset.tab !== tab; });
+  document.querySelectorAll('[data-tabbtn]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tabbtn === tab)));
+  // Hide a column with nothing to show, and let the other one take the full width.
+  const cols = [...document.querySelectorAll('.admin-col')];
+  cols.forEach(c => { c.style.display = [...c.querySelectorAll(':scope > [data-tab]')].some(p => !p.hidden) ? 'flex' : 'none'; });
+  document.getElementById('adminContainer').classList.toggle('single', cols.filter(c => c.style.display !== 'none').length < 2);
+  try { localStorage.setItem('adminTab', tab); } catch {}
+}
+(function initAdminTab() {
+  let tab = 'insights';
+  try { tab = localStorage.getItem('adminTab') || tab; } catch {}
+  setAdminTab(['insights', 'stylist', 'brands'].includes(tab) ? tab : 'insights');
+})();
 
 function renderCatalogResult(data) {
   const out = document.getElementById('catalogOut');
