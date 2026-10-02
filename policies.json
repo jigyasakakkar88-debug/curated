@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updatedAt": "2026-10-02T14:54:06.459Z",
+    "updatedAt": "2026-10-02T15:30:13.544Z",
     "totalTokens": 81726,
     "extractModel": "claude-haiku-4-5"
   },
@@ -29,7 +29,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:22.377Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "The products are only eligible for a refund in cases of a) incorrect deliveries b) damaged goods",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 3,
+          "quote": "please contact our care team within 3 days of delivery",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "The products are only eligible for a refund in cases of a) incorrect deliveries b) damaged goods",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "All Products which are on SALE are not valid for return unless its a manufacturing defect.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": false,
+          "quote": "Please note that international orders are not eligible for returns.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:35.563Z"
     },
     "kharakapas": {
       "name": "Khara Kapas",
@@ -55,7 +113,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:22.462Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "If the style doesn't suit you, we can offer you a one-time use store credit voucher valid for 3 months provided the piece is unworn and intact with all the tags and labels.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 14,
+          "quote": "If you wish to return/exchange a piece, please send us a mail within 2 weeks of receiving your order.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "If the style doesn't suit you, we can offer you a one-time use store credit voucher valid for 3 months provided the piece is unworn and intact with all the tags and labels.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "Unfortunately, all sale items are available at their best & final price and cannot be returned.",
+          "quoteVerified": false,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "Exchanges and returns will not be accepted for any customized order.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "International: We ship worldwide.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 14,
+          "quote": "From the date of placing order, we would normally take 10-14 working days to deliver your order.",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:36.646Z"
     },
     "farog-one": {
       "name": "Farog",
@@ -81,7 +197,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:22.703Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "Refunds or bank transfers are only applicable for select concerns.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 4,
+          "quote": "You may request for exchange within 4 days of delivery.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "Refunds or bank transfers are only applicable for select concerns.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "Refunds, exchanges or size alteration will not be applicable on items purchased on sale.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "Customised outfits are not applicable for returns or refunds in any case.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": true,
+          "quote": "For COD orders, store credit with a 1-year validity will be provided to your registered email address or contact number.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:37.683Z"
     },
     "okhai-org": {
       "name": "Okhai",
@@ -107,7 +281,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:22.690Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "In case of Refund, the entire amount paid by you including shipping and gift charges are transferred to your account.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 30,
+          "quote": "The buyer needs to intimate okhai.org within 30 (thirty) days of receipt of goods about the reason for seeking refund.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "In case of Refund, the entire amount paid by you including shipping and gift charges are transferred to your account.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "Made-to-order/custom products /international order cannot be replaced or returned.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "For international orders, shipping charges may differ according to location of deliver and weight of the item/s to be shipped.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:39.782Z"
     },
     "sreyasamanta-com": {
       "name": "SREYA SAMANTA",
@@ -133,7 +365,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:22.900Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": false,
+          "quote": "We do not offer refunds on orders due to the time and labor that goes into each of our products.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 3,
+          "quote": "In case you choose our standard size and face any fitting issues, please write to us within 3 days of the receival of the product at contact@sreyasamanta.com",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "As most of our pieces are custom made on order, we do not offer return or exchange.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "Please note the products bought on sale are not eligible for exchange or return.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "As most of our pieces are custom made on order, we do not offer return or exchange.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": false,
+          "quote": "We do not offer COD at the moment.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "So our runners at Aramex, FEDEX & UPS make sure your goods reach you, no matter where you are in the world, within 7-10 days (*Excluding Sundays & Public Holidays).",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 12,
+          "quote": "Sarees on order may take 8 -12 weeks to be made from the date of order confirmation, post which they shall be shipped out.",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:42.173Z"
     },
     "surma-in": {
       "name": "SURMA",
@@ -159,7 +449,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:22.680Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "However, refund/replacement can be made if the customer establishes that the quality of product delivered is not good.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 7,
+          "quote": "This should be reported within 7 days of receipt of the products.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": null,
+          "quoteVerified": false,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": 0,
+          "quote": "We ship all orders in 1-2 business days. It'll take another 3-7 days for the order to reach you depending on your pincode.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "international": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 2,
+          "quote": "We ship all orders in 1-2 business days.",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:43.110Z"
     },
     "www-theburntsoul-com": {
       "name": "THE BURNT SOUL",
@@ -185,7 +533,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:23.096Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "If you are not happy with your purchase, please see the options for returning or exchanging any of the items.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 1,
+          "quote": "please contact us within 24 hours of delivery with the following information",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "If your purchase meets our refund criteria stated above, please contact us within 24 hours of delivery",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "Please note that size exchanges or product exchanges will not be possible if the product is purchased from discounted/sale items.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "No, customized/made to measure products are not eligible for exchange/return.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": true,
+          "quote": "For a COD order, we may also call you to confirm the order.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": 4000,
+          "quote": "We provide free domenstic shipping to all orders equivalent to INR 4,000 and above.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "For International Orders: Shipping charges for international orders vary based on your location and will be calculated and displayed at the cart level before checkout",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 10,
+          "quote": "Orders are dispatched within 8-10 working days.",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:47.103Z"
     },
     "labeldhuni-com": {
       "name": "Dhuni",
@@ -211,7 +617,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:23.126Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": false,
+          "quote": "No Refunds / Exchanges At Dhuni, we celebrate the uniqueness of handcrafted items. As such, we do not offer refunds or exchanges for minor irregularities that add character to our products.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 2,
+          "quote": "if you receive a damaged item, we are here to assist you. Simply contact us via WhatsApp within 2 working days of delivery and we will facilitate the exchange process.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": true,
+          "quote": "No Refunds / Exchanges At Dhuni, we celebrate the uniqueness of handcrafted items. As such, we do not offer refunds or exchanges for minor irregularities that add character to our products.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": 0,
+          "quote": "Domestic shipping is free / International shipping charges are to be paid by the client on actuals.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "Domestic & International Delivery : We offer shipping services across India and worldwide",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:46.692Z"
     },
     "nonasties-in": {
       "name": "No Nasties",
@@ -237,7 +701,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:23.555Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": false,
+          "quote": "Please note that we do NOT issue refunds, only store credit.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 30,
+          "quote": "within 30 days of order delivery",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": true,
+          "quote": "Please note that we do NOT issue refunds, only store credit. We will happily accept returns and exchange them for the correct size, depending on availability, and within 30 days of order delivery.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "There are no returns or exchanges for items on sale, on towels, on bedsheets and on gift cards.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "For International orders: All International orders are typically shipped within 5 business days from our Goa warehouse via a commercial courier or the postal service.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 3,
+          "quote": "All India orders are typically shipped within 3 business days from our Goa warehouse via a commercial courier.",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:49.132Z"
     },
     "dressfolk-com": {
       "name": "Dressfolk",
@@ -263,7 +785,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:24.473Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "We offer 100% refund in case you are not satisfied with the products for any reason.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 5,
+          "quote": "Please inform us within 5 days of receiving the order.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "We offer 100% refund in case you are not satisfied with the products for any reason.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "Products on sale are not eligible for refund. They can only be exchanged at additional shipping costs of INR 150.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "Customized products are non returnable.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": 0,
+          "quote": "We offer free shipping on all products across India.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "We ship to most of the countries across the globe.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:50.129Z"
     },
     "doodlage-in": {
       "name": "Doodlage",
@@ -289,7 +869,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:23.416Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "If you are not entirely delighted with the products that you have chosen you may return them to us within 7 days of receipt",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 7,
+          "quote": "you may return them to us within 7 days of receipt",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "We will be more than happy to offer you an exchange (only for standard sizes) and if applicable offer you store credits for shopping further on the website",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "Returns/Exchange not applicable on Discounted Merchandise.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "We do not offer returns facility for any of the customized pieces.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:51.223Z"
     },
     "thesummerhouse-in": {
       "name": "The Summer House",
@@ -315,7 +953,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:23.723Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": false,
+          "quote": "In the rare case that you receive damaged goods, please inform us at friends@thesummerhouse.in within 3 days of receipt of product and we shall begin the refund process immediately. If you wish to exchange your purchase for another size or garment, please initiate returns on our website through the Returns section within 7 days of receipt of purchase.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 7,
+          "quote": "If you wish to exchange your purchase for another size or garment, please initiate returns on our website through the Returns section within 7 days of receipt of purchase.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": true,
+          "quote": "If you wish to exchange your purchase for another size or garment, please initiate returns on our website through the Returns section within 7 days of receipt of purchase.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 15,
+          "quote": "Orders are shipped to you within 15 working days.",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:53.313Z"
     },
     "indiefabstore-com": {
       "name": "IndieFab",
@@ -341,7 +1037,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:23.992Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "If you're not satisfied with the item and do not wish to exchange sizes, you may request a return for store credit (in the form of a discount coupon).",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 7,
+          "quote": "Request must be made within 7 days of delivery.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "If you're not satisfied with the item and do not wish to exchange sizes, you may request a return for store credit (in the form of a discount coupon).",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "3XL, 4XL and all customised / made-to-order sizes are non-returnable and non-exchangeable.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": true,
+          "quote": "On COD orders there is an additional fee and free delivery for prepaid orders.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "International Shipping(DUBAI)",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 3,
+          "quote": "Orders are usually shipped within 2–3 working days of purchase.",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:54.337Z"
     },
     "terralunaindia-com": {
       "name": "Terra Luna India",
@@ -367,7 +1121,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:23.847Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "We have a 2-day return policy, which means you have 2 day window after receiving your item to request a return.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 2,
+          "quote": "We have a 2-day return policy, which means you have 2 day window after receiving your item to request a return.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "If approved, you'll be automatically refunded on your original payment method within 10 business days.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "Unfortunately, we cannot accept returns on sale items or gift cards.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "Certain types of items cannot be returned, like perishable goods (such as food, flowers, or plants), custom products (such as special orders or personalized items), and personal care goods (such as beauty products).",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": true,
+          "quote": "We process Cash on Delivery (COD) and all online payments made by customers in India through PayU payment gateways which provide secure, encrypted connections for all credit card, debit card and Net Banking transactions.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": 0,
+          "quote": "There are no shipping charges. We offer free delivery on all orders within India.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "international": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 3,
+          "quote": "We endeavour to dispatch all products ordered within 2-3 working days after the order has been placed.",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:57.843Z"
     },
     "charkhatales-com": {
       "name": "Charkha Tales",
@@ -393,7 +1205,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:24.122Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "We have a 30-day return policy, which means you have 30 days after receiving your item to request a return.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 30,
+          "quote": "We have a 30-day return policy, which means you have 30 days after receiving your item to request a return.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "If approved, you'll be automatically refunded on your original payment method.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "Unfortunately, we cannot accept returns on sale items or gift cards.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "Certain types of items cannot be returned, like perishable goods (such as food, flowers, or plants), custom products (such as special orders or personalized items), and personal care goods (such as beauty products).",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 10,
+          "quote": "SHIP IN 7-10 DAYS",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:29:57.747Z"
     },
     "tjori-com": {
       "name": "Tjori",
@@ -419,7 +1289,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:24.615Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": false,
+          "quote": "All apparel products are made on order and can be returned or exchanged with any other products on the website within 24-48 hours of delivery. However, since these products are made on order, they are not eligible for a refund.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 2,
+          "quote": "can be returned or exchanged with any other products on the website within 24-48 hours of delivery",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": true,
+          "quote": "All apparel products are made on order and can be returned or exchanged with any other products on the website within 24-48 hours of delivery. However, since these products are made on order, they are not eligible for a refund.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "All products on Clearance sale are not eligible for exchange or return.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "All apparel products are made on order and can be returned or exchanged with any other products on the website within 24-48 hours of delivery. However, since these products are made on order, they are not eligible for a refund.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": 0,
+          "quote": "In India, we offer free shipping on all orders.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "Tjori ships to any street address in the United States, including Alaska and Hawaii, and Canada.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 1,
+          "quote": "Most items in stock are shipped within 1 business day of receiving the order.",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:30:01.702Z"
     },
     "shop-khamir-org": {
       "name": "Khamir",
@@ -445,7 +1373,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:24.620Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "If your goods are damaged or if you receive an incorrect product, or if you're simply not satisfied with what you have received, we would be happy to give you the following alternative: a. Exchange the goods for an alternative of your choice of equal value b. Give you a full refund for the price you paid for the goods",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 10,
+          "quote": "Products that are eligible for a return, can be returned within 10 days of receiving the merchandise.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "Give you a full refund for the price you paid for the goods",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "If your order contains products sold in SALE , we would not accept any returns/exchange/replacement requests. Sale products are a final sale only.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": 1200,
+          "quote": "Shipping within India is FREE for all orders above Rs. 1200.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "We ship across the globe with DHL and FedEx.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 6,
+          "quote": "Processing the order normally takes 2 working days and then Shipping normally takes 4-6 working days depending on the location from Khamir warehouse.",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:30:02.899Z"
     },
     "baghindia-com": {
       "name": "Bagh India",
@@ -471,7 +1457,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:24.477Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": false,
+          "quote": "We do not have a return policy.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": true,
+          "quote": "Bagh India offers a free exchange policy",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "No exchange will be done for discounted products.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "No exchanges or refunds will be made against garments which have been altered by the customer.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": 3000,
+          "quote": "BAGH INDIA has a non-refundable flat shipping rate of INR 100 for orders below INR 3000.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "international": {
+          "value": false,
+          "quote": null,
+          "quoteVerified": false,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 5,
+          "quote": "Team BAGH INDIA is committed to deliver all orders with good quality packaging within a span of 5 working days",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:30:04.850Z"
     },
     "nolabels-in": {
       "name": "Nolabels",
@@ -497,7 +1541,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:24.681Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": false,
+          "quote": "As a result, we do not offer returns on any orders.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 7,
+          "quote": "Report the issue within 7 working days.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": true,
+          "quote": "However, we offer alteration or exchange of ordered items only if: There is an issue with the fitting The dress does not match the given measurement The conveyed changes or enhancement not done Delivered the wrong size",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "Please note that the customized items are not eligible for a refund.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:30:06.182Z"
     },
     "hidesign-com": {
       "name": "Hidesign",
@@ -523,7 +1625,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:25.638Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "We have a 15-day return policy, which means you have 15 days after receiving your item to request a return.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 15,
+          "quote": "We have a 15-day return policy, which means you have 15 days after receiving your item to request a return.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "If approved, you will automatically be refunded on your original payment method.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "Certain types of items cannot be returned, like custom products (such as special orders or personalized items)",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": 0,
+          "quote": "We provide free shipping on all orders within India.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "We ship to all international destinations with fee which starts 5,000 per product depends upon the weight of the product.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 10,
+          "quote": "most are delivered between 5-10 business days of the order being confirmed.",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:30:08.703Z"
     },
     "tanandloom-com": {
       "name": "Tan & Loom",
@@ -549,7 +1709,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:25.172Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "We have a 7-day return policy, which means you have 7 days after receiving your item to request for a return.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 7,
+          "quote": "We have a 7-day return policy, which means you have 7 days after receiving your item to request for a return.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "If your return request is approved, we will process the refund within 7 business days.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "No refunds or exchanges, sale items or custom-made products or products on which the customer has redeemed a free gift.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": false,
+          "quote": "No refunds or exchanges, sale items or custom-made products or products on which the customer has redeemed a free gift.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:30:09.208Z"
     },
     "nappadori-com": {
       "name": "Nappa Dori",
@@ -575,7 +1793,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:25.463Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": false,
+          "quote": "In case of return, there is no credit refund given on the purchase amount, but you may exchange it for another product(s) of same or higher value by paying the remainder.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 7,
+          "quote": "returned to our warehouse within a strict time period of one week",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": true,
+          "quote": "In case of return, there is no credit refund given on the purchase amount, but you may exchange it for another product(s) of same or higher value by paying the remainder.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "cod": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "Shipping costs are calculated based on cumulative weight of entire order and are different for domestic and international delivery.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:30:11.479Z"
     },
     "pinklay-com": {
       "name": "Pinklay",
@@ -601,7 +1877,65 @@
         }
       },
       "ingestedAt": "2026-10-02T12:26:26.217Z",
-      "fields": {}
+      "fields": {
+        "returnable": {
+          "value": true,
+          "quote": "We accept exchanges and returns on non-sale items within 10 days of you receiving the shipment",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "returnWindowDays": {
+          "value": 10,
+          "quote": "We accept exchanges and returns on non-sale items within 10 days of you receiving the shipment",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "exchangeOnly": {
+          "value": false,
+          "quote": "We issue a store credit for the full amount against all returns",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "saleItemsReturnable": {
+          "value": false,
+          "quote": "No returns/exchanges on items over 20% off.",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "customisedReturnable": {
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
+          "source": "auto"
+        },
+        "cod": {
+          "value": true,
+          "quote": "COD or cash on delivery facility is available on most pincodes across India",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "freeShippingThreshold": {
+          "value": 2999,
+          "quote": "Orders above INR 2999 enjoy free shipping across India",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "international": {
+          "value": true,
+          "quote": "For international shipping, please visit: https://world.pinklay.com/",
+          "quoteVerified": true,
+          "source": "auto"
+        },
+        "dispatchDays": {
+          "value": 7,
+          "quote": "Our standard delivery time is 5-7 working days from order confirmation",
+          "quoteVerified": true,
+          "source": "auto"
+        }
+      },
+      "extractError": null,
+      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
+      "extractedAt": "2026-10-02T15:30:13.267Z"
     }
   }
 }
