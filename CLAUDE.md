@@ -54,7 +54,7 @@ There are no tests and no linter configured.
 | `trace.js` | One trace per question: steps (tool, input, resultCount, relaxed, ms), tokens, ₹ cost, latency, productIds, invalidIds (ids the agent named that no tool returned). Live traces → one `TRACE {json}` log line. |
 | `pricing.js` | Claude prices (USD/MTok) for `claude-sonnet-5-5`, `claude-sonnet-5`, `claude-haiku-4-5`, plus `USD_INR` and `costINR(model, usage)`. Re-check `checkedOn` against the pricing page when models change. |
 
-The Stylist design and build plan is in `docs/STYLIST.md`; the health check, open issues and later list are in `docs/SETUP_STATUS.md`.
+The Stylist design and build plan is in `docs/STYLIST.md`; the health check, open issues and later list are in `docs/SETUP_STATUS.md`; lessons about building with AI are in `docs/LEARNINGS.md` (add to it when something non-obvious is learned).
 
 ### Frontends (`public/`)
 - `index.html` — the main product feed, calls `GET /api/products`
