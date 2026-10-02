@@ -1,6 +1,6 @@
 {
   "meta": {
-    "updatedAt": "2026-10-02T15:30:13.544Z",
+    "updatedAt": "2026-10-02T15:39:35.756Z",
     "totalTokens": 81726,
     "extractModel": "claude-haiku-4-5"
   },
@@ -31,9 +31,9 @@
       "ingestedAt": "2026-10-02T12:26:22.377Z",
       "fields": {
         "returnable": {
-          "value": true,
-          "quote": "The products are only eligible for a refund in cases of a) incorrect deliveries b) damaged goods",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "returnWindowDays": {
@@ -43,8 +43,8 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "The products are only eligible for a refund in cases of a) incorrect deliveries b) damaged goods",
+          "value": true,
+          "quote": "Your purchase is eligible for exchange only",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -86,8 +86,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:35.563Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:38:56.561Z"
     },
     "kharakapas": {
       "name": "Khara Kapas",
@@ -158,7 +158,7 @@
         },
         "international": {
           "value": true,
-          "quote": "International: We ship worldwide.",
+          "quote": "We ship worldwide.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -170,8 +170,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:36.646Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:38:57.957Z"
     },
     "farog-one": {
       "name": "Farog",
@@ -199,9 +199,9 @@
       "ingestedAt": "2026-10-02T12:26:22.703Z",
       "fields": {
         "returnable": {
-          "value": true,
-          "quote": "Refunds or bank transfers are only applicable for select concerns.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "returnWindowDays": {
@@ -211,8 +211,8 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "Refunds or bank transfers are only applicable for select concerns.",
+          "value": true,
+          "quote": "You may request for exchange within 4 days of delivery.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -230,7 +230,7 @@
         },
         "cod": {
           "value": true,
-          "quote": "For COD orders, store credit with a 1-year validity will be provided to your registered email address or contact number.",
+          "quote": "COD Orders: For COD orders, store credit with a 1-year validity will be provided to your registered email address or contact number.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -254,8 +254,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:37.683Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:38:59.899Z"
     },
     "okhai-org": {
       "name": "Okhai",
@@ -283,21 +283,21 @@
       "ingestedAt": "2026-10-02T12:26:22.690Z",
       "fields": {
         "returnable": {
-          "value": true,
-          "quote": "In case of Refund, the entire amount paid by you including shipping and gift charges are transferred to your account.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "returnWindowDays": {
           "value": 30,
-          "quote": "The buyer needs to intimate okhai.org within 30 (thirty) days of receipt of goods about the reason for seeking refund.",
+          "quote": "Returns are covered by the 30 Day Replacement Guarantee",
           "quoteVerified": true,
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "In case of Refund, the entire amount paid by you including shipping and gift charges are transferred to your account.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "saleItemsReturnable": {
@@ -338,8 +338,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:39.782Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:00.974Z"
     },
     "sreyasamanta-com": {
       "name": "SREYA SAMANTA",
@@ -368,14 +368,14 @@
       "fields": {
         "returnable": {
           "value": false,
-          "quote": "We do not offer refunds on orders due to the time and labor that goes into each of our products.",
+          "quote": "As most of our pieces are custom made on order, we do not offer return or exchange.",
           "quoteVerified": true,
           "source": "auto"
         },
         "returnWindowDays": {
-          "value": 3,
-          "quote": "In case you choose our standard size and face any fitting issues, please write to us within 3 days of the receival of the product at contact@sreyasamanta.com",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "exchangeOnly": {
@@ -410,7 +410,7 @@
         },
         "international": {
           "value": true,
-          "quote": "So our runners at Aramex, FEDEX & UPS make sure your goods reach you, no matter where you are in the world, within 7-10 days (*Excluding Sundays & Public Holidays).",
+          "quote": "We understand you'll like your order to reach you at the earliest. So our runners at Aramex, FEDEX & UPS make sure your goods reach you, no matter where you are in the world, within 7-10 days.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -422,8 +422,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:42.173Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:04.522Z"
     },
     "surma-in": {
       "name": "SURMA",
@@ -451,21 +451,21 @@
       "ingestedAt": "2026-10-02T12:26:22.680Z",
       "fields": {
         "returnable": {
-          "value": true,
-          "quote": "However, refund/replacement can be made if the customer establishes that the quality of product delivered is not good.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "returnWindowDays": {
-          "value": 7,
-          "quote": "This should be reported within 7 days of receipt of the products.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
+          "value": null,
           "quote": null,
-          "quoteVerified": false,
+          "quoteVerified": null,
           "source": "auto"
         },
         "saleItemsReturnable": {
@@ -488,7 +488,7 @@
         },
         "freeShippingThreshold": {
           "value": 0,
-          "quote": "We ship all orders in 1-2 business days. It'll take another 3-7 days for the order to reach you depending on your pincode.",
+          "quote": "Free Shipping Sit back and wait for your order. That's all you need to do. Oh right, and we don't charge for shipping.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -506,8 +506,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:43.110Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:03.573Z"
     },
     "www-theburntsoul-com": {
       "name": "THE BURNT SOUL",
@@ -535,20 +535,20 @@
       "ingestedAt": "2026-10-02T12:26:23.096Z",
       "fields": {
         "returnable": {
-          "value": true,
-          "quote": "If you are not happy with your purchase, please see the options for returning or exchanging any of the items.",
+          "value": false,
+          "quote": "Any case other than above , we can only exchange or provide credit note.",
           "quoteVerified": true,
           "source": "auto"
         },
         "returnWindowDays": {
-          "value": 1,
-          "quote": "please contact us within 24 hours of delivery with the following information",
+          "value": 24,
+          "quote": "If your purchase meets our refund criteria stated above, please contact us within 24 hours of delivery with the following information",
           "quoteVerified": true,
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "If your purchase meets our refund criteria stated above, please contact us within 24 hours of delivery",
+          "value": true,
+          "quote": "Any case other than above , we can only exchange or provide credit note.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -566,7 +566,7 @@
         },
         "cod": {
           "value": true,
-          "quote": "For a COD order, we may also call you to confirm the order.",
+          "quote": "If the product is found unused, we will issue a credit note after deducting applicable shipping charges and COD charges.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -590,8 +590,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:47.103Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:08.385Z"
     },
     "labeldhuni-com": {
       "name": "Dhuni",
@@ -619,20 +619,20 @@
       "ingestedAt": "2026-10-02T12:26:23.126Z",
       "fields": {
         "returnable": {
-          "value": false,
-          "quote": "No Refunds / Exchanges At Dhuni, we celebrate the uniqueness of handcrafted items. As such, we do not offer refunds or exchanges for minor irregularities that add character to our products.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "returnWindowDays": {
-          "value": 2,
-          "quote": "if you receive a damaged item, we are here to assist you. Simply contact us via WhatsApp within 2 working days of delivery and we will facilitate the exchange process.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "exchangeOnly": {
           "value": true,
-          "quote": "No Refunds / Exchanges At Dhuni, we celebrate the uniqueness of handcrafted items. As such, we do not offer refunds or exchanges for minor irregularities that add character to our products.",
+          "quote": "All our shipments are carefully inspected, however, if you receive a damaged item, we are here to assist you. Simply contact us via WhatsApp within 2 working days of delivery and we will facilitate the exchange process.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -662,7 +662,7 @@
         },
         "international": {
           "value": true,
-          "quote": "Domestic & International Delivery : We offer shipping services across India and worldwide",
+          "quote": "We offer shipping services across India and worldwide",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -674,8 +674,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:46.692Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:07.473Z"
     },
     "nonasties-in": {
       "name": "No Nasties",
@@ -703,8 +703,8 @@
       "ingestedAt": "2026-10-02T12:26:23.555Z",
       "fields": {
         "returnable": {
-          "value": false,
-          "quote": "Please note that we do NOT issue refunds, only store credit.",
+          "value": true,
+          "quote": "we will provide 100% store credit after we get it back from you",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -715,14 +715,14 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": true,
-          "quote": "Please note that we do NOT issue refunds, only store credit. We will happily accept returns and exchange them for the correct size, depending on availability, and within 30 days of order delivery.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "saleItemsReturnable": {
           "value": false,
-          "quote": "There are no returns or exchanges for items on sale, on towels, on bedsheets and on gift cards.",
+          "quote": "There are no returns or exchanges for items on sale",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -746,20 +746,20 @@
         },
         "international": {
           "value": true,
-          "quote": "For International orders: All International orders are typically shipped within 5 business days from our Goa warehouse via a commercial courier or the postal service.",
+          "quote": "For International orders: All International orders are typically shipped within 5 business days",
           "quoteVerified": true,
           "source": "auto"
         },
         "dispatchDays": {
           "value": 3,
-          "quote": "All India orders are typically shipped within 3 business days from our Goa warehouse via a commercial courier.",
+          "quote": "All India orders are typically shipped within 3 business days",
           "quoteVerified": true,
           "source": "auto"
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:49.132Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:09.393Z"
     },
     "dressfolk-com": {
       "name": "Dressfolk",
@@ -799,14 +799,14 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "We offer 100% refund in case you are not satisfied with the products for any reason.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "saleItemsReturnable": {
           "value": false,
-          "quote": "Products on sale are not eligible for refund. They can only be exchanged at additional shipping costs of INR 150.",
+          "quote": "Products on sale are not eligible for refund.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -842,8 +842,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:50.129Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:11.576Z"
     },
     "doodlage-in": {
       "name": "Doodlage",
@@ -871,8 +871,8 @@
       "ingestedAt": "2026-10-02T12:26:23.416Z",
       "fields": {
         "returnable": {
-          "value": true,
-          "quote": "If you are not entirely delighted with the products that you have chosen you may return them to us within 7 days of receipt",
+          "value": false,
+          "quote": "We will be more than happy to offer you an exchange (only for standard sizes) and if applicable offer you store credits for shopping further on the website",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -883,7 +883,7 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
+          "value": true,
           "quote": "We will be more than happy to offer you an exchange (only for standard sizes) and if applicable offer you store credits for shopping further on the website",
           "quoteVerified": true,
           "source": "auto"
@@ -926,8 +926,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:51.223Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:12.946Z"
     },
     "thesummerhouse-in": {
       "name": "The Summer House",
@@ -956,7 +956,7 @@
       "fields": {
         "returnable": {
           "value": false,
-          "quote": "In the rare case that you receive damaged goods, please inform us at friends@thesummerhouse.in within 3 days of receipt of product and we shall begin the refund process immediately. If you wish to exchange your purchase for another size or garment, please initiate returns on our website through the Returns section within 7 days of receipt of purchase.",
+          "quote": "If you wish to exchange your purchase for another size or garment, please initiate returns on our website through the Returns section within 7 days of receipt of purchase.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -1010,8 +1010,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:53.313Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:14.513Z"
     },
     "indiefabstore-com": {
       "name": "IndieFab",
@@ -1051,9 +1051,9 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "If you're not satisfied with the item and do not wish to exchange sizes, you may request a return for store credit (in the form of a discount coupon).",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "saleItemsReturnable": {
@@ -1064,8 +1064,8 @@
         },
         "customisedReturnable": {
           "value": false,
-          "quote": "3XL, 4XL and all customised / made-to-order sizes are non-returnable and non-exchangeable.",
-          "quoteVerified": true,
+          "quote": "3XL, 4XL and all customised / made-to-order sizes are non-returnable and non-exchangeable — size exchange is also not available on these sizes.",
+          "quoteVerified": false,
           "source": "auto"
         },
         "cod": {
@@ -1094,8 +1094,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:54.337Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:16.683Z"
     },
     "terralunaindia-com": {
       "name": "Terra Luna India",
@@ -1135,9 +1135,9 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "If approved, you'll be automatically refunded on your original payment method within 10 business days.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "saleItemsReturnable": {
@@ -1178,8 +1178,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:57.843Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:19.012Z"
     },
     "charkhatales-com": {
       "name": "Charkha Tales",
@@ -1219,9 +1219,9 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "If approved, you'll be automatically refunded on your original payment method.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "saleItemsReturnable": {
@@ -1262,8 +1262,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:29:57.747Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:19.736Z"
     },
     "tjori-com": {
       "name": "Tjori",
@@ -1297,8 +1297,8 @@
           "source": "auto"
         },
         "returnWindowDays": {
-          "value": 2,
-          "quote": "can be returned or exchanged with any other products on the website within 24-48 hours of delivery",
+          "value": 48,
+          "quote": "All apparel products are made on order and can be returned or exchanged with any other products on the website within 24-48 hours of delivery.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -1346,8 +1346,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:30:01.702Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:24.710Z"
     },
     "shop-khamir-org": {
       "name": "Khamir",
@@ -1387,14 +1387,14 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "Give you a full refund for the price you paid for the goods",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "saleItemsReturnable": {
           "value": false,
-          "quote": "If your order contains products sold in SALE , we would not accept any returns/exchange/replacement requests. Sale products are a final sale only.",
+          "quote": "If your order contains products sold in SALE , we would not accept any returns/exchange/replacement requests.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -1430,8 +1430,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:30:02.899Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:24.202Z"
     },
     "baghindia-com": {
       "name": "Bagh India",
@@ -1459,9 +1459,9 @@
       "ingestedAt": "2026-10-02T12:26:24.477Z",
       "fields": {
         "returnable": {
-          "value": false,
-          "quote": "We do not have a return policy.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "returnWindowDays": {
@@ -1472,20 +1472,20 @@
         },
         "exchangeOnly": {
           "value": true,
-          "quote": "Bagh India offers a free exchange policy",
+          "quote": "Bagh India offers a free exchange policy; if you are unhappy with the size, fit, style, colour, we can exchange the garment for you with another garment of the same or higher value, the difference amount to paid. No exchange will be done for discounted products.",
           "quoteVerified": true,
           "source": "auto"
         },
         "saleItemsReturnable": {
           "value": false,
-          "quote": "No exchange will be done for discounted products.",
+          "quote": "No exchanges for garments purchased on sale with discount of 40% or more!",
           "quoteVerified": true,
           "source": "auto"
         },
         "customisedReturnable": {
-          "value": false,
-          "quote": "No exchanges or refunds will be made against garments which have been altered by the customer.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "cod": {
@@ -1501,21 +1501,21 @@
           "source": "auto"
         },
         "international": {
-          "value": false,
+          "value": null,
           "quote": null,
-          "quoteVerified": false,
+          "quoteVerified": null,
           "source": "auto"
         },
         "dispatchDays": {
           "value": 5,
-          "quote": "Team BAGH INDIA is committed to deliver all orders with good quality packaging within a span of 5 working days",
+          "quote": "Team BAGH INDIA is committed to deliver all orders with good quality packaging within a span of 5 working days (excluding Sundays & Public holidays) under normal circumstances.",
           "quoteVerified": true,
           "source": "auto"
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:30:04.850Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:28.474Z"
     },
     "nolabels-in": {
       "name": "Nolabels",
@@ -1543,15 +1543,15 @@
       "ingestedAt": "2026-10-02T12:26:24.681Z",
       "fields": {
         "returnable": {
-          "value": false,
-          "quote": "As a result, we do not offer returns on any orders.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "returnWindowDays": {
-          "value": 7,
-          "quote": "Report the issue within 7 working days.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "exchangeOnly": {
@@ -1568,7 +1568,7 @@
         },
         "customisedReturnable": {
           "value": false,
-          "quote": "Please note that the customized items are not eligible for a refund.",
+          "quote": "No Labels does not support the return of any personalized items bought from our website.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -1598,8 +1598,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:30:06.182Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:27.785Z"
     },
     "hidesign-com": {
       "name": "Hidesign",
@@ -1639,9 +1639,9 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "If approved, you will automatically be refunded on your original payment method.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "saleItemsReturnable": {
@@ -1676,14 +1676,14 @@
         },
         "dispatchDays": {
           "value": 10,
-          "quote": "most are delivered between 5-10 business days of the order being confirmed.",
+          "quote": "Delivery times vary based on location, but most are delivered between 5-10 business days of the order being confirmed.",
           "quoteVerified": true,
           "source": "auto"
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:30:08.703Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:31.534Z"
     },
     "tanandloom-com": {
       "name": "Tan & Loom",
@@ -1711,8 +1711,8 @@
       "ingestedAt": "2026-10-02T12:26:25.172Z",
       "fields": {
         "returnable": {
-          "value": true,
-          "quote": "We have a 7-day return policy, which means you have 7 days after receiving your item to request for a return.",
+          "value": false,
+          "quote": "Items will be considered for return only if product along with its original packaging and price tag is intact and the product has not been used or damaged.",
           "quoteVerified": true,
           "source": "auto"
         },
@@ -1723,9 +1723,9 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "If your return request is approved, we will process the refund within 7 business days.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "saleItemsReturnable": {
@@ -1766,8 +1766,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:30:09.208Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:31.696Z"
     },
     "nappadori-com": {
       "name": "Nappa Dori",
@@ -1795,15 +1795,15 @@
       "ingestedAt": "2026-10-02T12:26:25.463Z",
       "fields": {
         "returnable": {
-          "value": false,
-          "quote": "In case of return, there is no credit refund given on the purchase amount, but you may exchange it for another product(s) of same or higher value by paying the remainder.",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "returnWindowDays": {
-          "value": 7,
-          "quote": "returned to our warehouse within a strict time period of one week",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "exchangeOnly": {
@@ -1850,8 +1850,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:30:11.479Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:33.710Z"
     },
     "pinklay-com": {
       "name": "Pinklay",
@@ -1891,9 +1891,9 @@
           "source": "auto"
         },
         "exchangeOnly": {
-          "value": false,
-          "quote": "We issue a store credit for the full amount against all returns",
-          "quoteVerified": true,
+          "value": null,
+          "quote": null,
+          "quoteVerified": null,
           "source": "auto"
         },
         "saleItemsReturnable": {
@@ -1934,8 +1934,8 @@
         }
       },
       "extractError": null,
-      "extractMode": "plain-json (structured rejected: 400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Schemas contains too many parameters with union types (18 parameters with type arrays or )",
-      "extractedAt": "2026-10-02T15:30:13.267Z"
+      "extractMode": "structured",
+      "extractedAt": "2026-10-02T15:39:35.466Z"
     }
   }
 }
