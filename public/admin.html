@@ -339,6 +339,19 @@ input:focus { border-color:var(--accent); }
           Auto-sync: <strong>Daily 1:30am UTC</strong> (production only)<br>
           Sync takes about 1–2 minutes; only in-stock products are indexed. Freeze copies today's index for evals (one copy kept — free plan is 50,000 records).
         </div>
+        <div class="pol-hint" style="margin-top:16px">Test the Stylist's search tool</div>
+        <div style="display:grid;grid-template-columns:1fr 70px 56px;gap:6px;margin-top:6px">
+          <input id="stQuery" placeholder="cotton kurta" style="padding:7px;border:1px solid var(--border);background:var(--warm);font-size:12px">
+          <input id="stMax" placeholder="max ₹" type="number" style="padding:7px;border:1px solid var(--border);background:var(--warm);font-size:12px">
+          <input id="stSize" placeholder="size" style="padding:7px;border:1px solid var(--border);background:var(--warm);font-size:12px">
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:6px">
+          <label class="pol-hint"><input type="checkbox" id="stReturnable"> returns accepted</label>
+          <select id="stDept" style="padding:4px;border:1px solid var(--border);background:var(--warm);font-size:11px">
+            <option value="">clothing</option><option value="accessories">accessories</option><option value="fabric">fabric</option><option value="home">home</option><option value="clothing,accessories,fabric,home,other">everything</option>
+          </select>
+          <button class="btn-test" style="flex:0 0 auto;padding:7px 16px" onclick="runSearchTest()">Search</button>
+        </div>
         <pre id="catalogOut" style="font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;white-space:pre-wrap;margin-top:12px;max-height:320px;overflow:auto;display:none"></pre>
       </div>
     </div>
@@ -703,6 +716,27 @@ function renderCatalogResult(data) {
     out.textContent = `Frozen: ${data.indexName} (${data.records} records)` +
       (data.replaced && data.replaced.length ? `\nReplaced older copy: ${data.replaced.join(', ')}` : '');
   }
+}
+
+async function runSearchTest() {
+  const params = new URLSearchParams({ query: document.getElementById('stQuery').value.trim() });
+  const max = document.getElementById('stMax').value, size = document.getElementById('stSize').value.trim();
+  const dept = document.getElementById('stDept').value;
+  if (max) params.set('maxPrice', max);
+  if (size) params.set('size', size);
+  if (dept) params.set('departments', dept);
+  if (document.getElementById('stReturnable').checked) params.set('returnableOnly', '1');
+  const out = document.getElementById('catalogOut');
+  out.style.display = 'block'; out.textContent = 'Searching…';
+  try {
+    const res = await fetch(`/api/search?${params}`, { headers: { Authorization: `Bearer ${password}` } });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    const step = data.trace.steps[0] || {};
+    out.textContent = [`${data.totalHits} matches · ${step.ms} ms${data.relaxed ? ` · relaxed: ${data.relaxed}` : ''}`, '',
+      ...data.results.map(r => `₹${r.price}${r.discountPct ? ` (-${r.discountPct}%)` : ''}  ${r.name} — ${r.brandName}${r.sizesAvailable.length ? `  [${r.sizesAvailable.slice(0, 6).join(' ')}]` : ''}`)
+    ].join('\n');
+  } catch (e) { out.textContent = 'Error: ' + e.message; }
 }
 
 async function catalogStatus() {
