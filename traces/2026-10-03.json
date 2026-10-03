@@ -1,0 +1,49 @@
+{
+  "traces": [
+    {
+      "traceId": "607cb429-97c1-4f4e-b355-37a33b074e27",
+      "ts": "2026-10-03T06:01:56.128Z",
+      "source": "admin",
+      "system": "C",
+      "model": "claude-sonnet-5-5",
+      "index": "products",
+      "runId": null,
+      "queryId": null,
+      "query": "oversized blue cotton tops",
+      "steps": [
+        {
+          "tool": "respond",
+          "input": {
+            "text": "Happy to help you find oversized blue cotton tops! Is this for you, or for a man, woman or child?",
+            "product_ids": []
+          },
+          "resultCount": 0,
+          "relaxed": null,
+          "ms": 0
+        }
+      ],
+      "stepCount": 1,
+      "firstTool": "respond",
+      "llmCalls": 1,
+      "tokens": {
+        "in": 86,
+        "out": 181,
+        "cacheWrite": 3065,
+        "cacheRead": 0
+      },
+      "costINR": 0.85,
+      "latencyMs": 2695,
+      "finishedBy": "respond",
+      "answer": {
+        "text": "Happy to help you find oversized blue cotton tops! Is this for you, or for a man, woman or child?",
+        "product_ids": [],
+        "caveats": [],
+        "policy_quotes": []
+      },
+      "productIds": [],
+      "invalidIds": [],
+      "error": null,
+      "feedback": null
+    }
+  ]
+}
