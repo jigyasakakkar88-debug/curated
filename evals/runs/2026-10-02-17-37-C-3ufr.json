@@ -813,15 +813,17 @@
           "understood": 2,
           "constraints": 2,
           "fit": 2,
-          "grounded": 2
+          "grounded": 2,
+          "helpful": 2
         },
-        "total": 8,
-        "max": 8,
+        "total": 10,
+        "max": 10,
         "pct": 1,
-        "complete": false,
+        "complete": true,
         "criticalZero": false,
-        "verdict": null
-      }
+        "verdict": "pass"
+      },
+      "grade": "pass"
     },
     {
       "queryId": "S09",
@@ -4532,7 +4534,7 @@
     "errors": 0,
     "codeCheckPassRate": 0.95,
     "humanPassRate": 1,
-    "graded": 2,
+    "graded": 3,
     "consistency": null,
     "latencySec": {
       "p50": 7.6,
@@ -4543,7 +4545,7 @@
       "p90": 6.65,
       "total": 65.36,
       "mean": 2.97,
-      "perPass": 32.68,
+      "perPass": 21.79,
       "perPassBasis": "your grades"
     },
     "costUSD": {
