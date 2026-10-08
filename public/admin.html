@@ -954,6 +954,7 @@ async function startEval() {
   btn.disabled = false;
 }
 
+let evalHideGraded = false;
 let evalRun = null, evalCriteria = null, evalRubric = null, evalSaveChain = Promise.resolve();   // criteria: the test set's must / mustNot by id
 async function openEvalRun(runId) {
   const box = document.getElementById('evalDetail');
@@ -1036,16 +1037,24 @@ function noteEval(i, note) {
   saveGrade(i, { note });
 }
 
+function nextUngraded() {
+  const row = document.querySelector('#evalDetail tr[data-graded="0"]');
+  if (row) { row.scrollIntoView({ behavior: 'smooth', block: 'start' }); row.style.outline = '2px solid var(--accent)'; setTimeout(() => row.style.outline = '', 1500); }
+}
+
 function renderEvalRun() {
   const r = evalRun, s = r.summary || {};
   const checks = Object.entries(s.byCheck || {}).map(([k, v]) => `<span class="chk ${v.pass === v.total ? 'ok' : 'bad'}">${k} ${v.pass}/${v.total}</span>`).join('');
+  const isGraded = x => !!x.grade || !!(x.rubric && x.rubric.complete);
+  const nGraded = (r.results || []).filter(isGraded).length, nTotal = (r.results || []).length;
   const rows = (r.results || []).map((x, i) => {
+    if (evalHideGraded && isGraded(x)) return '';
     const ch = Object.entries(x.checks || {}).map(([k, c]) => `<span class="chk ${c.pass ? 'ok' : 'bad'}" title="${esc(c.detail || '')}">${c.pass ? '✓' : '✗'} ${k}</span>`).join('');
     const prods = (x.products || []).map(p => `<a class="ev-prod" href="${esc(p.productUrl || '#')}" target="_blank" rel="noopener" title="${esc(p.name)} — open on the brand's site">
         ${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : '<div class="ev-noimg">no photo</div>'}
         <span class="ev-name">${esc(p.name)}</span><span class="ev-meta">${esc(p.brandName)} · ₹${p.price}${p.discountPct ? ` · ${p.discountPct}% off` : ''}${p.gender && p.gender !== 'unknown' ? ` · ${esc(p.gender)}` : ''}</span></a>`).join('');
     const convo = (x.turns || []).length > 2 ? `<div class="pol-hint" style="margin-top:4px">${(x.turns || []).slice(1, -1).map(t => `${t.role === 'user' ? '👤' : '🤖'} ${esc(t.content)}`).join('<br>')}</div>` : '';
-    return `<tr><td><b>${esc(x.queryId)}</b>${r.runs > 1 ? `<br><span class="pol-hint">run ${x.repeat}</span>` : ''}</td>
+    return `<tr id="evrow-${i}" data-graded="${isGraded(x) ? 1 : 0}"><td><b>${esc(x.queryId)}</b>${isGraded(x) ? '<br><span style="color:var(--ok)">✓ graded</span>' : ''}${r.runs > 1 ? `<br><span class="pol-hint">run ${x.repeat}</span>` : ''}</td>
       <td style="max-width:520px"><b>${esc(x.query)}</b>${critHtml(evalCriteria && evalCriteria[x.queryId])}${convo}<div style="margin-top:6px">${esc(x.answer || x.error || '')}</div>
         ${(x.caveats || []).length ? `<div class="pol-hint" style="color:var(--warn)">⚠ ${esc(x.caveats.join(' | '))}</div>` : ''}
         ${prods ? `<div class="ev-prods">${prods}</div>` : `<div class="pol-hint" style="margin-top:6px">No products shown</div>`}
@@ -1068,6 +1077,11 @@ function renderEvalRun() {
     <div style="margin-bottom:10px">${checks}</div>
     ${s.rubric && evalRubric ? `<div style="margin-bottom:10px">${evalRubric.dimensions.map(d => { const v = s.rubric.byDimension[d.id]; return `<span class="chk ${v == null ? '' : v >= 1.5 ? 'ok' : v < 1 ? 'bad' : ''}">${esc(d.name)} ${v == null ? '—' : v + '/2'}</span>`; }).join('')}</div>` : ''}
     ${rubricGuide()}
+    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:0 0 10px;font-size:13px">
+      <b>Graded ${nGraded} / ${nTotal}</b> <span class="pol-hint">· saved automatically after every click; come back any time</span>
+      ${nGraded < nTotal ? `<button class="btn-test" style="padding:5px 12px" onclick="nextUngraded()">Next ungraded ↓</button>` : '<span style="color:var(--ok)">✓ All graded</span>'}
+      <label style="cursor:pointer"><input type="checkbox" ${evalHideGraded ? 'checked' : ''} onchange="evalHideGraded=this.checked; renderEvalRun()"> Hide graded</label>
+    </div>
     <div class="ins-scroll"><table class="ins-table"><tr><th>ID</th><th>Question → answer</th><th>Auto checks</th><th>Your grade (rubric)</th></tr>${rows}</table></div>
     <div style="margin-top:8px"><button class="btn-test" style="padding:7px 14px" onclick="exportEvalCsv()">Export CSV</button></div>`;
 }
