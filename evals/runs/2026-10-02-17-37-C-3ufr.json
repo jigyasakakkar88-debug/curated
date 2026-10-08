@@ -263,11 +263,12 @@
         "scores": {
           "understood": 2,
           "constraints": 2,
-          "fit": 1
+          "fit": 1,
+          "grounded": 1
         },
-        "total": 5,
-        "max": 6,
-        "pct": 0.83,
+        "total": 6,
+        "max": 8,
+        "pct": 0.75,
         "complete": false,
         "criticalZero": false,
         "verdict": null
@@ -4569,12 +4570,12 @@
     },
     "rubric": {
       "scored": 1,
-      "meanPct": 0.83,
+      "meanPct": 0.75,
       "byDimension": {
         "understood": 2,
         "constraints": 2,
         "fit": 1,
-        "grounded": null,
+        "grounded": 1,
         "helpful": null
       }
     }
