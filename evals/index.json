@@ -86,8 +86,8 @@
           }
         },
         "rubric": {
-          "scored": 2,
-          "meanPct": 0.9,
+          "scored": 3,
+          "meanPct": 0.93,
           "byDimension": {
             "understood": 2,
             "constraints": 2,
