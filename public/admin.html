@@ -1182,6 +1182,26 @@ function nextUngraded() {
   if (row) { row.scrollIntoView({ behavior: 'smooth', block: 'start' }); row.style.outline = '2px solid var(--accent)'; setTimeout(() => row.style.outline = '', 1500); }
 }
 
+// "See all" from an eval answer: the same search the Stylist pointed at, on the run's index, 24 per page.
+async function evalSeeAll(btn, i, page) {
+  const x = evalRun.results[i];
+  btn.disabled = true; btn.textContent = 'Loading…';
+  try {
+    const res = await fetch('/api/stylist?browse=1', { method: 'POST', headers: { Authorization: `Bearer ${password}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ browse: x.browse, page, index: evalRun.index }) });
+    const d = await readJsonOrError(res);
+    if (d.error) throw new Error(d.error);
+    const shown = new Set((x.products || []).map(p => p.id));
+    const cards = d.products.map(p => `<a class="ev-prod" href="${esc(p.productUrl || '#')}" target="_blank" rel="noopener" ${shown.has(p.id) ? 'style="border-color:var(--ok);border-width:2px"' : ''}>
+        ${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : '<div class="ev-noimg">no photo</div>'}
+        <span class="ev-name">${esc(p.name)}</span><span class="ev-meta">${esc(p.brandName)} · ₹${p.price}${shown.has(p.id) ? ' · <b style="color:var(--ok)">picked</b>' : ''}</span></a>`).join('');
+    const head = page === 0 ? `<div class="pol-hint" style="margin-top:8px">All ${d.total} matches, best keyword match first (green = one the Stylist picked). Ranks ${page * 24 + 1}–${page * 24 + d.products.length}:</div>` : `<div class="pol-hint" style="margin-top:8px">Ranks ${page * 24 + 1}–${page * 24 + d.products.length}:</div>`;
+    const more = d.hasMore ? `<button class="btn-test" style="padding:5px 12px;margin-top:6px" onclick="evalSeeAll(this, ${i}, ${page + 1})">Load more</button>` : '';
+    const target = btn.parentElement.classList.contains('ev-seeall') ? btn.parentElement : btn;
+    target.outerHTML = `${head}<div class="ev-prods">${cards}</div>${more}`;
+  } catch (e) { btn.disabled = false; btn.textContent = 'Try again'; showToast(e.message); }
+}
+
 function relLine(x) {
   const v = evalRun.relevance && evalRun.relevance.per && evalRun.relevance.per[`${x.queryId}#${x.repeat || 1}`];
   if (!v) return '';
@@ -1206,7 +1226,7 @@ function renderEvalRun() {
       <td style="max-width:520px"><b>${esc(x.query)}</b>${critHtml(evalCriteria && evalCriteria[x.queryId])}${convo}<div style="margin-top:6px">${esc(x.answer || x.error || '')}</div>
         ${(x.caveats || []).length ? `<div class="pol-hint" style="color:var(--warn)">⚠ ${esc(x.caveats.join(' | '))}</div>` : ''}
         ${relLine(x)}
-        ${prods ? `<div class="ev-prods">${prods}</div>${x.totalMatches ? `<div class="pol-hint" style="margin-top:4px">Pool: ${x.totalMatches} matches for “${esc((x.browse && x.browse.query) || '')}”</div>` : ''}` : `<div class="pol-hint" style="margin-top:6px">No products shown</div>`}
+        ${prods ? `<div class="ev-prods">${prods}</div>${x.totalMatches ? `<div class="ev-seeall" style="margin-top:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="btn-test" style="padding:5px 12px" onclick="evalSeeAll(this, ${i}, 0)">See all ${x.totalMatches} matches</button><span class="pol-hint">pool for “${esc((x.browse && x.browse.query) || '')}” · showed ${(x.products || []).length}</span></div>` : ''}` : `<div class="pol-hint" style="margin-top:6px">No products shown</div>`}
         <div class="pol-hint" style="margin-top:6px">${esc(toolChain(x.trace && x.trace.steps))} · ${fmtS(x.trace && x.trace.latencyMs)} · ₹${x.trace ? x.trace.costINR : 0}</div></td>
       <td>${ch}</td>
       <td style="min-width:270px">${gradeCell(x, i)}</td></tr>`;
