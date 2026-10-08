@@ -812,10 +812,11 @@
         "scores": {
           "understood": 2,
           "constraints": 2,
-          "fit": 2
+          "fit": 2,
+          "grounded": 2
         },
-        "total": 6,
-        "max": 6,
+        "total": 8,
+        "max": 8,
         "pct": 1,
         "complete": false,
         "criticalZero": false,
