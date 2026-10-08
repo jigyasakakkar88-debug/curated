@@ -526,15 +526,17 @@
           "understood": 2,
           "constraints": 2,
           "fit": 1,
-          "grounded": 2
+          "grounded": 2,
+          "helpful": 2
         },
-        "total": 7,
-        "max": 8,
-        "pct": 0.88,
-        "complete": false,
+        "total": 9,
+        "max": 10,
+        "pct": 0.9,
+        "complete": true,
         "criticalZero": false,
-        "verdict": null
-      }
+        "verdict": "pass"
+      },
+      "grade": "pass"
     },
     {
       "queryId": "S06",
@@ -4515,7 +4517,7 @@
     "errors": 0,
     "codeCheckPassRate": 0.95,
     "humanPassRate": 1,
-    "graded": 1,
+    "graded": 2,
     "consistency": null,
     "latencySec": {
       "p50": 7.6,
@@ -4526,7 +4528,7 @@
       "p90": 6.65,
       "total": 65.36,
       "mean": 2.97,
-      "perPass": 65.36,
+      "perPass": 32.68,
       "perPassBasis": "your grades"
     },
     "costUSD": {
@@ -4587,7 +4589,7 @@
     },
     "rubric": {
       "scored": 2,
-      "meanPct": 0.89,
+      "meanPct": 0.9,
       "byDimension": {
         "understood": 2,
         "constraints": 2,
