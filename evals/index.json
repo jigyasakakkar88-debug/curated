@@ -91,7 +91,7 @@
           "byDimension": {
             "understood": 2,
             "constraints": 2,
-            "fit": 1,
+            "fit": 1.33,
             "grounded": 2,
             "helpful": 2
           }
