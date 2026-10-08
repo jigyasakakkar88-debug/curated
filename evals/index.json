@@ -15,7 +15,7 @@
         "errors": 0,
         "codeCheckPassRate": 0.95,
         "humanPassRate": 1,
-        "graded": 1,
+        "graded": 2,
         "consistency": null,
         "latencySec": {
           "p50": 7.6,
@@ -26,7 +26,7 @@
           "p90": 6.65,
           "total": 65.36,
           "mean": 2.97,
-          "perPass": 65.36,
+          "perPass": 32.68,
           "perPassBasis": "your grades"
         },
         "costUSD": {
@@ -87,7 +87,7 @@
         },
         "rubric": {
           "scored": 2,
-          "meanPct": 0.89,
+          "meanPct": 0.9,
           "byDimension": {
             "understood": 2,
             "constraints": 2,
