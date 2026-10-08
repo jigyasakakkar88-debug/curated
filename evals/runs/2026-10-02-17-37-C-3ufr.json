@@ -523,10 +523,11 @@
       },
       "rubric": {
         "scores": {
-          "understood": 2
+          "understood": 2,
+          "constraints": 2
         },
-        "total": 2,
-        "max": 2,
+        "total": 4,
+        "max": 4,
         "pct": 1,
         "complete": false,
         "criticalZero": false,
