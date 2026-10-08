@@ -89,6 +89,12 @@ header { background:var(--ink); color:var(--paper); display:flex; align-items:ce
 .grade-btn { padding:3px 10px; font-size:10px; border:1px solid var(--border); background:none; cursor:pointer; font-family:'DM Mono',monospace; }
 .grade-btn.on.pass { background:var(--ok); color:white; border-color:var(--ok); }
 .grade-btn.on.fail { background:var(--err); color:white; border-color:var(--err); }
+.ev-prods { display:grid; grid-template-columns:repeat(auto-fill,minmax(92px,1fr)); gap:8px; margin-top:8px; }
+.ev-prod { display:flex; flex-direction:column; text-decoration:none; color:var(--ink); border:1px solid var(--border); background:var(--card); }
+.ev-prod:hover { border-color:var(--accent); }
+.ev-prod img, .ev-noimg { width:100%; aspect-ratio:3/4; object-fit:cover; background:var(--warm, #EDE8DF); display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--muted); }
+.ev-name { font-size:10.5px; line-height:1.25; padding:4px 5px 0; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.ev-meta { font-size:9.5px; color:var(--muted); padding:2px 5px 5px; }
 .rub-row { display:flex; align-items:center; gap:3px; margin-bottom:3px; }
 .rub-name { font-size:11px; width:128px; cursor:help; }
 .rub-btn { width:30px; padding:2px 0; font-size:10px; border:1px solid var(--border); background:none; cursor:pointer; font-family:'DM Mono',monospace; }
@@ -1035,12 +1041,14 @@ function renderEvalRun() {
   const checks = Object.entries(s.byCheck || {}).map(([k, v]) => `<span class="chk ${v.pass === v.total ? 'ok' : 'bad'}">${k} ${v.pass}/${v.total}</span>`).join('');
   const rows = (r.results || []).map((x, i) => {
     const ch = Object.entries(x.checks || {}).map(([k, c]) => `<span class="chk ${c.pass ? 'ok' : 'bad'}" title="${esc(c.detail || '')}">${c.pass ? '✓' : '✗'} ${k}</span>`).join('');
-    const prods = (x.products || []).map(p => `${esc(p.name)} — ${esc(p.brandName)} ₹${p.price}`).join('<br>');
+    const prods = (x.products || []).map(p => `<a class="ev-prod" href="${esc(p.productUrl || '#')}" target="_blank" rel="noopener" title="${esc(p.name)} — open on the brand's site">
+        ${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : '<div class="ev-noimg">no photo</div>'}
+        <span class="ev-name">${esc(p.name)}</span><span class="ev-meta">${esc(p.brandName)} · ₹${p.price}${p.discountPct ? ` · ${p.discountPct}% off` : ''}${p.gender && p.gender !== 'unknown' ? ` · ${esc(p.gender)}` : ''}</span></a>`).join('');
     const convo = (x.turns || []).length > 2 ? `<div class="pol-hint" style="margin-top:4px">${(x.turns || []).slice(1, -1).map(t => `${t.role === 'user' ? '👤' : '🤖'} ${esc(t.content)}`).join('<br>')}</div>` : '';
     return `<tr><td><b>${esc(x.queryId)}</b>${r.runs > 1 ? `<br><span class="pol-hint">run ${x.repeat}</span>` : ''}</td>
-      <td style="max-width:360px"><b>${esc(x.query)}</b>${critHtml(evalCriteria && evalCriteria[x.queryId])}${convo}<div style="margin-top:6px">${esc(x.answer || x.error || '')}</div>
+      <td style="max-width:520px"><b>${esc(x.query)}</b>${critHtml(evalCriteria && evalCriteria[x.queryId])}${convo}<div style="margin-top:6px">${esc(x.answer || x.error || '')}</div>
         ${(x.caveats || []).length ? `<div class="pol-hint" style="color:var(--warn)">⚠ ${esc(x.caveats.join(' | '))}</div>` : ''}
-        ${prods ? `<div class="pol-hint" style="margin-top:6px">${prods}</div>` : ''}
+        ${prods ? `<div class="ev-prods">${prods}</div>` : `<div class="pol-hint" style="margin-top:6px">No products shown</div>`}
         <div class="pol-hint" style="margin-top:6px">${esc(toolChain(x.trace && x.trace.steps))} · ${fmtS(x.trace && x.trace.latencyMs)} · ₹${x.trace ? x.trace.costINR : 0}</div></td>
       <td>${ch}</td>
       <td style="min-width:270px">${gradeCell(x, i)}</td></tr>`;
