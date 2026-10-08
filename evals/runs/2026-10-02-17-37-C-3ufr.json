@@ -258,6 +258,17 @@
           "pass": true,
           "detail": "ok"
         }
+      },
+      "rubric": {
+        "scores": {
+          "understood": 2
+        },
+        "total": 2,
+        "max": 2,
+        "pct": 1,
+        "complete": false,
+        "criticalZero": false,
+        "verdict": null
       }
     },
     {
@@ -4493,8 +4504,22 @@
     "costINR": {
       "p50": 1.85,
       "p90": 6.65,
-      "total": 65.36
+      "total": 65.36,
+      "mean": 2.97,
+      "perPass": 3.11,
+      "perPassBasis": "auto checks"
     },
+    "costUSD": {
+      "total": 0.7428
+    },
+    "tokens": {
+      "in": 264430,
+      "out": 16032,
+      "cacheWrite": 9195,
+      "cacheRead": 153250
+    },
+    "llmCalls": 53,
+    "searches": 30,
     "toolCalls": {
       "p50": 1,
       "p90": 3
@@ -4538,6 +4563,17 @@
       "asksQuestion": {
         "pass": 2,
         "total": 2
+      }
+    },
+    "rubric": {
+      "scored": 1,
+      "meanPct": 1,
+      "byDimension": {
+        "understood": 2,
+        "constraints": null,
+        "fit": null,
+        "grounded": null,
+        "helpful": null
       }
     }
   }
