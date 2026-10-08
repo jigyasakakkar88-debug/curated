@@ -9,8 +9,84 @@
       "runs": 1,
       "createdAt": "2026-10-08T11:10:11.225Z",
       "total": 22,
-      "finished": false,
-      "summary": null
+      "finished": true,
+      "summary": {
+        "answers": 22,
+        "errors": 0,
+        "codeCheckPassRate": 0.91,
+        "humanPassRate": null,
+        "graded": 0,
+        "consistency": null,
+        "latencySec": {
+          "p50": 8.6,
+          "p90": 16.1
+        },
+        "costINR": {
+          "p50": 2.92,
+          "p90": 6.62,
+          "total": 80.34,
+          "mean": 3.65,
+          "perPass": 4.02,
+          "perPassBasis": "auto checks"
+        },
+        "costUSD": {
+          "total": 0.9132
+        },
+        "tokens": {
+          "in": 302726,
+          "out": 22916,
+          "cacheWrite": 12879,
+          "cacheRead": 231822
+        },
+        "llmCalls": 57,
+        "searches": 35,
+        "toolCalls": {
+          "p50": 2,
+          "p90": 4
+        },
+        "within2ToolCalls": 0.73,
+        "routeAgreement": 0.61,
+        "relaxedRate": 0.14,
+        "byCheck": {
+          "maxPrice": {
+            "pass": 5,
+            "total": 5
+          },
+          "expectProducts": {
+            "pass": 11,
+            "total": 11
+          },
+          "noInventedProducts": {
+            "pass": 22,
+            "total": 22
+          },
+          "gender": {
+            "pass": 2,
+            "total": 2
+          },
+          "mustMentionBrands": {
+            "pass": 2,
+            "total": 2
+          },
+          "returnableOnly": {
+            "pass": 1,
+            "total": 3
+          },
+          "expectNoProducts": {
+            "pass": 4,
+            "total": 4
+          },
+          "asksQuestion": {
+            "pass": 2,
+            "total": 2
+          },
+          "maxTotal": {
+            "pass": 1,
+            "total": 1
+          }
+        },
+        "rubric": null
+      }
     },
     {
       "runId": "2026-10-02-17-37-C-3ufr",
