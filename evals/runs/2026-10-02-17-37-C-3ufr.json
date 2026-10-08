@@ -520,6 +520,17 @@
           "pass": true,
           "detail": "ok"
         }
+      },
+      "rubric": {
+        "scores": {
+          "understood": 2
+        },
+        "total": 2,
+        "max": 2,
+        "pct": 1,
+        "complete": false,
+        "criticalZero": false,
+        "verdict": null
       }
     },
     {
@@ -4572,8 +4583,8 @@
       }
     },
     "rubric": {
-      "scored": 1,
-      "meanPct": 0.9,
+      "scored": 2,
+      "meanPct": 0.95,
       "byDimension": {
         "understood": 2,
         "constraints": 2,
