@@ -87,11 +87,11 @@
         },
         "rubric": {
           "scored": 1,
-          "meanPct": 0.75,
+          "meanPct": 0.88,
           "byDimension": {
             "understood": 2,
             "constraints": 2,
-            "fit": 1,
+            "fit": 2,
             "grounded": 1,
             "helpful": null
           }
