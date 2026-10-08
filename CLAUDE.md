@@ -29,6 +29,7 @@ There are no tests and no linter configured.
 - `policies.json` — per-brand policy text (refund/shipping/terms) and extracted fields with source quotes; fields are copied onto Algolia records at catalog sync
 - `catalog-hints.json` — per-brand hints applied at sync (e.g. `gender` for brands whose products never say who they're for)
 - `evals/testset.json` (22 questions + checks + follow-ups) and `evals/fixtures.json` (wishlist picked per run)
+- `evals/rubric.json` — human grading rubric: 5 dimensions scored 0/1/2 or N/A (understood, constraints*, fit, grounded*, helpful; * = critical). A complete rubric derives the verdict: pass = no critical 0 and total ≥ `passPct` (70%). Quick Pass/Fail still works.
 - `evals/synonyms.json` — search synonym groups, pushed to Algolia on every catalog sync
 
 ### Vercel serverless functions (`api/`)

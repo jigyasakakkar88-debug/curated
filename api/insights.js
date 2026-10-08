@@ -5,7 +5,7 @@
 //   GET  /api/insights?view=testset                                   → the eval questions
 //   POST /api/insights?action=start    { system: "C"|"baseline", ids?, runs?, index?, label? }
 //   POST /api/insights?action=continue { runId }   → processes the next batch (call until remaining = 0)
-//   POST /api/insights?action=grade    { runId, queryId, repeat, grade: "pass"|"fail"|null, note? }
+//   POST /api/insights?action=grade    { runId, queryId, repeat, grade?: "pass"|"fail"|null, rubric?: {dimId: 0|1|2|"na"}, note? }
 const github = require('../lib/github');
 const observability = require('../lib/observability');
 const evals = require('../lib/evals');
@@ -38,7 +38,7 @@ module.exports = async function handler(req, res) {
         const run = await evals.getRun(String(q.runId || ''));
         return run ? res.status(200).json(run) : res.status(404).json({ error: "Run not found" });
       }
-      if (q.view === 'testset') return res.status(200).json(evals.testset);
+      if (q.view === 'testset') return res.status(200).json({ ...evals.testset, rubric: evals.rubric });
       return res.status(400).json({ error: "view must be traces, runs, run or testset" });
     }
     if (req.method === "POST") {
