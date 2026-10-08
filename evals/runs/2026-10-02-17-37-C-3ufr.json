@@ -811,10 +811,11 @@
       "rubric": {
         "scores": {
           "understood": 2,
-          "constraints": 2
+          "constraints": 2,
+          "fit": 2
         },
-        "total": 4,
-        "max": 4,
+        "total": 6,
+        "max": 6,
         "pct": 1,
         "complete": false,
         "criticalZero": false,
@@ -4606,7 +4607,7 @@
       "byDimension": {
         "understood": 2,
         "constraints": 2,
-        "fit": 1,
+        "fit": 1.33,
         "grounded": 2,
         "helpful": 2
       }
