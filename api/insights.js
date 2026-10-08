@@ -6,9 +6,15 @@
 //   POST /api/insights?action=start    { system: "C"|"baseline", ids?, runs?, index?, label? }
 //   POST /api/insights?action=continue { runId }   → processes the next batch (call until remaining = 0)
 //   POST /api/insights?action=grade    { runId, queryId, repeat, grade?: "pass"|"fail"|null, rubric?: {dimId: 0|1|2|"na"}, note? }
+//   Relevance labels (answer key for recall; lib/relevance.js):
+//   GET  /api/insights?view=relevance[&queryId=…]   → overview of every discovery question, or one question's pool
+//   POST /api/insights?action=pool  { queryId, index? }   → build/extend the candidate pool (several searches + eval-run products)
+//   POST /api/insights?action=judge { queryId }           → Claude Haiku pre-grades unlabelled pool items 0/1/2 (call until remaining = 0)
+//   POST /api/insights?action=label { queryId, labels: {productId: 0|1|2|null} } → your grades
 const github = require('../lib/github');
 const observability = require('../lib/observability');
 const evals = require('../lib/evals');
+const relevance = require('../lib/relevance');
 const { INDEX_PATTERN } = require('../lib/tools');
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "changeme123";
@@ -36,10 +42,16 @@ module.exports = async function handler(req, res) {
       if (q.view === 'runs') return res.status(200).json({ runs: await evals.listRuns() });
       if (q.view === 'run') {
         const run = await evals.getRun(String(q.runId || ''));
-        return run ? res.status(200).json(run) : res.status(404).json({ error: "Run not found" });
+        if (!run) return res.status(404).json({ error: "Run not found" });
+        run.relevance = await relevance.scoreRun(run).catch(e => ({ error: e.message }));
+        return res.status(200).json(run);
       }
       if (q.view === 'testset') return res.status(200).json({ ...evals.testset, rubric: evals.rubric });
-      return res.status(400).json({ error: "view must be traces, runs, run or testset" });
+      if (q.view === 'relevance') {
+        if (q.queryId) return res.status(200).json((await relevance.getLabels(String(q.queryId))) || { queryId: q.queryId, items: {} });
+        return res.status(200).json({ queries: await relevance.overview() });
+      }
+      return res.status(400).json({ error: "view must be traces, runs, run, testset or relevance" });
     }
     if (req.method === "POST") {
       if (q.action === 'start') {
@@ -48,7 +60,13 @@ module.exports = async function handler(req, res) {
       }
       if (q.action === 'continue') return res.status(200).json(await evals.continueRun(String(body.runId || '')));
       if (q.action === 'grade') return res.status(200).json(await evals.gradeResult(String(body.runId || ''), body));
-      return res.status(400).json({ error: "action must be start, continue or grade" });
+      if (q.action === 'pool') {
+        const index = body.index && INDEX_PATTERN.test(body.index) ? body.index : undefined;
+        return res.status(200).json(await relevance.buildPool(String(body.queryId || ''), { index }));
+      }
+      if (q.action === 'judge') return res.status(200).json(await relevance.judgePool(String(body.queryId || '')));
+      if (q.action === 'label') return res.status(200).json(await relevance.saveLabels(String(body.queryId || ''), body.labels));
+      return res.status(400).json({ error: "action must be start, continue, grade, pool, judge or label" });
     }
     return res.status(405).json({ error: "Method not allowed" });
   } catch (e) {

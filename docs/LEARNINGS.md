@@ -52,6 +52,10 @@ Simple keyword rules sorted 27,000 products into clothing / accessories / fabric
 "Cotton kurta for office" returned a mix of men's and women's kurtas. Nothing in the 20-question eval set asks the agent to work out *who* something is for, and the catalog had no gender data at all. One real question from the owner found it.
 *Lesson:* try the agent yourself before trusting the eval set; then add what you found to it.
 
+**16. Grading what was shown measures precision, not recall.**
+The eval checked whether the 6 products the Stylist showed were good. It could never notice that the 3 best pieces in the catalog weren't among them. Measuring recall needs an answer key: a wide pool of candidates per question, each graded, so you know what "the best possible picks" were. An AI judge pre-grades the pool; the owner confirms, and the AI's agreement rate on confirmed items says how far to trust the rest.
+*Lesson:* for recommendations, ask both "were these good?" and "were the best ones here?" They need different tests.
+
 ## Building and shipping
 
 **11. Free tiers shape the architecture.**
