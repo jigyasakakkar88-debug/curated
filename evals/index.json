@@ -90,7 +90,7 @@
           "meanPct": 1,
           "byDimension": {
             "understood": 2,
-            "constraints": null,
+            "constraints": 2,
             "fit": null,
             "grounded": null,
             "helpful": null
