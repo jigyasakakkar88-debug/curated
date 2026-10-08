@@ -274,7 +274,8 @@
         "criticalZero": false,
         "verdict": "pass"
       },
-      "grade": "pass"
+      "grade": "pass",
+      "note": "SINCE THE QUERY WAS VERY BROAD, AGENT COULD HAVE ASKED FOR MORE PREFERENCES FROM CUSTOMER APART FROM THEIR GENDER. AND PROVIDED THESE OPTIONS AS BASELINE IF CUSTOMER DIDNT PROVIDE MORE PREFERENCES."
     },
     {
       "queryId": "S05",
