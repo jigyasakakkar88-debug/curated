@@ -262,11 +262,12 @@
       "rubric": {
         "scores": {
           "understood": 2,
-          "constraints": 2
+          "constraints": 2,
+          "fit": 1
         },
-        "total": 4,
-        "max": 4,
-        "pct": 1,
+        "total": 5,
+        "max": 6,
+        "pct": 0.83,
         "complete": false,
         "criticalZero": false,
         "verdict": null
@@ -4568,11 +4569,11 @@
     },
     "rubric": {
       "scored": 1,
-      "meanPct": 1,
+      "meanPct": 0.83,
       "byDimension": {
         "understood": 2,
         "constraints": 2,
-        "fit": null,
+        "fit": 1,
         "grounded": null,
         "helpful": null
       }
