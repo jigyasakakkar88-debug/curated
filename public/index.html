@@ -316,6 +316,12 @@ footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-
 .sty-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:2px; margin-top:12px; }
 .sty-grid .card:hover { transform:none; box-shadow:none; }
 .sty-grid .card-name { font-size:12px; }
+.sty-pick { display:flex; flex-direction:column; background:var(--card); }
+.sty-why { font-size:11px; line-height:1.4; color:var(--ink); padding:6px 8px 9px; border-top:1px solid var(--border); font-style:italic; }
+.sty-more { display:block; width:100%; margin-top:10px; padding:11px; background:none; border:1px solid var(--ink); color:var(--ink); font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.sty-more:hover { background:var(--ink); color:var(--paper); }
+.sty-more:disabled { opacity:.5; cursor:default; }
+.sty-browse-title { margin-top:16px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
 .sty-rate { margin-top:10px; display:flex; gap:6px; align-items:center; font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); }
 .sty-rate button { background:none; border:1px solid var(--border); padding:3px 8px; cursor:pointer; font-size:12px; }
 .sty-rate button.on { border-color:var(--accent); background:var(--warm); }
@@ -1030,6 +1036,8 @@ const STY_EXAMPLES = [
   'What goes with a red festive kurta?',
 ];
 const styProducts = new Map();     // id → card data for products shown by the Stylist
+const styReasons = new Map();      // id → the Stylist's one-line reason for picking it
+const styBrowses = [];             // "See all" searches, referenced by index from the buttons
 let styHistory = [];               // [{role, content}] — last 6 turns are sent
 let styAnchor = null;              // product the next question is about
 let styBusy = false;
@@ -1148,18 +1156,49 @@ function styAnswerHtml(d) {
   }).join('');
   const caveats = (d.caveats || []).map(c => `<div class="sty-caveat">· ${esc(c)}</div>`).join('');
   const ids = (d.products || []).map(p => p.id);
-  const cards = ids.length ? `<div class="sty-grid" data-ids="${esc(ids.join(','))}">${ids.map((id, i) => card(styProducts.get(id), i * 40)).join('')}</div>` : '';
+  Object.entries(d.reasons || {}).forEach(([id, why]) => styReasons.set(id, why));
+  const cards = ids.length ? `<div class="sty-grid" data-ids="${esc(ids.join(','))}">${ids.map((id, i) => styPick(styProducts.get(id), i * 40)).join('')}</div>` : '';
+  let more = '';
+  if (d.browse && d.totalMatches && d.totalMatches > ids.length) {
+    styBrowses.push(d.browse);
+    more = `<button class="sty-more" onclick="styBrowse(this, ${styBrowses.length - 1}, 0)">See all ${d.totalMatches} matches</button>`;
+  }
   return `<div class="sty-msg-ai">
-    <div>${esc(d.answer).replace(/\n/g, '<br>')}</div>${quotes}${caveats}${cards}
+    <div>${esc(d.answer).replace(/\n/g, '<br>')}</div>${quotes}${caveats}${cards}${more}
     <div class="sty-rate" data-trace="${esc(d.traceId || '')}">Helpful?
       <button onclick="styRate(this,'up')" aria-label="Helpful">👍</button><button onclick="styRate(this,'down')" aria-label="Not helpful">👎</button>
     </div></div>`;
 }
 
+function styPick(p, delay) {
+  const why = styReasons.get(p.id);
+  return why ? `<div class="sty-pick">${card(p, delay)}<div class="sty-why">${esc(why)}</div></div>` : card(p, delay);
+}
+
 function styRefreshCards() {
   document.querySelectorAll('.sty-grid').forEach(g => {
-    g.innerHTML = g.dataset.ids.split(',').map(id => styProducts.get(id)).filter(Boolean).map(p => card(p, 0)).join('');
+    g.innerHTML = g.dataset.ids.split(',').map(id => styProducts.get(id)).filter(Boolean).map(p => styPick(p, 0)).join('');
   });
+}
+
+// "See all N matches": the same search the Stylist used, plain relevance order, 24 per page. No AI cost.
+async function styBrowse(btn, n, page) {
+  btn.disabled = true; btn.textContent = 'Loading…';
+  try {
+    const res = await fetch('/api/stylist?browse=1', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ browse: styBrowses[n], page }) });
+    const d = await res.json();
+    if (!res.ok || d.error) throw new Error(d.error || 'Something went wrong.');
+    d.products.forEach(p => styProducts.set(p.id, p));
+    const ids = d.products.map(p => p.id);
+    const grid = `<div class="sty-grid" data-ids="${esc(ids.join(','))}">${d.products.map(p => card(p, 0)).join('')}</div>`;
+    const next = d.hasMore ? `<button class="sty-more" onclick="styBrowse(this, ${n}, ${page + 1})">Load more</button>` : '';
+    const title = page === 0 ? `<div class="sty-browse-title">All ${d.total} matches · best match first</div>` : '';
+    btn.outerHTML = `${title}${grid}${next}`;
+  } catch (e) {
+    btn.disabled = false; btn.textContent = 'Try again';
+    showToast(e.message);
+  }
 }
 
 async function styRate(btn, rating) {

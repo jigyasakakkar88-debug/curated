@@ -94,6 +94,7 @@ header { background:var(--ink); color:var(--paper); display:flex; align-items:ce
 .ev-prod:hover { border-color:var(--accent); }
 .ev-prod img, .ev-noimg { width:100%; aspect-ratio:3/4; object-fit:cover; background:var(--warm, #EDE8DF); display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--muted); }
 .ev-name { font-size:10.5px; line-height:1.25; padding:4px 5px 0; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.ev-why { font-size:10px; font-style:italic; padding:3px 5px 0; line-height:1.3; }
 .ev-meta { font-size:9.5px; color:var(--muted); padding:2px 5px 5px; }
 .rub-row { display:flex; align-items:center; gap:3px; margin-bottom:3px; }
 .rub-name { font-size:11px; width:128px; cursor:help; }
@@ -1052,12 +1053,12 @@ function renderEvalRun() {
     const ch = Object.entries(x.checks || {}).map(([k, c]) => `<span class="chk ${c.pass ? 'ok' : 'bad'}" title="${esc(c.detail || '')}">${c.pass ? '✓' : '✗'} ${k}</span>`).join('');
     const prods = (x.products || []).map(p => `<a class="ev-prod" href="${esc(p.productUrl || '#')}" target="_blank" rel="noopener" title="${esc(p.name)} — open on the brand's site">
         ${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : '<div class="ev-noimg">no photo</div>'}
-        <span class="ev-name">${esc(p.name)}</span><span class="ev-meta">${esc(p.brandName)} · ₹${p.price}${p.discountPct ? ` · ${p.discountPct}% off` : ''}${p.gender && p.gender !== 'unknown' ? ` · ${esc(p.gender)}` : ''}</span></a>`).join('');
+        <span class="ev-name">${esc(p.name)}</span>${x.reasons && x.reasons[p.id] ? `<span class="ev-why">${esc(x.reasons[p.id])}</span>` : ''}<span class="ev-meta">${esc(p.brandName)} · ₹${p.price}${p.discountPct ? ` · ${p.discountPct}% off` : ''}${p.gender && p.gender !== 'unknown' ? ` · ${esc(p.gender)}` : ''}</span></a>`).join('');
     const convo = (x.turns || []).length > 2 ? `<div class="pol-hint" style="margin-top:4px">${(x.turns || []).slice(1, -1).map(t => `${t.role === 'user' ? '👤' : '🤖'} ${esc(t.content)}`).join('<br>')}</div>` : '';
     return `<tr id="evrow-${i}" data-graded="${isGraded(x) ? 1 : 0}"><td><b>${esc(x.queryId)}</b>${isGraded(x) ? '<br><span style="color:var(--ok)">✓ graded</span>' : ''}${r.runs > 1 ? `<br><span class="pol-hint">run ${x.repeat}</span>` : ''}</td>
       <td style="max-width:520px"><b>${esc(x.query)}</b>${critHtml(evalCriteria && evalCriteria[x.queryId])}${convo}<div style="margin-top:6px">${esc(x.answer || x.error || '')}</div>
         ${(x.caveats || []).length ? `<div class="pol-hint" style="color:var(--warn)">⚠ ${esc(x.caveats.join(' | '))}</div>` : ''}
-        ${prods ? `<div class="ev-prods">${prods}</div>` : `<div class="pol-hint" style="margin-top:6px">No products shown</div>`}
+        ${prods ? `<div class="ev-prods">${prods}</div>${x.totalMatches ? `<div class="pol-hint" style="margin-top:4px">Pool: ${x.totalMatches} matches for “${esc((x.browse && x.browse.query) || '')}”</div>` : ''}` : `<div class="pol-hint" style="margin-top:6px">No products shown</div>`}
         <div class="pol-hint" style="margin-top:6px">${esc(toolChain(x.trace && x.trace.steps))} · ${fmtS(x.trace && x.trace.latencyMs)} · ₹${x.trace ? x.trace.costINR : 0}</div></td>
       <td>${ch}</td>
       <td style="min-width:270px">${gradeCell(x, i)}</td></tr>`;
