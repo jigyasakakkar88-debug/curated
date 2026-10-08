@@ -14,8 +14,8 @@
         "answers": 22,
         "errors": 0,
         "codeCheckPassRate": 0.95,
-        "humanPassRate": null,
-        "graded": 0,
+        "humanPassRate": 1,
+        "graded": 1,
         "consistency": null,
         "latencySec": {
           "p50": 7.6,
@@ -26,8 +26,8 @@
           "p90": 6.65,
           "total": 65.36,
           "mean": 2.97,
-          "perPass": 3.11,
-          "perPassBasis": "auto checks"
+          "perPass": 65.36,
+          "perPassBasis": "your grades"
         },
         "costUSD": {
           "total": 0.7428
@@ -87,13 +87,13 @@
         },
         "rubric": {
           "scored": 1,
-          "meanPct": 0.75,
+          "meanPct": 0.7,
           "byDimension": {
             "understood": 2,
             "constraints": 2,
             "fit": 1,
             "grounded": 1,
-            "helpful": null
+            "helpful": 1
           }
         }
       }
