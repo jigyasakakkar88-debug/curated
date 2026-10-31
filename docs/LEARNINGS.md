@@ -30,6 +30,14 @@ Policy extraction is form-filling, not reasoning: Haiku, about ₹10–15 for al
 Asking for a strict answer format with 9 "value-or-nothing" fields was rejected ("too many union types") on every call. The documentation lists no such limit. The first symptom was "0 fields extracted" with no visible error.
 *Lesson:* always surface the real error message. Have a fallback path (plain JSON) so one API quirk doesn't block everything.
 
+**17. Cost hides where you don't expect it, so break it down by question type.**
+"Cotton kurta under ₹3,000" cost ₹3.02: the cached system prompt, 20 product records (~270 tokens each) and the written answer, in roughly equal parts. The products weren't the expensive part. Policy questions cost ₹6.40 because the policy tool sent the full refund and shipping text of all 23 brands, and one combined question cost ₹17.60.
+*Lesson:* look at cost per question type, not the average. The fix is usually in what a tool sends back, not in the model.
+
+**18. Split the work: a cheap model widens the window, the smart model decides.**
+Claude only ever saw the top 20 products by keyword order, so keyword search was quietly making the shortlist. Giving the expensive model 150 products would cost far more and crowd its context. A cheaper model can read 150 and pass on the best 20, while the expensive model's job and cost stay the same.
+*Lesson:* match each model to the size of the job. Wide and shallow goes to the cheap model, narrow and deep to the strong one.
+
 ## Search and data
 
 **7. The AI is only as good as what it can search.**
@@ -55,6 +63,24 @@ Simple keyword rules sorted 27,000 products into clothing / accessories / fabric
 **16. Grading what was shown measures precision, not recall.**
 The eval checked whether the 6 products the Stylist showed were good. It could never notice that the 3 best pieces in the catalog weren't among them. Measuring recall needs an answer key: a wide pool of candidates per question, each graded, so you know what "the best possible picks" were. An AI judge pre-grades the pool; the owner confirms, and the AI's agreement rate on confirmed items says how far to trust the rest.
 *Lesson:* for recommendations, ask both "were these good?" and "were the best ones here?" They need different tests.
+
+**19. A count is not a quality claim.**
+The Stylist said "about 760 cotton kurtas fit". They were 760 *keyword matches* (anything containing "cotton" or "kurta" under ₹3,000), including sets and dupattas. Nobody had checked whether they fit.
+*Lesson:* say what a number actually counts ("760 matches", not "760 fit"), and don't let a big pool stand in for relevance.
+
+## Evals and decisions
+
+**20. Pass/fail is too coarse to tell you what to fix.**
+A single Pass/Fail said whether an answer was OK, not why. A five-part rubric (understood the ask, kept the constraints, product fit, accurate, helpful), with two "critical" parts that fail the answer on their own, shows *where* the agent is weak: product fit points at search, accuracy points at the prompt.
+*Lesson:* grade on a few named dimensions, and decide up front which failures are deal-breakers.
+
+**21. A fair comparison needs a frozen world.**
+The catalog changes every night. Two eval runs a few days apart are partly measuring different stock, not different designs.
+*Lesson:* freeze the inputs (catalog, questions, labels) before comparing options, then change one thing at a time.
+
+**22. Don't spend experiments on obvious wins.**
+I nearly ran "agent vs agent + reranker" before comparing the three designs from the plan. Better retrieval helps every design, so it went into the shared search tool for all of them, and the experiments stayed on the open question: which design (A, B or C) is best for quality, cost and speed.
+*Lesson:* build the clear improvements into the shared foundation; save A/B tests for decisions that are genuinely uncertain.
 
 ## Building and shipping
 
@@ -82,3 +108,12 @@ The site got slow after adding 10 brands. Two unrelated causes: the product list
 - **Structured output**: making the model reply in an exact format (JSON fields) instead of prose.
 - **Agentic loop**: the model decides which tool to call next, code runs the tool, repeat until done.
 - **Preview deployment**: a test copy of the site per code change, with its own address. The live site is untouched until merge.
+- **Token**: the unit AI models read and write (roughly ¾ of a word). Cost = tokens in + tokens out, with output about 5× the price.
+- **Prompt caching**: the model provider keeps a repeated prompt for a few minutes, so re-reading it costs about a tenth.
+- **Rubric**: a scoring guide with named dimensions (here 0/1/2 each), instead of a single Pass/Fail.
+- **LLM-as-a-judge**: a second AI grades answers against criteria; trusted only as far as it agrees with human grades.
+- **Precision**: of the products shown, how many were good. **Recall**: of the best products available, how many were shown.
+- **nDCG**: whether the best products were placed first (0–1).
+- **Relevance labels / pool**: graded candidate products per question, the answer key recall is measured against.
+- **Retrieve, then rerank**: a fast search casts a wide net; a model then judges and reorders the candidates.
+- **Frozen index**: a fixed copy of the catalog, so every eval run sees exactly the same products.
