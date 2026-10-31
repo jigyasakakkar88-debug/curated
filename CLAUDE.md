@@ -64,7 +64,7 @@ There are no tests and no linter configured.
 | `cards.js` | Algolia record → feed card shape (shared by `stylist.js` and evals). |
 | `pricing.js` | Claude prices (USD/MTok) for `claude-sonnet-5-5`, `claude-sonnet-5`, `claude-haiku-4-5`, plus `USD_INR` and `costINR(model, usage)`. Re-check `checkedOn` against the pricing page when models change. |
 
-The Stylist design and build plan is in `docs/STYLIST.md`; the health check, open issues and later list are in `docs/SETUP_STATUS.md`; lessons about building with AI are in `docs/LEARNINGS.md` (add to it when something non-obvious is learned).
+**`docs/START_HERE.md` is the owner's one-page status: what's built, results, the agreed next steps. Update it (date, status column, results, preview link) at the end of every work session.** The Stylist design and build plan is in `docs/STYLIST.md`; the health check, open issues and later list are in `docs/SETUP_STATUS.md`; lessons about building with AI are in `docs/LEARNINGS.md` (add to it when something non-obvious is learned).
 
 ### Observability branch
 Traces and eval results are JSON files on the `observability` git branch (created on first write; `vercel.json` disables deployments for it so trace commits don't redeploy the site). Override with `OBS_BRANCH`.
