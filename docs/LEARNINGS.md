@@ -79,7 +79,7 @@ The catalog changes every night. Two eval runs a few days apart are partly measu
 *Lesson:* freeze the inputs (catalog, questions, labels) before comparing options, then change one thing at a time.
 
 **22. Don't spend experiments on obvious wins.**
-I nearly ran "agent vs agent + reranker" before comparing the three designs from the plan. Better retrieval helps every design, so it went into the shared search tool for all of them, and the experiments stayed on the open question: which design (A, B or C) is best for quality, cost and speed.
+I nearly ran "agent vs agent + reranker" before comparing the three designs from the plan. Better retrieval helps every design, so the plan is to build it into the shared search tool for all of them and keep the experiments on the open question: which design (A, B or C) is best for quality, cost and speed.
 *Lesson:* build the clear improvements into the shared foundation; save A/B tests for decisions that are genuinely uncertain.
 
 ## Building and shipping
