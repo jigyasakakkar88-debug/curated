@@ -16,6 +16,7 @@
 | Code branch | `claude/repository-settings-nx8ju4`, 40 changes ahead of `main` (the live site) |
 | Eval results and traces | the `observability` branch (never deployed) |
 | System design diagram | https://claude.ai/artifact/PmFeAWu6LQyHmQCGtMYcjZ |
+| Box diagram: frontend / backend / data / external services | https://claude.ai/artifact/UxWWGWSw9hwPi9hr6jMMty |
 | Token flow: today vs reranker | https://claude.ai/artifact/FVFt7Jz5H1yXWqA4Q8Cwvs |
 | Every step, question to answer (S32 vs S38: code / LLM / agentic, tokens per step) | https://claude.ai/artifact/VkozqtMqxrv8cDzDhL2d3J |
 | Lessons learned + vocabulary | `docs/LEARNINGS.md` |
