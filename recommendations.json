@@ -623,30 +623,6 @@
       "underperforming": false
     },
     {
-      "id": "suta-in",
-      "name": "Suta",
-      "url": "https://suta.in",
-      "reason": "A beloved Indian handloom brand with a vast range of cotton and mulmul sarees — known for wearable, modern colour stories and weaves that bridge everyday comfort with classic craft sensibility, ideal for office to occasion dressing.",
-      "isShopify": true,
-      "sampleProduct": "Jamdani Jaal",
-      "productCount": 3,
-      "discoveredAt": "2026-10-01T08:15:32.950Z",
-      "runNumber": 7,
-      "searchAxis": "Slow fashion and sustainable labels",
-      "sourceQuery": "suta.in handloom cotton saree Indian brand official website",
-      "sourcePosition": 1,
-      "score": 4,
-      "scoreDetails": {
-        "isStorefront": true,
-        "isIndian": true,
-        "aesthetic": 4,
-        "briefMatch": 5,
-        "quality": 3
-      },
-      "evaluatorNotes": "Well-known and beloved Indian handloom brand with excellent cotton saree range, but scale and mainstream popularity nudge it toward mid-market rather than curated indie.",
-      "underperforming": false
-    },
-    {
       "id": "chidiyaa-com",
       "name": "Chidiyaa",
       "url": "https://chidiyaa.com",
