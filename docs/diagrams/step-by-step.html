@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stylist Step by Step</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f5f1; --panel:#fff; --ink:#1f1d1a; --muted:#6b645b; --line:#e4dfd6; --head:#f1ede6;
+  --code:#059669; --code-bg:#e0f6ec;
+  --llm:#d4582f; --llm-bg:#fde8dd;
+  --ag:#7c3aed; --ag-bg:#efe6ff;
+  --round:#2563eb; --round-bg:#e6efff;
+  --mono-bg:#00000008;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16151a; --panel:#1f1e24; --ink:#ece9e4; --muted:#a39d94; --line:#34323b; --head:#26252c;
+    --code:#34d399; --code-bg:#123528; --llm:#ff9a72; --llm-bg:#43251a; --ag:#b394ff; --ag-bg:#2b2147;
+    --round:#7aa7ff; --round-bg:#1c2a48; --mono-bg:#ffffff10;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16151a; --panel:#1f1e24; --ink:#ece9e4; --muted:#a39d94; --line:#34323b; --head:#26252c;
+  --code:#34d399; --code-bg:#123528; --llm:#ff9a72; --llm-bg:#43251a; --ag:#b394ff; --ag-bg:#2b2147;
+  --round:#7aa7ff; --round-bg:#1c2a48; --mono-bg:#ffffff10;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.45}
+main{max-width:1240px;margin:0 auto;padding:28px 16px 48px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.01em}
+.lede{color:var(--muted);margin:0 0 14px;max-width:900px}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin:0 0 16px;font-size:13px}
+.tag{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:2px 7px;border-radius:99px;white-space:nowrap}
+.t-code{background:var(--code-bg);color:var(--code)}
+.t-llm{background:var(--llm-bg);color:var(--llm)}
+.t-ag{background:var(--ag-bg);color:var(--ag)}
+.wrap{background:var(--panel);border-radius:14px;box-shadow:0 1px 3px #0000001a;overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:980px;font-size:13px}
+th,td{padding:9px 10px;border-top:1px solid var(--line);vertical-align:top;text-align:left}
+thead th{background:var(--head);font-size:12px;color:var(--muted);font-weight:600;position:sticky;top:0}
+td.n{color:var(--muted);font-variant-numeric:tabular-nums;width:34px}
+td.who{width:110px}
+td.tok{width:170px;font-size:12px}
+td.na{color:var(--muted)}
+tr.round td{background:var(--round-bg);color:var(--round);font-weight:700;font-size:12.5px;letter-spacing:.02em}
+tr.sec td{background:var(--head);font-weight:700;font-size:12.5px}
+tr.total td{background:var(--head);font-weight:600}
+code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;background:var(--mono-bg);padding:1px 4px;border-radius:4px}
+.bill{color:var(--llm);font-weight:600}
+.free{color:var(--code)}
+.est{color:var(--muted);font-size:11px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:18px}
+.card{background:var(--panel);border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px #0000001a}
+.card h3{font-size:15px;margin:0 0 8px}
+.card p,.card li{font-size:13.5px}
+.card ul{margin:0;padding-left:18px}
+.bar{display:flex;height:14px;border-radius:5px;overflow:hidden;margin:8px 0 4px}
+.bar div{height:100%}
+.small{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+<h1>From question to answer, every step</h1>
+<p class="lede">Two real questions from your 8 Oct eval run, side by side. <b>S32</b> is simple (2 Claude calls). <b>S38</b> uses the full 6. Total tokens, ₹, time and tool timings are measured. How tokens split <i>between</i> Claude calls is estimated from those totals (marked ≈), because the system records totals per question, not per call.</p>
+<div class="legend">
+  <span><span class="tag t-code">CODE</span> our programs or a plain API (Algolia, GitHub). No AI, no token cost</span>
+  <span><span class="tag t-llm">LLM</span> Claude reading or writing: <b>billed in tokens</b>, even when the shopper never sees it</span>
+  <span><span class="tag t-ag">AGENTIC</span> Claude choosing the next step based on what it just saw</span>
+</div>
+
+<div class="wrap">
+<table>
+<thead><tr><th>#</th><th>S32 · "Show me silk sarees I can return"</th><th>S38 · "Is my saved saree returnable? If not, find something similar from a brand that takes returns"</th><th>Who</th><th>Token cost</th></tr></thead>
+<tbody>
+
+<tr class="sec"><td colspan="5">Before any AI: browser → backend</td></tr>
+<tr><td class="n">1</td><td>Shopper types in the Stylist drawer. Browser sends <code>POST /api/stylist</code> (REST, JSON): question, last 6 chat turns, saved-item ids from localStorage</td><td>Same, carrying <b>3 saved ids</b> (Tjori saree, Dressfolk pre-drape, Okhai saree)</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+<tr><td class="n">2</td><td>Vercel function <code>api/stylist.js</code>: under 30 questions/day for this person? Under 500 characters? Starts the <b>trace</b> (log of every step)</td><td>Same</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+<tr><td class="n">3</td><td>Loads the brand list: <code>brands.json</code> via the GitHub API (REST); cached 10 min, so usually skipped</td><td>Same</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+<tr><td class="n">4</td><td>Sets up the 5 tools. Keeps the saved-item ids and catalog name <b>in code</b>; Claude can't see them unless it asks</td><td>Same: Claude doesn't yet know what's saved</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+<tr><td class="n">5</td><td>Builds the request: <b>system prompt + brand list</b> (marked for caching), <b>5 tool descriptions</b>, the chat messages, settings (model <code>claude-sonnet-5-5</code>, thinking effort "medium", max 8,000 output tokens)</td><td>Same</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+
+<tr class="round"><td colspan="5">Round 1: Claude call 1</td></tr>
+<tr><td class="n">6</td><td>Vercel → Anthropic: <code>POST api.anthropic.com/v1/messages</code> (REST, with the API key from Vercel settings)</td><td>Same</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free (the call itself)</td></tr>
+<tr><td class="n">7</td><td>Anthropic reads the input. The cache finds the prompt + tools + brands (4,293 tokens); the question is new</td><td>Same</td><td class="who"><span class="tag t-llm">LLM</span></td><td class="tok"><span class="bill">4,293 cached</span> (1/10 price) + <span class="bill">≈60 new</span></td></tr>
+<tr><td class="n">8</td><td>Claude <b>thinks</b> (hidden from the shopper): "sarees are women's, no need to ask; 'can return' → use the filter". Returns a <b>tool request</b>, not words: <code>search_products("silk saree", returnableOnly, women, limit 12)</code></td><td>Claude <b>thinks</b>: "this is about their <i>saved</i> saree, and I don't know what it is". Returns <code>get_wishlist()</code></td><td class="who"><span class="tag t-llm">LLM</span> <span class="tag t-ag">AGENTIC</span></td><td class="tok"><span class="bill">≈150 output</span> (thinking + request, billed though hidden)</td></tr>
+<tr><td class="n">9</td><td>Vercel logs the tokens, appends Claude's reply to the conversation unchanged, and runs the tool: <b>Algolia</b> (REST) filters 17,680 → <b>123 matches</b>, sends back 12 (≤2 per brand). 98 ms</td><td>Runs the tool: fetches the 3 saved products from Algolia → Tjori saree <b>marked not returnable</b>, Dressfolk pre-drape, Okhai saree. 84 ms</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free (Algolia counts 1 search)</td></tr>
+<tr><td class="n">10</td><td>Adds the 12 products as the next message (<code>tool_result</code>)</td><td>Adds the 3 saved items as the next message</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok">becomes <b>input</b> next round</td></tr>
+
+<tr class="round"><td colspan="5">Round 2: Claude call 2 (the whole conversation so far is sent again)</td></tr>
+<tr><td class="n">11</td><td>Vercel → Anthropic again: prompt + question + Claude's round-1 request + the 12 products</td><td>Same pattern: prompt + question + round-1 request + 3 saved items</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free (the call itself)</td></tr>
+<tr><td class="n">12</td><td>Anthropic reads the input</td><td>Anthropic reads the input</td><td class="who"><span class="tag t-llm">LLM</span></td><td class="tok"><span class="bill">4,293 cached</span> + S32 <span class="bill">≈2,950 new</span> (mostly the 12 products) · S38 <span class="bill">≈1,000 new</span></td></tr>
+<tr><td class="n">13</td><td>Claude thinks, reads the 12, <b>picks 5</b>, writes the answer, a reason for each, the "See all" search and a caveat → calls <code>respond</code>. <b>Loop ends.</b></td><td>Claude thinks: "Tjori isn't returnable, so the 'if not' branch applies". Asks for <b>two tools at once</b>: <code>search_products("cotton linen saree", returnable, exclude Tjori)</code> + <code>get_policies(Tjori)</code> to quote the rule</td><td class="who"><span class="tag t-llm">LLM</span> <span class="tag t-ag">AGENTIC</span></td><td class="tok">S32 <span class="bill">≈600 output</span> · S38 <span class="bill">≈250 output</span></td></tr>
+<tr><td class="n">14</td><td class="na">—</td><td>Runs both in parallel: Algolia → 32 matches, 10 back (95 ms); <code>policies.json</code> via GitHub → Tjori's fields, quotes, refund + shipping text (155 ms). Both added as the next message</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok">free → input next round</td></tr>
+
+<tr class="round"><td colspan="5">Round 3: Claude call 3 (S38 only)</td></tr>
+<tr><td class="n">15</td><td class="na">—</td><td>Input: everything so far (now including 10 products + Tjori's policy text)</td><td class="who"><span class="tag t-llm">LLM</span></td><td class="tok"><span class="bill">4,293 cached + ≈5,600 new</span></td></tr>
+<tr><td class="n">16</td><td class="na">—</td><td>Claude <b>judges the results weak</b> (mostly stoles and underskirts) → changes strategy: <code>search_products("saree", ≤₹4,000, returnable, exclude 3 brands)</code></td><td class="who"><span class="tag t-llm">LLM</span> <span class="tag t-ag">AGENTIC</span></td><td class="tok"><span class="bill">≈200 output</span></td></tr>
+<tr><td class="n">17</td><td class="na">—</td><td>Algolia → 35 matches, 10 back (93 ms) → next message</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+
+<tr class="round"><td colspan="5">Round 4: Claude call 4 (S38 only)</td></tr>
+<tr><td class="n">18</td><td class="na">—</td><td>Input: everything so far (+10 more products)</td><td class="who"><span class="tag t-llm">LLM</span></td><td class="tok"><span class="bill">4,293 cached + ≈8,300 new</span></td></tr>
+<tr><td class="n">19</td><td class="na">—</td><td>Still not good → <b>different words</b>: <code>"handloom cotton saree"</code>, only 7 brands, ≤₹5,000</td><td class="who"><span class="tag t-llm">LLM</span> <span class="tag t-ag">AGENTIC</span></td><td class="tok"><span class="bill">≈200 output</span></td></tr>
+<tr><td class="n">20</td><td class="na">—</td><td>Algolia → <b>0 results</b> (177 ms) → next message</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+
+<tr class="round"><td colspan="5">Round 5: Claude call 5 (S38 only)</td></tr>
+<tr><td class="n">21</td><td class="na">—</td><td>Input: everything so far</td><td class="who"><span class="tag t-llm">LLM</span></td><td class="tok"><span class="bill">4,293 cached + ≈8,700 new</span></td></tr>
+<tr><td class="n">22</td><td class="na">—</td><td><b>Recovers from the dead end</b>: drops the price limit, tries 7 other brands, <code>"saree"</code></td><td class="who"><span class="tag t-llm">LLM</span> <span class="tag t-ag">AGENTIC</span></td><td class="tok"><span class="bill">≈200 output</span></td></tr>
+<tr><td class="n">23</td><td class="na">—</td><td>Algolia → 1 result (87 ms). Code also adds a note: "This is your last step: call respond now" → next message</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+
+<tr class="round"><td colspan="5">Round 6: Claude call 6 (S38 only, the maximum)</td></tr>
+<tr><td class="n">24</td><td class="na">—</td><td>Input: the full conversation</td><td class="who"><span class="tag t-llm">LLM</span></td><td class="tok"><span class="bill">4,293 cached + ≈9,200 new</span></td></tr>
+<tr><td class="n">25</td><td class="na">—</td><td><b>Decides to stop</b> and calls <code>respond</code>: Tjori is exchange-only (2 quotes), your saved Okhai saree is returnable and closest (₹2,500), a costlier Khara Kapas option (₹16,800), and <b>4 caveats</b> ("searches mostly returned stoles and underskirts", …)</td><td class="who"><span class="tag t-llm">LLM</span> <span class="tag t-ag">AGENTIC</span></td><td class="tok"><span class="bill">≈840 output</span></td></tr>
+
+<tr class="sec"><td colspan="5">After respond: backend → browser</td></tr>
+<tr><td class="n">26</td><td><b>Guardrail:</b> every product id must be one a tool returned. 0 invented, nothing dropped</td><td>Same: 0 invented</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+<tr><td class="n">27</td><td>Fetches full cards (photo, price, link) for the 5 ids from Algolia; adds brand names to policy quotes</td><td>Same, for 2 ids</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+<tr><td class="n">28</td><td>Sends the answer to the browser as JSON</td><td>Same</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+<tr><td class="n">29</td><td><b>After</b> replying, saves the trace to GitHub (observability branch), so the shopper doesn't wait</td><td>Same</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+<tr><td class="n">30</td><td>Shopper sees: answer, caveat, <b>5 cards with reasons</b>, "See all 123 matches", 👍/👎. Everything in rounds 1–2 was invisible to them</td><td>Shopper sees: answer with the Tjori policy quotes, 4 caveats, <b>2 cards with reasons</b>, 👍/👎. Rounds 1–5 were invisible to them</td><td class="who"><span class="tag t-code">CODE</span></td><td class="tok free">free</td></tr>
+
+<tr class="total"><td></td><td>2 Claude calls · 1 search · <b>5.8 s</b><br>Tokens (measured): 3,016 new in · 8,586 cached · 752 out<br><b>₹1.34</b></td><td>6 Claude calls · 5 searches + wishlist + policy · <b>14.9 s</b><br>Tokens (measured): 32,894 new in · 25,758 cached · 1,841 out<br><b>₹7.86</b></td><td></td><td></td></tr>
+</tbody>
+</table>
+</div>
+
+<div class="cards">
+  <div class="card">
+    <h3>Where the ₹ went (measured)</h3>
+    <p><b>S32 · ₹1.34</b></p>
+    <div class="bar"><div style="width:40%;background:var(--llm)"></div><div style="width:11%;background:var(--round)"></div><div style="width:49%;background:var(--ag)"></div></div>
+    <p class="small">new input ₹0.53 · cached prompt ₹0.15 · output incl. hidden thinking ₹0.66</p>
+    <p style="margin-top:12px"><b>S38 · ₹7.86</b></p>
+    <div class="bar"><div style="width:74%;background:var(--llm)"></div><div style="width:6%;background:var(--round)"></div><div style="width:20%;background:var(--ag)"></div></div>
+    <p class="small">new input ₹5.79 · cached prompt ₹0.45 · output incl. hidden thinking ₹1.62</p>
+  </div>
+  <div class="card">
+    <h3>Hidden ≠ free</h3>
+    <ul>
+      <li><b>Thinking</b> and every <b>tool request</b> are output tokens, billed at the highest rate, even though the shopper never sees them.</li>
+      <li>In S32, about half the cost (₹0.66 of ₹1.34) is output, mostly Claude's reasoning and its tool requests.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Why S38 costs 6× more: the snowball</h3>
+    <ul>
+      <li>Each round <b>re-sends the whole conversation</b>: question, Claude's earlier requests and every tool result so far.</li>
+      <li>So input grows round after round (≈60 → 1,000 → 5,600 → 8,300 → 8,700 → 9,200 new tokens). Rounds 3–6 alone account for nearly all of S38's input cost.</li>
+      <li>The fixed prompt is cheap thanks to caching (₹0.45 for 6 reads).</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>What's agentic, in one line</h3>
+    <p><b>S32:</b> two decisions (which search, which 5), no reaction to results. A fixed pipeline could do it.</p>
+    <p><b>S38:</b> picks the tool order, follows the "if not" branch, runs tools in parallel, judges results, retries 3 ways, recovers from 0, and decides when to stop. That's what the extra ₹6.50 bought.</p>
+  </div>
+</div>
+</main>
+</body>
+</html>

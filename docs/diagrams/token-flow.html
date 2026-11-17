@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stylist Token Flow</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f5f1; --panel:#ffffff; --ink:#1f1d1a; --muted:#6b645b; --line:#d9d3c9; --arrow:#8a8278;
+  --fe:#2563eb; --fe-bg:#e3edff;
+  --be:#059669; --be-bg:#dcf6ea;
+  --son:#d4582f; --son-bg:#fde6da;
+  --hai:#7c3aed; --hai-bg:#efe6ff;
+  --al:#c27803; --al-bg:#fff2d1;
+  --new:#7c3aed;
+  --chip:#00000008;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16151a; --panel:#1f1e24; --ink:#ece9e4; --muted:#a39d94; --line:#3a3842; --arrow:#8d877e;
+    --fe:#7aa7ff; --fe-bg:#1c2a48; --be:#34d399; --be-bg:#123528; --son:#ff9a72; --son-bg:#43251a;
+    --hai:#b394ff; --hai-bg:#2b2147; --al:#fbbf24; --al-bg:#3d2f10; --new:#b394ff; --chip:#ffffff10;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16151a; --panel:#1f1e24; --ink:#ece9e4; --muted:#a39d94; --line:#3a3842; --arrow:#8d877e;
+  --fe:#7aa7ff; --fe-bg:#1c2a48; --be:#34d399; --be-bg:#123528; --son:#ff9a72; --son-bg:#43251a;
+  --hai:#b394ff; --hai-bg:#2b2147; --al:#fbbf24; --al-bg:#3d2f10; --new:#b394ff; --chip:#ffffff10;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.45}
+main{max-width:1180px;margin:0 auto;padding:28px 16px 48px}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.01em}
+.lede{color:var(--muted);margin:0 0 20px;max-width:860px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media (max-width:860px){.cols{grid-template-columns:1fr}}
+.col{background:var(--panel);border-radius:16px;padding:18px 16px 16px;box-shadow:0 1px 3px #0000001a}
+.col h2{font-size:18px;margin:0 0 2px}
+.col .sub{color:var(--muted);font-size:13px;margin:0 0 14px}
+.box{border:2px solid;border-radius:12px;padding:10px 12px;position:relative}
+.box .t{font-weight:700;font-size:14px;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.box .t small{font-weight:500;color:var(--muted);font-size:11.5px;white-space:nowrap}
+.box p{margin:4px 0 0;font-size:13px}
+.box ul{margin:6px 0 0;padding-left:18px;font-size:13px}
+.box li{margin:2px 0}
+.fe{border-color:var(--fe);background:var(--fe-bg)}
+.be{border-color:var(--be);background:var(--be-bg)}
+.son{border-color:var(--son);background:var(--son-bg)}
+.hai{border-color:var(--hai);background:var(--hai-bg)}
+.al{border-color:var(--al);background:var(--al-bg)}
+.box.isnew{box-shadow:0 0 0 3px var(--panel),0 0 0 5px var(--new)}
+.badge{display:inline-block;background:var(--new);color:#fff;font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:1px 7px;border-radius:99px;margin-left:6px;vertical-align:2px}
+.tok{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tok span{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;background:var(--chip);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+.tok span b{font-weight:700}
+.arrow{height:30px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;position:relative}
+.arrow::before{content:"";position:absolute;left:50%;top:2px;bottom:8px;border-left:2px solid var(--arrow)}
+.arrow::after{content:"";position:absolute;left:calc(50% - 5px);bottom:2px;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--arrow)}
+.arrow em{position:relative;background:var(--panel);padding:0 6px;font-style:normal;margin-left:120px}
+.reply{font-size:12.5px;color:var(--muted);text-align:center;margin:2px 0;font-style:italic}
+.total{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
+.total .row{display:flex;justify-content:space-between;font-size:13.5px;margin:3px 0}
+.total .big{font-size:20px;font-weight:700}
+.bar{display:flex;height:16px;border-radius:5px;overflow:hidden;margin:8px 0 4px}
+.bar div{height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.note{font-size:12px;color:var(--muted);margin-top:10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:20px}
+.card{background:var(--panel);border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px #0000001a}
+.card h3{font-size:15px;margin:0 0 8px}
+.card ul{margin:0;padding-left:18px;font-size:13.5px}
+.card li{margin:4px 0}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:6px 6px;border-top:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12px}
+.up{color:var(--be);font-weight:600}.down{color:var(--son);font-weight:600}
+</style>
+</head>
+<body>
+<main>
+<h1>One question, two designs: where the tokens go</h1>
+<p class="lede">Real trace from your eval run on 8 Oct for <b>"Cotton kurta under ₹3,000"</b> (question S01): token totals, cost and time are measured. The split across steps is worked out from those totals. The right-hand design is a proposal, so its numbers are estimates.</p>
+
+<div class="cols">
+
+<!-- ================= CURRENT ================= -->
+<section class="col">
+  <h2>Today: Option C (agent + keyword search)</h2>
+  <p class="sub">Keyword search decides what's relevant; Claude chooses from its top 20.</p>
+
+  <div class="box fe">
+    <div class="t">Shopper <small>browser → POST /api/stylist</small></div>
+    <p>"Cotton kurta under ₹3,000"</p>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="box son">
+    <div class="t">Claude Sonnet: call 1 <small>~2 s</small></div>
+    <p>Reads the system prompt, tool manuals and 23-brand list, plus the question. Decides it doesn't know who it's for.</p>
+    <div class="tok"><span>prompt + tools <b>4,293</b> (cache write)</span><span>question <b>~20</b></span><span>out <b>~150</b></span></div>
+    <p><b>→ asks:</b> "Is this for a woman, a man or a child?"</p>
+  </div>
+  <div class="reply">Shopper: "It's for me, I'm a woman."</div>
+  <div class="arrow"></div>
+
+  <div class="box son">
+    <div class="t">Claude Sonnet: call 2 <small>~2 s</small></div>
+    <p>Turns the request into one search with filters.</p>
+    <div class="tok"><span>prompt <b>4,293</b> (cached, 1/10 price)</span><span>chat <b>~100</b></span><span>out <b>~150</b></span></div>
+    <p><b>→ search_products</b>(query "cotton kurta", gender women, maxPrice 3000, limit 20)</p>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="box al">
+    <div class="t">Algolia keyword search <small>0.2 s · 0 LLM tokens</small></div>
+    <ul>
+      <li>17,680 in-stock products</li>
+      <li>filters (women, clothing, ≤ ₹3,000) + the words "cotton" / "kurta" → <b>760 matches</b></li>
+      <li>takes the top 60, keeps ≤ 2 per brand → <b>20 sent to Claude</b></li>
+    </ul>
+    <p style="color:var(--muted);font-size:12px;margin-top:6px">"Relevant" here = contains the words. Nobody checks the 760.</p>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="box son">
+    <div class="t">Claude Sonnet: call 3 <small>~4 s</small></div>
+    <p>Reads the 20 products (name, type, tags, 200-character description; no photos), picks 6 with variety, writes a reason for each.</p>
+    <div class="tok"><span>prompt <b>4,293</b> (cached)</span><span>20 products <b>~5,400</b> (~270 each)</span><span>out <b>~700</b></span></div>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="box be">
+    <div class="t">Answer <small>back to the browser as JSON</small></div>
+    <p>6 cards with reasons, e.g. "Plain black, relaxed straight cut, ₹1,399, easy daily wear" (Tjori)</p>
+    <p>+ <b>"See all 760 matches"</b>: keyword matches, not checked. One of the 6 was a kurta <i>set</i>, a sign of keyword noise.</p>
+  </div>
+
+  <div class="total">
+    <div class="row"><span>Sonnet calls</span><b>3</b></div>
+    <div class="row"><span>Tokens (measured)</span><span>5,789 in · 4,293 cache write · 8,586 cache read · 1,034 out</span></div>
+    <div class="row"><span>Time</span><b>8.6 s</b></div>
+    <div class="row"><span>Cost</span><span class="big">₹3.02</span></div>
+    <div class="bar" aria-label="Cost split">
+      <div style="width:34%;background:var(--son)" title="fresh input ₹1.02"></div>
+      <div style="width:31%;background:var(--al)" title="cache write ₹0.94"></div>
+      <div style="width:30%;background:var(--hai)" title="output ₹0.91"></div>
+      <div style="width:5%;background:var(--be)" title="cache read ₹0.15"></div>
+    </div>
+    <div class="legend"><span><i style="background:var(--son)"></i>fresh input ₹1.02 (mostly the 20 products)</span><span><i style="background:var(--al)"></i>cache write ₹0.94 (first question in a while; ~₹0.10 when warm)</span><span><i style="background:var(--hai)"></i>output ₹0.91</span><span><i style="background:var(--be)"></i>cache read ₹0.15</span></div>
+  </div>
+</section>
+
+<!-- ================= PROPOSED ================= -->
+<section class="col">
+  <h2>Proposed: C + AI rerank</h2>
+  <p class="sub">Keyword search only casts the net; a cheap AI decides what's relevant.</p>
+
+  <div class="box fe">
+    <div class="t">Shopper <small>browser → POST /api/stylist</small></div>
+    <p>"Cotton kurta under ₹3,000"</p>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="box son">
+    <div class="t">Claude Sonnet: calls 1 + 2 <small>unchanged · ~4 s</small></div>
+    <p>Asks who it's for, then plans the search.</p>
+    <div class="tok"><span>same as today <b>~9,000</b> incl. cache</span></div>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="box al">
+    <div class="t">Algolia keyword search <small>0.3 s · 0 LLM tokens</small></div>
+    <ul>
+      <li>same filters → 760 matches</li>
+      <li>returns a <b>wider net: top 150</b> (its job is now "don't miss anything")</li>
+    </ul>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="box hai isnew">
+    <div class="t">Claude Haiku reranker <span class="badge">NEW</span><small>~5 s (3 batches in parallel)</small></div>
+    <p>Scores each of the 150 from 0 to 10 against explicit criteria: right garment, fabric really cotton, cut and occasion, price, gender. Uses slim records (name, type, tags, short description).</p>
+    <div class="tok"><span>150 × ~120 = <b>~18,000</b> in</span><span>criteria <b>~500</b></span><span>scores <b>~1,500</b> out</span></div>
+    <p><b>→</b> keeps those scoring ≥ 7, e.g. <b>~40 good fits</b> (illustrative), sorted by score</p>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="box son">
+    <div class="t">Claude Sonnet: call 3 <small>~4 s</small></div>
+    <p>Reads the <b>top 20 by AI score</b> (same token size as today, but better candidates), picks 6 with variety and reasons.</p>
+    <div class="tok"><span>prompt <b>4,293</b> (cached)</span><span>20 products <b>~5,400</b></span><span>out <b>~700</b></span></div>
+  </div>
+  <div class="arrow"></div>
+
+  <div class="box be">
+    <div class="t">Answer</div>
+    <p>6 cards with reasons, chosen from AI-vetted candidates.</p>
+    <p>+ <b>"See all ~40 good fits"</b>: every item an AI judged relevant, best first, instead of 760 raw keyword matches.</p>
+  </div>
+
+  <div class="total">
+    <div class="row"><span>Model calls</span><b>3 Sonnet + 3 small Haiku</b></div>
+    <div class="row"><span>Extra tokens</span><span>~20,000 on Haiku (about half Sonnet's price per token)</span></div>
+    <div class="row"><span>Time (est.)</span><b>~14 s</b> <span class="down">(+5 s)</span></div>
+    <div class="row"><span>Cost (est.)</span><span class="big">≈ ₹5.3</span> <span class="down">(+₹2.3)</span></div>
+    <div class="bar" aria-label="Estimated cost split">
+      <div style="width:57%;background:var(--son)" title="today's Sonnet cost ₹3.0"></div>
+      <div style="width:43%;background:var(--hai)" title="Haiku rerank ₹2.3"></div>
+    </div>
+    <div class="legend"><span><i style="background:var(--son)"></i>Sonnet, same as today ₹3.0</span><span><i style="background:var(--hai)"></i>Haiku rerank ≈ ₹2.3</span></div>
+    <p class="note">Only shopping questions pay the extra. Declines, clarifying questions and policy answers cost the same as today.</p>
+  </div>
+</section>
+</div>
+
+<div class="cards">
+  <div class="card">
+    <h3>What changes</h3>
+    <table>
+      <tr><th></th><th>Today</th><th>Proposed</th></tr>
+      <tr><td>Who decides "relevant"</td><td>keyword match</td><td class="up">AI, against criteria</td></tr>
+      <tr><td>Candidates Claude picks from</td><td>top 20 by keywords</td><td class="up">top 20 of 150 by AI score</td></tr>
+      <tr><td>"See all"</td><td>760 unchecked</td><td class="up">~40 vetted</td></tr>
+      <tr><td>Cost per shopping answer</td><td>₹3.0</td><td class="down">≈ ₹5.3</td></tr>
+      <tr><td>Time</td><td>8.6 s</td><td class="down">≈ 14 s</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>What it can't fix</h3>
+    <ul>
+      <li>The reranker only sees Algolia's top 150. A great piece described in other words never reaches it. That's the job of offline tagging (occasion, formality) and, later, semantic search.</li>
+      <li>It reads text, not photos. Adding photos would improve judgement on style but cost several times more.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>How we'll know it's worth it</h3>
+    <ul>
+      <li>Same frozen catalog, same 22 questions: run C, then C + rerank.</li>
+      <li>Compare recall, precision, nDCG and your rubric score against ₹ per answer and time.</li>
+      <li>Ship it only if quality rises enough to justify +₹2.3 and +5 s.</li>
+    </ul>
+  </div>
+</div>
+</main>
+</body>
+</html>
