@@ -3,6 +3,8 @@
 //   POST /api/catalog?action=freeze   copy `products` → `products_eval_<YYYY-MM-DD>` (admin)
 // Free Algolia plan = 50,000 records, so: only in-stock products are indexed, the sync updates in
 // place (no temporary second copy), and freezing replaces the previous eval copy.
+// Only new or changed products are written (content fingerprint vs the stored copy), so a nightly sync costs
+// operations in proportion to what changed, not to the size of the catalog.
 //   GET  /api/catalog                 index status (admin) — or a sync when called by the Vercel cron
 const github = require('../lib/github');
 const algolia = require('../lib/algolia');
@@ -57,7 +59,7 @@ async function sync({ force }) {
   // Read what's already in the index while the stores download.
   const [results, existing] = await Promise.all([
     mapLimit(brands, BRAND_CONCURRENCY, b => fetchBrandRecords(b, catalogHints.brands?.[b.id] || {})),
-    algolia.existingRecordBrands(client),
+    algolia.existingRecords(client),
   ]);
   lap(`shopify fetched, ${existing.size} existing records read`);
 
@@ -89,7 +91,7 @@ async function sync({ force }) {
     records.push(...recs);
   }
 
-  const keptFromFailed = [...existing.values()].filter(b => failedBrandIds.has(b)).length;
+  const keptFromFailed = [...existing.values()].filter(e => failedBrandIds.has(e.brandId)).length;
   const previous = existing.size;
   const nextTotal = records.length + keptFromFailed;
   if (!force && previous > 0 && nextTotal < previous * MIN_KEEP_RATIO) {
@@ -98,20 +100,25 @@ async function sync({ force }) {
 
   const newIds = new Set(records.map(r => r.objectID));
   const stale  = [...existing.entries()]
-    .filter(([id, brandId]) => !newIds.has(id) && !failedBrandIds.has(brandId))
+    .filter(([id, e]) => !newIds.has(id) && !failedBrandIds.has(e.brandId))
     .map(([id]) => id);
+  // Write only what's new or different from the stored copy.
+  const changed = records.filter(r => existing.get(r.objectID)?.hash !== algolia.recordHash(r));
+  const added = changed.filter(r => !existing.has(r.objectID)).length;
 
   await algolia.applyIndexConfig(client);
   lap('settings applied');
   // Send every batch, then wait once: Algolia applies an index's tasks in order, so the last one finishing means all have.
-  const batches = await client.saveObjects({ indexName: algolia.INDEX, objects: records, batchSize: 1000, waitForTasks: false });
+  const batches = changed.length
+    ? await client.saveObjects({ indexName: algolia.INDEX, objects: changed, batchSize: 1000, waitForTasks: false })
+    : [];
   if (stale.length) {
     batches.push(...await client.deleteObjects({ indexName: algolia.INDEX, objectIDs: stale, batchSize: 1000, waitForTasks: false }));
   }
   if (batches.length) await client.waitForTask({ indexName: algolia.INDEX, taskID: batches[batches.length - 1].taskID });
-  lap(`saved ${records.length}, removed ${stale.length}`);
+  lap(`wrote ${changed.length} (${added} new), unchanged ${records.length - changed.length}, removed ${stale.length}`);
   for (const id of failedBrandIds) {
-    perBrand[id].count = [...existing.values()].filter(b => b === id).length;
+    perBrand[id].count = [...existing.values()].filter(e => e.brandId === id).length;
   }
 
   const departments = {};
@@ -121,6 +128,10 @@ async function sync({ force }) {
     indexName: algolia.INDEX,
     total: nextTotal,
     previous,
+    written: changed.length,
+    added,
+    updated: changed.length - added,
+    unchanged: records.length - changed.length,
     removed: stale.length,
     soldOutSkipped: soldOut,
     departments,

@@ -68,6 +68,10 @@ The eval checked whether the 6 products the Stylist showed were good. It could n
 The Stylist said "about 760 cotton kurtas fit". They were 760 *keyword matches* (anything containing "cotton" or "kurta" under ₹3,000), including sets and dupattas. Nobody had checked whether they fit.
 *Lesson:* say what a number actually counts ("760 matches", not "760 fit"), and don't let a big pool stand in for relevance.
 
+**23. A free tier's limits apply to background jobs too.**
+The catalog sync rewrote all ~17,700 products on every run. With evals and tests on top, Algolia's free monthly operations quota ran out on the day the Stylist went live, and search stopped. The fix: fingerprint each product and write only what changed, so a nightly sync costs in proportion to what changed, not to catalog size.
+*Lesson:* count what your scheduled jobs consume, not just what users do.
+
 ## Evals and decisions
 
 **20. Pass/fail is too coarse to tell you what to fix.**
