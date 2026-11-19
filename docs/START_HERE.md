@@ -20,6 +20,7 @@
 | Token flow: today vs reranker | https://claude.ai/artifact/FVFt7Jz5H1yXWqA4Q8Cwvs |
 | Every step, question to answer (S32 vs S38: code / LLM / agentic, tokens per step) | https://claude.ai/artifact/VkozqtMqxrv8cDzDhL2d3J |
 | Diagram source files (offline copies) | `docs/diagrams/` |
+| Design options to test (A, B, C + code-first variants) | `docs/DESIGN_OPTIONS.md` (Word copy alongside) |
 | Lessons learned + vocabulary | `docs/LEARNINGS.md` |
 | Later / someday list | `docs/SETUP_STATUS.md` (bottom) |
 | Design reference | `docs/STYLIST.md` |
