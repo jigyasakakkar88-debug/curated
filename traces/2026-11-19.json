@@ -1,0 +1,51 @@
+{
+  "traces": [
+    {
+      "traceId": "b04c3ab3-ed35-41d1-8960-5131868c465b",
+      "ts": "2026-11-19T05:27:54.336Z",
+      "source": "live",
+      "system": "C",
+      "model": "claude-sonnet-5-5",
+      "index": "products",
+      "runId": null,
+      "queryId": null,
+      "query": "What suits a pear-shaped body?",
+      "steps": [
+        {
+          "tool": "respond",
+          "input": {
+            "text": "I can't give body-type or figure advice, sorry. What I can do is help you find pieces by occasion, fabric, cut, budget or size. Tell me what you're shopping for, for example office wear, a wedding outfit or everyday kurtas. Also tell me if it's for a woman, a man or a child, and I'll pick some options from our brands.",
+            "product_ids": []
+          },
+          "resultCount": 0,
+          "relaxed": null,
+          "ms": 0
+        }
+      ],
+      "stepCount": 1,
+      "firstTool": "respond",
+      "llmCalls": 1,
+      "tokens": {
+        "in": 88,
+        "out": 181,
+        "cacheWrite": 4303,
+        "cacheRead": 0
+      },
+      "costINR": 1.12,
+      "latencyMs": 2458,
+      "finishedBy": "respond",
+      "answer": {
+        "text": "I can't give body-type or figure advice, sorry. What I can do is help you find pieces by occasion, fabric, cut, budget or size. Tell me what you're shopping for, for example office wear, a wedding outfit or everyday kurtas. Also tell me if it's for a woman, a man or a child, and I'll pick some options from our brands.",
+        "product_ids": [],
+        "caveats": [],
+        "policy_quotes": [],
+        "product_reasons": [],
+        "browse": null
+      },
+      "productIds": [],
+      "invalidIds": [],
+      "error": null,
+      "feedback": null
+    }
+  ]
+}
