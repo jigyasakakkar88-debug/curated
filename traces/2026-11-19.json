@@ -46,6 +46,81 @@
       "invalidIds": [],
       "error": null,
       "feedback": null
+    },
+    {
+      "traceId": "fa845768-d09a-4c0d-9761-97155f73db7a",
+      "ts": "2026-11-19T05:28:11.266Z",
+      "source": "live",
+      "system": "C",
+      "model": "claude-sonnet-5-5",
+      "index": "products",
+      "runId": null,
+      "queryId": null,
+      "query": "Silk sarees I can return",
+      "steps": [
+        {
+          "tool": "search_products",
+          "input": {
+            "query": "silk saree",
+            "returnableOnly": true,
+            "limit": 12
+          },
+          "resultCount": null,
+          "relaxed": null,
+          "ms": 268,
+          "error": "Operations quota exceeded. Change plan to get more Operations. (Correlation-ID: AN2GZS-21Wye-nhMyAGXRzZk)"
+        },
+        {
+          "tool": "search_products",
+          "input": {
+            "query": "silk saree",
+            "returnableOnly": true
+          },
+          "resultCount": null,
+          "relaxed": null,
+          "ms": 79,
+          "error": "Operations quota exceeded. Change plan to get more Operations. (Correlation-ID: AN2GZS-21Wye-FBjgjp9KYnk)"
+        },
+        {
+          "tool": "respond",
+          "input": {
+            "text": "I can't search the catalog right now. The search tool returned a quota error, so I can't show silk sarees from brands that accept returns. I'd rather not guess at products or policies. Please try again in a little while and I'll look again.",
+            "product_ids": [],
+            "caveats": [
+              "Search tool failed with an 'Operations quota exceeded' error; no results were retrieved."
+            ]
+          },
+          "resultCount": 0,
+          "relaxed": null,
+          "ms": 0
+        }
+      ],
+      "stepCount": 3,
+      "firstTool": "search_products",
+      "llmCalls": 3,
+      "tokens": {
+        "in": 725,
+        "out": 368,
+        "cacheWrite": 0,
+        "cacheRead": 12909
+      },
+      "costINR": 0.68,
+      "latencyMs": 4722,
+      "finishedBy": "respond",
+      "answer": {
+        "text": "I can't search the catalog right now. The search tool returned a quota error, so I can't show silk sarees from brands that accept returns. I'd rather not guess at products or policies. Please try again in a little while and I'll look again.",
+        "product_ids": [],
+        "caveats": [
+          "Search tool failed with an 'Operations quota exceeded' error; no results were retrieved."
+        ],
+        "policy_quotes": [],
+        "product_reasons": [],
+        "browse": null
+      },
+      "productIds": [],
+      "invalidIds": [],
+      "error": null,
+      "feedback": null
     }
   ]
 }
