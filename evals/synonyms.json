@@ -1,0 +1,13 @@
+{
+  "_note": "Two-way synonyms loaded into the Algolia `products` index on every catalog sync. Each entry is a group of words that should match each other. Extend freely.",
+  "synonyms": [
+    ["kurta", "kurti"],
+    ["saree", "sari"],
+    ["dupatta", "stole"],
+    ["co-ord", "coord", "coord set", "co-ord set", "co ord set"],
+    ["lehenga", "lehnga"],
+    ["kota doria", "kota"],
+    ["shaadi", "wedding"],
+    ["halka", "light"]
+  ]
+}

@@ -38,6 +38,102 @@ header { background:var(--ink); color:var(--paper); display:flex; align-items:ce
 .logout-btn { background:none; border:1px solid #444; color:#999; padding:6px 14px; font-size:10px; letter-spacing:1px; cursor:pointer; font-family:'DM Mono',monospace; }
 .logout-btn:hover { border-color:var(--err); color:var(--err); }
 
+/* POLICIES */
+.pol-actions { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+.pol-actions .btn-test { flex:1; min-width:160px; }
+.pol-row { border-top:1px solid var(--border); }
+.pol-row summary { list-style:none; cursor:pointer; padding:12px 0; display:flex; gap:10px; align-items:center; flex-wrap:wrap; font-size:13px; }
+.pol-row summary::-webkit-details-marker { display:none; }
+.pol-name { flex:1; min-width:140px; }
+.pol-badge { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; padding:2px 6px; border:1px solid var(--border); color:var(--muted); }
+.pol-badge.ok { color:var(--ok); border-color:var(--ok); }
+.pol-badge.bad { color:var(--err); border-color:var(--err); }
+.pol-badge.warn { color:var(--warn); border-color:var(--warn); }
+.pol-body { padding:4px 0 16px; }
+.pol-field { display:grid; grid-template-columns:1fr 96px 16px; gap:4px 8px; align-items:center; margin-bottom:10px; font-size:12px; }
+.pol-field input[data-q] { grid-column:1 / -1; grid-row:2; }
+.pol-field > span { grid-column:3; grid-row:1; }
+.pol-field label { font-size:12px; color:var(--ink); letter-spacing:0; text-transform:none; font-family:'Jost',sans-serif; }
+.pol-field input, .pol-field select, .pol-section textarea { width:100%; padding:5px 7px; border:1px solid var(--border); background:var(--warm); font-family:'Jost',sans-serif; font-size:12px; }
+.pol-section { margin:10px 0; }
+.pol-section summary { font-family:'DM Mono',monospace; font-size:10px; cursor:pointer; color:var(--accent); }
+.pol-section textarea { height:160px; margin-top:6px; font-size:11px; line-height:1.5; }
+.pol-hint { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); line-height:1.8; }
+
+/* STYLIST TEST */
+.sty-thread { max-height:520px; overflow-y:auto; display:flex; flex-direction:column; gap:12px; margin-bottom:12px; }
+.sty-q { align-self:flex-end; background:var(--ink); color:var(--paper); padding:8px 12px; font-size:13px; max-width:85%; }
+.sty-a { font-size:13px; line-height:1.55; }
+.sty-caveat { font-family:'DM Mono',monospace; font-size:10px; color:var(--warn); margin-top:6px; }
+.sty-quote { border-left:2px solid var(--accent); padding:4px 8px; margin-top:6px; font-size:11px; color:var(--muted); }
+.sty-prod { display:flex; gap:8px; align-items:center; margin-top:6px; font-size:12px; text-decoration:none; color:var(--ink); }
+.sty-prod img { width:40px; height:52px; object-fit:cover; background:var(--warm); }
+.sty-trace { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); margin-top:6px; line-height:1.6; }
+
+/* INSIGHTS: observability + evals */
+.kpis { display:grid; grid-template-columns:repeat(auto-fill,minmax(118px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); margin-bottom:16px; }
+.kpi { background:var(--card); padding:10px 12px; }
+.kpi b { display:block; font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:400; color:var(--accent); }
+.kpi span { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; color:var(--muted); text-transform:uppercase; }
+.ins-controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+.ins-controls select, .ins-controls input { padding:7px 8px; border:1px solid var(--border); background:var(--warm); font-family:'Jost',sans-serif; font-size:12px; }
+.ins-table { width:100%; border-collapse:collapse; font-size:12px; }
+.ins-table th { text-align:left; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; color:var(--muted); text-transform:uppercase; padding:6px; border-bottom:1px solid var(--border); }
+.ins-table td { padding:7px 6px; border-bottom:1px solid var(--border); vertical-align:top; }
+.ins-table tr.click { cursor:pointer; }
+.ins-table tr.click:hover td { background:var(--warm); }
+.ins-detail td { background:var(--paper); font-family:'DM Mono',monospace; font-size:10px; line-height:1.7; color:#5c544c; }
+.chk { font-family:'DM Mono',monospace; font-size:9px; padding:1px 5px; margin:1px; display:inline-block; border:1px solid var(--border); }
+.chk.ok { color:var(--ok); border-color:var(--ok); }
+.chk.bad { color:var(--err); border-color:var(--err); }
+.grade-btn { padding:3px 10px; font-size:10px; border:1px solid var(--border); background:none; cursor:pointer; font-family:'DM Mono',monospace; }
+.grade-btn.on.pass { background:var(--ok); color:white; border-color:var(--ok); }
+.grade-btn.on.fail { background:var(--err); color:white; border-color:var(--err); }
+.ev-prods { display:grid; grid-template-columns:repeat(auto-fill,minmax(92px,1fr)); gap:8px; margin-top:8px; }
+.ev-prod { display:flex; flex-direction:column; text-decoration:none; color:var(--ink); border:1px solid var(--border); background:var(--card); }
+.ev-prod:hover { border-color:var(--accent); }
+.ev-prod img, .ev-noimg { width:100%; aspect-ratio:3/4; object-fit:cover; background:var(--warm, #EDE8DF); display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--muted); }
+.ev-name { font-size:10.5px; line-height:1.25; padding:4px 5px 0; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.ev-why { font-size:10px; font-style:italic; padding:3px 5px 0; line-height:1.3; }
+.ev-meta { font-size:9.5px; color:var(--muted); padding:2px 5px 5px; }
+.rel-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
+.rel-card { border:1px solid var(--border); background:var(--card); display:flex; flex-direction:column; font-size:11px; }
+.rel-card.g2 { border-color:var(--ok); } .rel-card.g0 { opacity:.75; }
+.rel-card img, .rel-card .ev-noimg { width:100%; aspect-ratio:3/4; object-fit:cover; background:var(--warm, #EDE8DF); }
+.rel-card .rc-body { padding:6px 7px; display:flex; flex-direction:column; gap:3px; flex:1; }
+.rel-card .rc-ai { font-style:italic; color:var(--muted); }
+.rel-card .rc-btns { display:flex; gap:3px; margin-top:auto; padding-top:4px; }
+.rel-card .rc-btns button { flex:1; padding:3px 0; font-size:10px; border:1px solid var(--border); background:none; cursor:pointer; font-family:'DM Mono',monospace; }
+.rel-card .rc-btns button.on.v0 { background:var(--err); color:white; border-color:var(--err); }
+.rel-card .rc-btns button.on.v1 { background:var(--warn); color:white; border-color:var(--warn); }
+.rel-card .rc-btns button.on.v2 { background:var(--ok); color:white; border-color:var(--ok); }
+.rel-card .rc-btns button.ai { border-style:dashed; border-color:var(--accent); }
+.rub-row { display:flex; align-items:center; gap:3px; margin-bottom:3px; }
+.rub-name { font-size:11px; width:128px; cursor:help; }
+.rub-btn { width:30px; padding:2px 0; font-size:10px; border:1px solid var(--border); background:none; cursor:pointer; font-family:'DM Mono',monospace; }
+.rub-btn.on.v0 { background:var(--err); color:white; border-color:var(--err); }
+.rub-btn.on.v1 { background:var(--warn); color:white; border-color:var(--warn); }
+.rub-btn.on.v2 { background:var(--ok); color:white; border-color:var(--ok); }
+.rub-btn.on.vna { background:var(--muted); color:white; border-color:var(--muted); }
+.rub-sum { font-size:11px; margin:4px 0 6px; color:var(--muted); }
+.rub-note { width:100%; margin-top:6px; padding:5px 7px; font-size:11px; border:1px solid var(--border); background:var(--card); font-family:inherit; }
+.rub-guide { margin:0 0 12px; font-size:12px; }
+.rub-guide summary { cursor:pointer; font-weight:500; margin-bottom:6px; }
+.rub-guide table td { padding:4px 6px; border-top:1px solid var(--border); vertical-align:top; }
+.ins-scroll { max-height:620px; overflow:auto; }
+.panel, .panel-body { min-width:0; }
+.kpis { min-width:0; }
+
+[hidden] { display:none !important; }
+/* ADMIN TABS */
+.admin-tabs { display:flex; gap:0; padding:0 48px; background:var(--card); border-bottom:1px solid var(--border); overflow-x:auto; }
+.admin-tabs button { background:none; border:none; border-bottom:2px solid transparent; padding:14px 20px 12px; cursor:pointer; font-family:'Jost',sans-serif; font-size:13px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+.admin-tabs button span { display:block; font-family:'DM Mono',monospace; font-size:9px; letter-spacing:1px; text-transform:none; margin-top:2px; }
+.admin-tabs button[aria-selected="true"] { color:var(--ink); border-bottom-color:var(--accent); }
+.admin-tabs button:focus-visible { outline:2px solid var(--accent); outline-offset:-2px; }
+.container.single { grid-template-columns:1fr; }
+@media (max-width:700px) { .admin-tabs { padding:0 12px; } .admin-tabs button { padding:12px 12px 10px; } .admin-tabs button span { display:none; } }
+
 /* LAYOUT */
 .container { max-width:1100px; margin:0 auto; padding:48px 48px 80px; display:grid; grid-template-columns:1fr 380px; gap:40px; }
 
@@ -186,17 +282,81 @@ input:focus { border-color:var(--accent); }
   </div>
 </header>
 
-<div class="container">
+<nav class="admin-tabs" id="adminTabs" role="tablist">
+  <button role="tab" data-tabbtn="insights" onclick="setAdminTab('insights')">Insights <span>observability · evals</span></button>
+  <button role="tab" data-tabbtn="stylist" onclick="setAdminTab('stylist')">Stylist <span>test · catalog · policies</span></button>
+  <button role="tab" data-tabbtn="brands" onclick="setAdminTab('brands')">Brands <span>list · discover · settings</span></button>
+</nav>
 
-  <div style="display:flex;flex-direction:column;gap:24px">
+<div class="container" id="adminContainer">
+
+  <div class="admin-col" style="display:flex;flex-direction:column;gap:24px">
 
     <!-- CONFIG WARNING (shown if GitHub not set up) -->
     <div class="config-warn" id="configWarn">
       ⚠ GitHub is not configured yet. Changes won't be saved permanently until you set GITHUB_TOKEN and GITHUB_REPO in Vercel environment variables. See the setup guide below.
     </div>
 
+    <!-- STYLIST TEST -->
+    <div data-tab="stylist" class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Test the Stylist</div>
+        <div class="panel-meta">admin only · no daily limit</div>
+      </div>
+      <div class="panel-body">
+        <div class="sty-thread" id="styThread"><div class="pol-hint">Ask anything a shopper would. Your saved (hearted) items on this browser are sent as the wishlist.</div></div>
+        <textarea id="styInput" maxlength="500" placeholder="Cotton kurta under ₹3,000 for office" style="width:100%;height:60px;padding:8px;border:1px solid var(--border);background:var(--warm);font-family:'Jost',sans-serif;font-size:13px"></textarea>
+        <input id="styAnchor" placeholder="optional: product id the question is about" style="width:100%;margin-top:6px;padding:6px 8px;border:1px solid var(--border);background:var(--warm);font-size:11px">
+        <div class="btn-row" style="margin-top:8px">
+          <button class="btn-test" onclick="styNewChat()">New chat</button>
+          <button class="btn-add" id="stySend" onclick="styAsk()">Ask</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OBSERVABILITY -->
+    <div data-tab="insights" class="panel" id="obsPanel">
+      <div class="panel-head"><div class="panel-title">Stylist Observability</div><div class="panel-meta" id="obsMeta"></div></div>
+      <div class="panel-body">
+        <div class="ins-controls">
+          <select id="obsSource" onchange="loadObs()"><option value="live">Shoppers (live)</option><option value="admin">Admin tests</option><option value="eval">Eval runs</option><option value="all">All</option></select>
+          <select id="obsDays" onchange="loadObs()"><option value="1">Today</option><option value="7" selected>Last 7 days</option><option value="30">Last 30 days</option></select>
+          <button class="btn-test" style="flex:0 0 auto;padding:7px 14px" onclick="loadObs()">Refresh</button>
+        </div>
+        <div class="kpis" id="obsKpis"></div>
+        <div class="ins-scroll"><table class="ins-table" id="obsTable"></table></div>
+      </div>
+    </div>
+
+    <!-- EVALS -->
+    <div data-tab="insights" class="panel" id="evalPanel">
+      <div class="panel-head"><div class="panel-title">Stylist Evals</div><div class="panel-meta" id="evalMeta">22 test questions · automatic checks + your grades</div></div>
+      <div class="panel-body">
+        <div class="ins-controls">
+          <select id="evalSystem"><option value="C">Stylist agent (C)</option><option value="baseline">Baseline: keyword search, no AI</option></select>
+          <select id="evalRepeat"><option value="1">1 run each</option><option value="3">3 runs each (consistency)</option></select>
+          <select id="evalIndex"><option value="products">Live catalog</option></select>
+          <input id="evalLabel" placeholder="label (optional)" style="width:140px">
+          <button class="btn-add" id="evalRunBtn" style="flex:0 0 auto;padding:8px 18px" onclick="startEval()">Run evals</button>
+        </div>
+        <div class="pol-hint" id="evalProgress" style="margin-bottom:10px">The agent run costs about ₹3 per question (22 questions ≈ ₹60–70) and takes 2–5 minutes. The baseline is free.</div>
+        <div style="overflow-x:auto"><table class="ins-table" id="evalRuns"></table></div>
+        <div id="evalDetail" style="margin-top:18px"></div>
+      </div>
+    </div>
+
+    <div data-tab="insights" class="panel" id="relPanel">
+      <div class="panel-head"><div class="panel-title">Relevance labels</div><div class="panel-meta" id="relMeta">answer key for recall · AI pre-grades, you confirm</div></div>
+      <div class="panel-body">
+        <div class="pol-hint" style="margin-bottom:10px">For each discovery question: <b>Prepare</b> pools ~50–80 candidate products (6 differently-worded searches + everything any eval run showed) and has Claude Haiku grade each one 2 / 1 / 0 from its photo and text (about ₹3–6 per question). Then <b>Review</b> and fix the AI's grades: your grade always wins. Eval runs are then scored for precision, recall and ranking against these labels. Re-run Prepare after new eval runs so their products get labelled too.</div>
+        <div class="ins-controls"><button class="btn-add" id="relAllBtn" style="flex:0 0 auto;padding:8px 18px" onclick="prepareAllRel()">Prepare all questions</button><span class="pol-hint" id="relProgress"></span></div>
+        <div style="overflow-x:auto"><table class="ins-table" id="relTable"></table></div>
+        <div id="relDetail" style="margin-top:18px"></div>
+      </div>
+    </div>
+
     <!-- BRAND LIST -->
-    <div class="panel">
+    <div data-tab="brands" class="panel">
       <div class="panel-head">
         <div class="panel-title">Your Brands</div>
         <div class="panel-meta" id="brandCount">Loading…</div>
@@ -207,7 +367,7 @@ input:focus { border-color:var(--accent); }
     </div>
 
     <!-- DISCOVER -->
-    <div class="panel">
+    <div data-tab="brands" class="panel">
       <div class="panel-head">
         <div class="panel-title">Discover Brands</div>
         <div class="panel-meta" id="recCount"></div>
@@ -221,7 +381,7 @@ input:focus { border-color:var(--accent); }
     </div>
 
     <!-- HOW IT WORKS -->
-    <div class="panel">
+    <div data-tab="brands" class="panel">
       <div class="panel-head"><div class="panel-title">How it works</div></div>
       <div class="panel-body" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);line-height:2.2">
         1. Add a Shopify brand URL below →<br>
@@ -236,10 +396,10 @@ input:focus { border-color:var(--accent); }
 
   </div>
 
-  <div style="display:flex;flex-direction:column;gap:24px">
+  <div class="admin-col" style="display:flex;flex-direction:column;gap:24px">
 
     <!-- ADD BRAND -->
-    <div class="panel">
+    <div data-tab="brands" class="panel">
       <div class="panel-head">
         <div class="panel-title">Add a Brand</div>
       </div>
@@ -267,7 +427,7 @@ input:focus { border-color:var(--accent); }
     </div>
 
     <!-- REFRESH -->
-    <div class="panel">
+    <div data-tab="brands" class="panel">
       <div class="panel-head">
         <div class="panel-title">Refresh Feed</div>
       </div>
@@ -282,8 +442,61 @@ input:focus { border-color:var(--accent); }
       </div>
     </div>
 
+    <!-- STYLIST CATALOG -->
+    <div data-tab="stylist" class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Stylist Catalog</div>
+        <div class="panel-meta" id="catalogMeta"></div>
+      </div>
+      <div class="panel-body">
+        <button class="btn-big-refresh" id="catalogSyncBtn" onclick="catalogAction('sync')">⇪ Sync Catalog to Algolia</button>
+        <div class="btn-row" style="margin-top:0">
+          <button class="btn-test" onclick="catalogStatus()">Index status</button>
+          <button class="btn-test" id="catalogFreezeBtn" onclick="catalogAction('freeze')">Freeze eval copy</button>
+        </div>
+        <div class="cron-info" style="margin-top:12px">
+          Auto-sync: <strong>Daily 1:30am UTC</strong> (production only)<br>
+          Sync takes about 1–2 minutes; only in-stock products are indexed. Freeze copies today's index for evals (one copy kept — free plan is 50,000 records).
+        </div>
+        <div class="pol-hint" style="margin-top:16px">Test the Stylist's search tool</div>
+        <div style="display:grid;grid-template-columns:1fr 70px 56px;gap:6px;margin-top:6px">
+          <input id="stQuery" placeholder="cotton kurta" style="padding:7px;border:1px solid var(--border);background:var(--warm);font-size:12px">
+          <input id="stMax" placeholder="max ₹" type="number" style="padding:7px;border:1px solid var(--border);background:var(--warm);font-size:12px">
+          <input id="stSize" placeholder="size" style="padding:7px;border:1px solid var(--border);background:var(--warm);font-size:12px">
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:6px">
+          <label class="pol-hint"><input type="checkbox" id="stReturnable"> returns accepted</label>
+          <select id="stDept" style="padding:4px;border:1px solid var(--border);background:var(--warm);font-size:11px">
+            <option value="">clothing</option><option value="accessories">accessories</option><option value="fabric">fabric</option><option value="home">home</option><option value="clothing,accessories,fabric,home,other">everything</option>
+          </select>
+          <button class="btn-test" style="flex:0 0 auto;padding:7px 16px" onclick="runSearchTest()">Search</button>
+        </div>
+        <pre id="catalogOut" style="font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;white-space:pre-wrap;margin-top:12px;max-height:320px;overflow:auto;display:none"></pre>
+      </div>
+    </div>
+
+    <!-- BRAND POLICIES -->
+    <div data-tab="stylist" class="panel" id="policiesPanel">
+      <div class="panel-head">
+        <div class="panel-title">Brand Policies</div>
+        <div class="panel-meta" id="polMeta"></div>
+      </div>
+      <div class="panel-body">
+        <div class="pol-actions">
+          <button class="btn-test" id="polIngestBtn" onclick="policyAction('ingest')">1 · Fetch policy pages</button>
+          <button class="btn-test" id="polExtractBtn" onclick="policyAction('extract')">2 · Extract fields (Claude Haiku)</button>
+        </div>
+        <div class="pol-hint" style="margin-bottom:12px">
+          Open a brand to check each field against its quote. ✗ = the quote isn't found in the policy text — check it.
+          Paste text for missing or empty sections, fix any field, tick Reviewed, Save. Edits are never overwritten by a later fetch/extract.
+          After saving, run <strong>Sync Catalog</strong> so returnable/COD/etc. reach the products.
+        </div>
+        <div id="polList"><div class="pol-hint">Loading…</div></div>
+      </div>
+    </div>
+
     <!-- SETTINGS -->
-    <div class="panel">
+    <div data-tab="brands" class="panel">
       <div class="panel-head"><div class="panel-title">Settings</div></div>
       <div class="panel-body">
         <div class="setting-row">
@@ -330,6 +543,8 @@ function doLogin() {
       document.getElementById('loginScreen').style.display = 'none';
       loadSettings();
       loadRecommendations();
+      loadPolicies();
+      loadObs(); loadEvalRuns(); loadEvalIndexes(); loadRelevance();
     } else {
       document.getElementById('loginErr').style.display = 'block';
       password = '';
@@ -491,6 +706,661 @@ async function triggerRefresh() {
     }
   } catch(e) { showToast('Error: ' + e.message); }
   btn.textContent = '↻ Refresh All Brands Now'; btn.disabled = false;
+}
+
+const POL_FIELDS = {
+  returnable: 'boolean', returnWindowDays: 'integer', exchangeOnly: 'boolean', saleItemsReturnable: 'boolean',
+  customisedReturnable: 'boolean', cod: 'boolean', freeShippingThreshold: 'integer', international: 'boolean', dispatchDays: 'integer',
+};
+const POL_LABELS = {
+  returnable: 'Returns accepted', returnWindowDays: 'Return window (days)', exchangeOnly: 'Exchange only',
+  saleItemsReturnable: 'Sale items returnable', customisedReturnable: 'Custom items returnable', cod: 'Cash on delivery',
+  freeShippingThreshold: 'Free shipping above ₹', international: 'Ships internationally', dispatchDays: 'Dispatch (days)',
+};
+let policyData = null;
+
+async function loadPolicies() {
+  try {
+    const res = await fetch('/api/policies', { headers: { Authorization: `Bearer ${password}` } });
+    policyData = await readJsonOrError(res);
+    if (policyData.error) throw new Error(policyData.error);
+    renderPolicies();
+  } catch (e) {
+    document.getElementById('polList').innerHTML = `<div class="pol-hint">Error: ${esc(e.message)}</div>`;
+  }
+}
+
+function polSectionBadge(key, sec) {
+  const st = sec ? sec.status : 'none';
+  const cls = st === 'ok' ? 'ok' : (st === 'none' ? '' : 'bad');
+  return `<span class="pol-badge ${cls}">${key}${st === 'ok' ? '' : ' ' + st}${sec && sec.source === 'manual' ? ' ✎' : ''}</span>`;
+}
+
+function renderPolicies() {
+  const brands = (policyData && policyData.brands) || {};
+  const meta = (policyData && policyData.meta) || {};
+  document.getElementById('polMeta').textContent = meta.totalTokens
+    ? `${meta.totalTokens.toLocaleString()} policy tokens` : '';
+  const ids = currentBrands.map(b => b.id);
+  if (!Object.keys(brands).length) {
+    document.getElementById('polList').innerHTML = '<div class="pol-hint">No policies yet — click “Fetch policy pages”.</div>';
+    return;
+  }
+  document.getElementById('polList').innerHTML = ids.map(id => {
+    const e = brands[id];
+    const name = (currentBrands.find(b => b.id === id) || {}).name || id;
+    if (!e) return `<div class="pol-row"><div style="padding:12px 0;font-size:13px">${esc(name)} <span class="pol-badge">not fetched</span></div></div>`;
+    const fields = e.fields || {};
+    const found = Object.values(fields).filter(f => f.value != null).length;
+    const unverified = Object.values(fields).filter(f => f.quoteVerified === false).length;
+    const secs = ['refund', 'shipping', 'terms'].map(k => polSectionBadge(k, (e.sections || {})[k])).join(' ');
+    const fieldRows = Object.entries(POL_FIELDS).map(([name, type]) => {
+      const f = fields[name] || {};
+      const v = f.value;
+      const input = type === 'boolean'
+        ? `<select data-f="${name}"><option value="">—</option><option value="true" ${v === true ? 'selected' : ''}>yes</option><option value="false" ${v === false ? 'selected' : ''}>no</option></select>`
+        : `<input data-f="${name}" type="number" value="${v == null ? '' : v}">`;
+      const mark = f.quoteVerified === false ? '<span title="Quote not found in policy text" style="color:var(--err)">✗</span>'
+        : f.quoteVerified === true ? '<span title="Quote found in policy text" style="color:var(--ok)">✓</span>' : '';
+      return `<div class="pol-field"><label title="${name}">${POL_LABELS[name]}${f.source === 'manual' ? ' ✎' : ''}</label>${input}
+        <input data-q="${name}" placeholder="exact quote from the policy" value="${esc(f.quote || '')}">${mark}</div>`;
+    }).join('');
+    const sections = ['refund', 'shipping', 'terms'].map(k => {
+      const sec = (e.sections || {})[k] || {};
+      return `<details class="pol-section"><summary>${k} policy text — ${sec.status || 'none'}${sec.url ? ` · <a href="${esc(sec.url)}" target="_blank">page</a>` : ''}</summary>
+        <textarea data-s="${k}" placeholder="Paste the ${k} policy here if the page is missing or empty">${esc(sec.text || '')}</textarea></details>`;
+    }).join('');
+    return `<details class="pol-row" data-brand="${esc(id)}"><summary>
+        <span class="pol-name">${esc(name)}</span>${secs}
+        <span class="pol-badge ${found ? 'ok' : ''}">${found}/9 fields</span>
+        ${unverified ? `<span class="pol-badge bad">${unverified} ✗</span>` : ''}
+        ${e.extractError ? '<span class="pol-badge bad">extract error</span>' : ''}
+        ${e.reviewed ? '<span class="pol-badge ok">reviewed</span>' : ''}
+      </summary><div class="pol-body">
+        ${e.extractError ? `<div class="pol-hint" style="color:var(--err)">${esc(e.extractError)}</div>` : ''}
+        ${e.extractMode && e.extractMode !== 'structured' ? `<div class="pol-hint" style="color:var(--warn)">Extracted via ${esc(e.extractMode)}</div>` : ''}
+        ${fieldRows}${sections}
+        <div style="display:flex;gap:12px;align-items:center;margin-top:12px">
+          <label class="pol-hint"><input type="checkbox" data-reviewed ${e.reviewed ? 'checked' : ''}> Reviewed</label>
+          <button class="btn-test" style="flex:0 0 auto;padding:8px 18px" onclick="savePolicy('${esc(id)}')">Save</button>
+          <button class="btn-test" style="flex:0 0 auto;padding:8px 18px" onclick="policyAction('extract','${esc(id)}')">Re-extract</button>
+        </div></div></details>`;
+  }).join('');
+}
+
+async function policyAction(action, brandId) {
+  const btn = brandId ? null : document.getElementById(action === 'ingest' ? 'polIngestBtn' : 'polExtractBtn');
+  const label = btn && btn.textContent;
+  if (btn) { btn.textContent = action === 'ingest' ? 'Fetching… (~20s)' : 'Extracting… (~1–2 min)'; btn.disabled = true; }
+  try {
+    const q = `action=${action}${brandId ? `&brandId=${encodeURIComponent(brandId)}` : ''}`;
+    const res = await fetch(`/api/policies?${q}`, { method: 'POST', headers: { Authorization: `Bearer ${password}` } });
+    const data = await readJsonOrError(res);
+    if (data.error) throw new Error(data.error);
+    const errs = (data.errors || []).length;
+    showToast(action === 'ingest' ? '✓ Policy pages fetched'
+      : errs ? `Extracted with ${errs} errors — first: ${data.errors[0].error}` : '✓ Fields extracted');
+    await loadPolicies();
+  } catch (e) { showToast('Error: ' + e.message); }
+  if (btn) { btn.textContent = label; btn.disabled = false; }
+}
+
+async function savePolicy(brandId) {
+  const row = document.querySelector(`.pol-row[data-brand="${CSS.escape(brandId)}"]`);
+  const prev = policyData.brands[brandId] || {};
+  const fields = {}, sections = {};
+  row.querySelectorAll('[data-f]').forEach(el => {
+    const name = el.dataset.f;
+    const quote = row.querySelector(`[data-q="${name}"]`).value.trim();
+    const raw = el.value;
+    const value = raw === '' ? null : POL_FIELDS[name] === 'boolean' ? raw === 'true' : Number(raw);
+    const old = (prev.fields || {})[name] || {};
+    if (value !== (old.value ?? null) || quote !== (old.quote || '')) fields[name] = { value, quote };
+  });
+  row.querySelectorAll('[data-s]').forEach(el => {
+    const old = ((prev.sections || {})[el.dataset.s] || {}).text || '';
+    if (el.value.trim() !== old.trim()) sections[el.dataset.s] = el.value;
+  });
+  const reviewed = row.querySelector('[data-reviewed]').checked;
+  try {
+    const res = await fetch('/api/policies?action=save', {
+      method: 'POST', headers: { Authorization: `Bearer ${password}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ brandId, fields, sections, reviewed }),
+    });
+    const data = await readJsonOrError(res);
+    if (data.error) throw new Error(data.error);
+    policyData.brands[brandId] = data.brand;
+    renderPolicies();
+    document.querySelector(`.pol-row[data-brand="${CSS.escape(brandId)}"]`).open = true;
+    showToast('✓ Saved — run Sync Catalog when done reviewing');
+  } catch (e) { showToast('Error: ' + e.message); }
+}
+
+let styHistory = [];
+
+function styNewChat() {
+  styHistory = [];
+  document.getElementById('styThread').innerHTML = '<div class="pol-hint">New chat.</div>';
+}
+
+async function styAsk() {
+  const input = document.getElementById('styInput');
+  const q = input.value.trim();
+  if (!q) return;
+  const thread = document.getElementById('styThread');
+  const btn = document.getElementById('stySend');
+  thread.insertAdjacentHTML('beforeend', `<div class="sty-q">${esc(q)}</div><div class="sty-a pol-hint" id="styPending">Looking through the brands… (usually 5–20s)</div>`);
+  thread.scrollTop = thread.scrollHeight;
+  input.value = ''; btn.disabled = true;
+  styHistory.push({ role: 'user', content: q });
+  let wishlistIds = [];
+  try { wishlistIds = JSON.parse(localStorage.getItem('wishlist') || '[]'); } catch {}
+  const anchorId = document.getElementById('styAnchor').value.trim() || undefined;
+  let html;
+  try {
+    const res = await fetch('/api/stylist', {
+      method: 'POST', headers: { Authorization: `Bearer ${password}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: styHistory.slice(-6), wishlistIds, anchorId }),
+    });
+    const d = await readJsonOrError(res);
+    if (d.error) throw new Error(d.error + (d.detail ? ` (${d.detail})` : ''));
+    styHistory.push({ role: 'assistant', content: d.answer });
+    const t = d.trace || {};
+    const steps = (t.steps || []).filter(s => s.tool !== 'respond')
+      .map(s => `${s.tool}${s.input && s.input.query !== undefined ? `("${s.input.query}"${s.input.maxPrice ? ` ≤₹${s.input.maxPrice}` : ''}${s.input.size ? ` ${s.input.size}` : ''})` : ''}→${s.resultCount ?? '!'}${s.relaxed ? ` [${s.relaxed}]` : ''}${s.error ? ` ERR ${s.error}` : ''}`).join(' · ');
+    html = `<div>${esc(d.answer)}</div>`
+      + (d.caveats || []).map(c => `<div class="sty-caveat">⚠ ${esc(c)}</div>`).join('')
+      + (d.policy_quotes || []).map(pq => `<div class="sty-quote">“${esc(pq.quote)}” — ${esc(pq.brandId)}</div>`).join('')
+      + (d.products || []).map(p => `<a class="sty-prod" href="${esc(p.productUrl)}" target="_blank"><img src="${esc(p.image || '')}" alt=""><span>${esc(p.name)}<br><span class="pol-hint">${esc(p.brandName)} · ₹${p.price}${p.discountPct ? ` (-${p.discountPct}%)` : ''}</span></span></a>`).join('')
+      + `<div class="sty-trace">${esc(steps || 'no tool calls')}<br>${(t.latencyMs / 1000).toFixed(1)}s · ₹${t.costINR} · ${t.llmCalls} model calls · ${t.tokens ? t.tokens.in + t.tokens.cacheRead : 0} in / ${t.tokens ? t.tokens.out : 0} out tokens · ${esc(d.finishedBy)}${t.invalidIds && t.invalidIds.length ? ` · dropped invented ids: ${t.invalidIds.length}` : ''}</div>`;
+  } catch (e) {
+    styHistory.pop();
+    html = `<div style="color:var(--err)">Error: ${esc(e.message)}</div>`;
+  }
+  document.getElementById('styPending').outerHTML = `<div class="sty-a">${html}</div>`;
+  thread.scrollTop = thread.scrollHeight;
+  btn.disabled = false;
+}
+
+// ── INSIGHTS: observability + evals ──────────────────────
+const fmtS = ms => ms == null ? '—' : (ms / 1000).toFixed(1) + 's';
+const pctTxt = x => x == null ? '—' : Math.round(x * 100) + '%';
+const kpi = (v, l) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`;
+function toolChain(steps) {
+  return (steps || []).filter(s => s.tool !== 'respond').map(s => {
+    const q = s.input && s.input.query !== undefined ? `"${s.input.query}"` : '';
+    const f = s.input ? [s.input.maxPrice ? `≤₹${s.input.maxPrice}` : '', s.input.gender || '', s.input.returnableOnly ? 'returnable' : '', s.input.size || ''].filter(Boolean).join(' ') : '';
+    return `${s.tool.replace('_products', '').replace('get_', '')}${q || f ? `(${[q, f].filter(Boolean).join(' ')})` : ''}→${s.resultCount ?? '!'}${s.relaxed ? '⚠' : ''}`;
+  }).join(' · ') || '—';
+}
+
+// ── Relevance labels (answer key for recall) ───────────────
+let relData = null, relFilter = 'all', relSaveChain = Promise.resolve();
+const relGrade = it => (it.human != null ? it.human : it.ai ? it.ai.grade : null);
+
+async function loadRelevance() {
+  try {
+    const { queries } = await insights('?view=relevance');
+    const done = queries.filter(q => q.pool && q.aiGraded === q.pool).length;
+    document.getElementById('relMeta').textContent = `${done}/${queries.length} questions prepared`;
+    document.getElementById('relTable').innerHTML = `<tr><th>ID</th><th>Question</th><th>Pool</th><th>AI graded</th><th>You reviewed</th><th>Great (2)</th><th>AI agrees with you</th><th>Cost</th><th></th></tr>` +
+      queries.map(q => `<tr><td><b>${esc(q.queryId)}</b></td><td>${esc(q.query)}</td><td>${q.pool || '—'}</td><td>${q.pool ? `${q.aiGraded}/${q.pool}` : '—'}</td>
+        <td>${q.humanReviewed || 0}</td><td>${q.pool ? q.great : '—'}</td>
+        <td>${q.judgeAgreement != null ? `${pctTxt(q.judgeAgreement)} <span class="pol-hint">(${q.judgeAgreementN})</span>` : '—'}</td><td>${q.costINR ? '₹' + q.costINR : '—'}</td>
+        <td style="white-space:nowrap"><button class="btn-test" style="padding:4px 10px" onclick="prepareRel('${esc(q.queryId)}', this)">${q.pool ? 'Update' : 'Prepare'}</button>
+        ${q.pool ? `<button class="btn-test" style="padding:4px 10px" onclick="openRel('${esc(q.queryId)}')">Review ›</button>` : ''}</td></tr>`).join('');
+    return queries;
+  } catch (e) { document.getElementById('relTable').innerHTML = `<tr><td>Error: ${esc(e.message)}</td></tr>`; return []; }
+}
+
+async function prepareRel(queryId, btn) {
+  const prog = document.getElementById('relProgress');
+  if (btn) btn.disabled = true;
+  try {
+    prog.textContent = `${queryId}: pooling candidates…`;
+    let s = await insights('?action=pool', { method: 'POST', body: JSON.stringify({ queryId }) });
+    for (let i = 0; i < 5; i++) {
+      prog.textContent = `${queryId}: AI grading ${s.aiGraded || 0}/${s.pool}…`;
+      s = await insights('?action=judge', { method: 'POST', body: JSON.stringify({ queryId }) });
+      if (!s.remaining) break;
+    }
+    prog.textContent = `${queryId}: ${s.pool} products, ${s.great} great · ₹${s.costINR}`;
+  } catch (e) { prog.textContent = `${queryId}: error — ${e.message}`; }
+  if (btn) btn.disabled = false;
+  await loadRelevance();
+}
+
+async function prepareAllRel() {
+  const btn = document.getElementById('relAllBtn');
+  btn.disabled = true;
+  const queries = await loadRelevance();
+  for (const q of queries) if (!q.pool || q.aiGraded < q.pool) await prepareRel(q.queryId);
+  document.getElementById('relProgress').textContent = '✓ All questions prepared. Review the AI grades, starting with the 2s.';
+  btn.disabled = false;
+}
+
+async function openRel(queryId) {
+  const box = document.getElementById('relDetail');
+  box.innerHTML = '<div class="pol-hint">Loading…</div>';
+  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  try { relData = await insights(`?view=relevance&queryId=${encodeURIComponent(queryId)}`); relFilter = 'all'; renderRel(); }
+  catch (e) { box.innerHTML = `<div class="pol-hint">Error: ${esc(e.message)}</div>`; }
+}
+
+function renderRel() {
+  const d = relData, entries = Object.entries(d.items || {});
+  const order = it => (relGrade(it) == null ? -1 : relGrade(it));
+  entries.sort((a, b) => order(b[1]) - order(a[1]));
+  const shown = entries.filter(([, it]) => relFilter === 'all' ? true
+    : relFilter === 'todo' ? it.human == null
+    : relFilter === 'disagree' ? it.human != null && it.ai && it.human !== it.ai.grade
+    : String(relGrade(it)) === relFilter);
+  const reviewed = entries.filter(([, it]) => it.human != null).length;
+  const cards = shown.map(([id, it]) => {
+    const p = it.snapshot || {}, g = relGrade(it);
+    const btn = v => `<button class="v${v} ${it.human === v ? 'on' : ''} ${it.human == null && it.ai && it.ai.grade === v ? 'ai' : ''}" onclick="setRel('${esc(id)}', ${v})">${v}</button>`;
+    return `<div class="rel-card g${g ?? 'x'}">
+      <a href="${esc(p.productUrl || '#')}" target="_blank" rel="noopener">${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : '<div class="ev-noimg">no photo</div>'}</a>
+      <div class="rc-body"><b>${esc(p.name || id)}</b><span class="pol-hint">${esc(p.brandName || '')} · ₹${p.price ?? '?'}${p.gender && p.gender !== 'unknown' ? ' · ' + esc(p.gender) : ''}</span>
+        ${it.ai ? `<span class="rc-ai">AI ${it.ai.grade}: ${esc(it.ai.why || '')}${it.ai.photo ? '' : ' (no photo)'}</span>` : '<span class="rc-ai">not AI-graded yet</span>'}
+        ${it.sources && it.sources.includes('eval run') ? '<span class="pol-hint">● shown in an eval run</span>' : ''}
+        <div class="rc-btns">${btn(0)}${btn(1)}${btn(2)}</div></div></div>`;
+  }).join('');
+  const f = (v, label) => `<button class="btn-test" style="padding:4px 10px;${relFilter === v ? 'background:var(--ink);color:var(--paper)' : ''}" onclick="relFilter='${v}'; renderRel()">${label}</button>`;
+  document.getElementById('relDetail').innerHTML = `
+    <div class="panel-title" style="font-size:18px;margin-bottom:4px">${esc(d.queryId)} · ${esc(d.query || '')}</div>
+    <div class="pol-hint" style="margin-bottom:8px">${d.must ? `<b>Must:</b> ${esc(d.must)} · ` : ''}${d.mustNot ? `<b>Must not:</b> ${esc(d.mustNot)} · ` : ''}Constraints: ${esc(d.constraints || '')}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px">
+      <b style="font-size:13px">You reviewed ${reviewed} / ${entries.length}</b>${entries.some(([, it]) => it.bulk) ? `<span class="pol-hint">(${entries.filter(([, it]) => it.bulk).length} by "agree with AI")</span>` : ''}
+      ${f('all', 'All')}${f('todo', 'Not reviewed')}${f('2', 'Great (2)')}${f('1', 'OK (1)')}${f('0', 'Wrong (0)')}${f('disagree', 'You disagreed with AI')}
+      <button class="btn-test" style="padding:4px 10px" onclick="confirmRelVisible()">Agree with AI on all shown</button>
+    </div>
+    <div class="pol-hint" style="margin-bottom:10px">Dashed button = the AI's grade. Click a number to set yours (click again to clear). Recall counts the 2s, so check those first: they're the "best possible picks" each answer is measured against.</div>
+    <div class="rel-grid">${cards || '<div class="pol-hint">Nothing in this filter.</div>'}</div>`;
+}
+
+function saveRel(labels) {
+  const queryId = relData.queryId;
+  relSaveChain = relSaveChain.then(async () => {
+    try { await insights('?action=label', { method: 'POST', body: JSON.stringify({ queryId, labels }) }); }
+    catch (e) { showToast('Not saved: ' + e.message); }
+  });
+  const mine = relSaveChain;
+  mine.then(() => { if (mine === relSaveChain) loadRelevance(); });
+}
+
+function setRel(id, v) {
+  const it = relData.items[id];
+  it.human = it.human === v ? null : v;
+  delete it.bulk;
+  renderRel();
+  saveRel({ [id]: it.human });
+}
+
+function confirmRelVisible() {
+  const labels = {};
+  for (const [id, it] of Object.entries(relData.items)) {
+    if (it.human != null || !it.ai) continue;
+    const g = it.ai.grade;
+    const visible = relFilter === 'all' || relFilter === 'todo' || String(g) === relFilter;
+    if (visible) { it.human = g; it.bulk = true; labels[id] = 'confirm'; }
+  }
+  if (!Object.keys(labels).length) return showToast('Nothing to confirm in this view');
+  renderRel();
+  saveRel(labels);
+  showToast(`Confirmed ${Object.keys(labels).length} AI grades`);
+}
+
+async function insights(path, opts) {
+  const res = await fetch('/api/insights' + path, { ...(opts || {}), headers: { Authorization: `Bearer ${password}`, 'Content-Type': 'application/json' } });
+  const d = await readJsonOrError(res);
+  if (d.error) throw new Error(d.error);
+  return d;
+}
+
+async function loadObs() {
+  const source = document.getElementById('obsSource').value, days = document.getElementById('obsDays').value;
+  document.getElementById('obsMeta').textContent = 'loading…';
+  try {
+    const d = await insights(`?view=traces&days=${days}&source=${source}`);
+    const s = d.summary;
+    document.getElementById('obsMeta').textContent = Object.entries(d.bySource).map(([k, v]) => `${k} ${v}`).join(' · ') || 'no traces yet';
+    document.getElementById('obsKpis').innerHTML = [
+      kpi(s.questions, 'questions'), kpi(s.errors, 'errors'),
+      kpi(s.latencySec.p50 != null ? s.latencySec.p50 + 's' : '—', 'median time'), kpi(s.latencySec.p90 != null ? s.latencySec.p90 + 's' : '—', 'p90 time'),
+      kpi(s.costINR.p50 != null ? '₹' + s.costINR.p50 : '—', 'median cost'), kpi('₹' + (s.costINR.total || 0), 'total cost'),
+      kpi(s.toolCalls.mean ?? '—', 'tool calls / q'), kpi(pctTxt(s.within2ToolCalls), '≤2 tool calls'),
+      kpi(pctTxt(s.relaxedRate), 'filter relaxed'), kpi(pctTxt(s.invalidIdRate), 'invented ids caught'),
+      kpi(pctTxt(s.cacheReadShare), 'input from cache'), kpi(`${s.feedback.up}👍 ${s.feedback.down}👎`, 'feedback'),
+    ].join('');
+    obsTraces = d.traces;
+    document.getElementById('obsTable').innerHTML = `<tr><th>When</th><th>Question</th><th>Tools</th><th>Time</th><th>₹</th><th>👍</th></tr>` +
+      d.traces.map((t, i) => `<tr class="click" onclick="toggleTrace(this, ${i})"><td>${new Date(t.ts).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}</td>
+        <td>${esc(t.query)}</td><td style="font-family:'DM Mono',monospace;font-size:10px">${esc(toolChain(t.steps))}</td><td>${fmtS(t.latencyMs)}</td><td>${t.costINR ?? '—'}</td>
+        <td>${t.feedback ? (t.feedback.rating === 'up' ? '👍' : '👎') : ''}${t.error ? '⚠' : ''}</td></tr>`).join('');
+  } catch (e) { document.getElementById('obsMeta').textContent = 'Error: ' + e.message; }
+}
+let obsTraces = [];
+function toggleTrace(tr, i) {
+  if (tr.nextElementSibling && tr.nextElementSibling.classList.contains('ins-detail')) { tr.nextElementSibling.remove(); return; }
+  const t = obsTraces[i];
+  const steps = (t.steps || []).map(s => `${s.tool} ${JSON.stringify(s.input || {})} → ${s.resultCount ?? '-'} results, ${s.ms}ms${s.relaxed ? ' · relaxed: ' + s.relaxed : ''}${s.error ? ' · ERROR ' + s.error : ''}`).join('<br>');
+  tr.insertAdjacentHTML('afterend', `<tr class="ins-detail"><td colspan="6">
+    <b>Answer:</b> ${esc(t.answer ? t.answer.text : t.error || '')}<br>
+    ${t.answer && t.answer.caveats && t.answer.caveats.length ? '<b>Caveats:</b> ' + esc(t.answer.caveats.join(' | ')) + '<br>' : ''}
+    <b>Steps:</b><br>${steps}<br>
+    <b>Model calls:</b> ${t.llmCalls} · <b>tokens</b> in ${t.tokens ? t.tokens.in : 0} + cached ${t.tokens ? t.tokens.cacheRead : 0} / out ${t.tokens ? t.tokens.out : 0} · <b>products shown</b> ${(t.productIds || []).length}${(t.invalidIds || []).length ? ` · <b style="color:var(--err)">invented ids dropped ${t.invalidIds.length}</b>` : ''} · finished by ${esc(t.finishedBy || '?')} · ${esc(t.model || '')}
+  </td></tr>`);
+}
+
+async function loadEvalIndexes() {
+  try {
+    const res = await fetch('/api/catalog', { headers: { Authorization: `Bearer ${password}` } });
+    const d = await readJsonOrError(res);
+    if (d.indices) document.getElementById('evalIndex').innerHTML = d.indices.map(i => `<option value="${esc(i.name)}">${i.name === 'products' ? 'Live catalog' : 'Frozen: ' + esc(i.name.replace('products_eval_', ''))} (${i.records})</option>`).join('');
+  } catch {}
+}
+
+async function loadEvalRuns() {
+  try {
+    const { runs } = await insights('?view=runs');
+    document.getElementById('evalRuns').innerHTML = runs.length ? `<tr><th>Run</th><th>System</th><th>Auto checks</th><th>Your grades</th><th>Median time</th><th>Cost</th><th>₹ / answer</th><th>₹ / good answer</th><th>≤2 calls</th><th></th></tr>` +
+      runs.map(r => { const s = r.summary || {}; return `<tr class="click" onclick="openEvalRun('${esc(r.runId)}')">
+        <td>${new Date(r.createdAt).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}${r.label ? ' · ' + esc(r.label) : ''}${r.finished ? '' : ' <span style="color:var(--warn)">(unfinished)</span>'}</td>
+        <td>${r.system === 'C' ? 'Agent' : 'Baseline'} ×${r.runs}</td><td><b>${pctTxt(s.codeCheckPassRate)}</b></td><td>${s.graded ? pctTxt(s.humanPassRate) + ` (${s.graded})` : '—'}${s.rubric ? `<br><span class="pol-hint">rubric ${pctTxt(s.rubric.meanPct)}</span>` : ''}</td>
+        <td>${s.latencySec && s.latencySec.p50 != null ? s.latencySec.p50 + 's' : '—'}</td><td>₹${s.costINR ? s.costINR.total : 0}</td><td>${s.costINR && s.costINR.mean != null ? '₹' + s.costINR.mean : '—'}</td><td>${s.costINR && s.costINR.perPass != null ? '₹' + s.costINR.perPass : '—'}</td><td>${pctTxt(s.within2ToolCalls)}</td><td><b style="color:var(--accent);white-space:nowrap">Open &amp; grade ›</b></td></tr>`; }).join('')
+      : '<tr><td class="pol-hint">No eval runs yet. Run the baseline (free) and the agent, then compare.</td></tr>';
+  } catch (e) { document.getElementById('evalRuns').innerHTML = `<tr><td>Error: ${esc(e.message)}</td></tr>`; }
+}
+
+async function startEval() {
+  const btn = document.getElementById('evalRunBtn'), prog = document.getElementById('evalProgress');
+  btn.disabled = true;
+  try {
+    const system = document.getElementById('evalSystem').value;
+    const s = await insights('?action=start', { method: 'POST', body: JSON.stringify({ system, runs: Number(document.getElementById('evalRepeat').value),
+      index: document.getElementById('evalIndex').value, label: document.getElementById('evalLabel').value.trim() }) });
+    let remaining = s.total;
+    prog.textContent = `Running ${s.total} questions… 0/${s.total} done. Keep this page open.`;
+    while (remaining > 0) {
+      const r = await insights('?action=continue', { method: 'POST', body: JSON.stringify({ runId: s.runId }) });
+      remaining = r.remaining;
+      prog.textContent = `Running… ${s.total - remaining}/${s.total} done${r.summary ? ` · auto checks so far ${pctTxt(r.summary.codeCheckPassRate)}` : ''}`;
+    }
+    prog.textContent = '✓ Finished. Open the run below to review answers and grade them.';
+    await loadEvalRuns();
+    openEvalRun(s.runId);
+  } catch (e) { prog.textContent = 'Error: ' + e.message + ' — reopen the run below; Run again continues nothing, so start a new run if it stopped.'; }
+  btn.disabled = false;
+}
+
+let evalHideGraded = false;
+let evalRun = null, evalCriteria = null, evalRubric = null, evalSaveChain = Promise.resolve();   // criteria: the test set's must / mustNot by id
+async function openEvalRun(runId) {
+  const box = document.getElementById('evalDetail');
+  box.innerHTML = '<div class="pol-hint">Loading run…</div>';
+  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  try {
+    if (!evalCriteria) {
+      const ts = await insights('?view=testset');
+      evalCriteria = Object.fromEntries((ts.queries || []).map(q => [q.id, q]));
+      evalRubric = ts.rubric || null;
+    }
+    evalRun = await insights(`?view=run&runId=${encodeURIComponent(runId)}`);
+    renderEvalRun();
+  } catch (e) { box.innerHTML = `<div class="pol-hint">Error: ${esc(e.message)}</div>`; }
+}
+
+function critHtml(q) {
+  if (!q || (!q.must && !q.mustNot)) return '';
+  return `<div class="pol-hint" style="margin-top:4px;padding:4px 6px;border-left:3px solid var(--accent)">
+    ${q.must ? `<div><b style="color:var(--ok)">Must:</b> ${esc(q.must)}</div>` : ''}${q.mustNot ? `<div><b style="color:var(--warn)">Must not:</b> ${esc(q.mustNot)}</div>` : ''}</div>`;
+}
+
+// Same rule as lib/evals.js scoreRubric, so the screen updates instantly while the save runs in the background.
+function scoreRubricLocal(scores) {
+  const dims = evalRubric.dimensions;
+  const scored = dims.filter(d => typeof scores[d.id] === 'number');
+  const complete = dims.every(d => d.id in scores);
+  const max = scored.length * 2, total = scored.reduce((a, d) => a + scores[d.id], 0);
+  const criticalZero = dims.some(d => d.critical && scores[d.id] === 0);
+  const verdict = complete && max ? (!criticalZero && total / max >= evalRubric.passPct ? 'pass' : 'fail') : null;
+  return { scores, total, max, pct: max ? Math.round(total / max * 100) / 100 : null, complete, criticalZero, verdict };
+}
+
+function rubricGuide() {
+  if (!evalRubric) return '';
+  return `<details class="rub-guide"><summary>How to score: rubric (0 / 1 / 2 per dimension, N/A if it doesn't apply · * = critical: a 0 there fails the answer · pass ≥ ${Math.round(evalRubric.passPct * 100)}%)</summary>
+    <table>${evalRubric.dimensions.map(d => `<tr><td><b>${esc(d.name)}${d.critical ? ' *' : ''}</b><br><span class="pol-hint">${esc(d.help)}</span></td>
+      ${[2, 1, 0].map(v => `<td><b>${v}</b> · ${esc(d.levels[v])}</td>`).join('')}</tr>`).join('')}</table></details>`;
+}
+
+function gradeCell(x, i) {
+  const quick = `<button class="grade-btn pass ${x.grade === 'pass' ? 'on' : ''}" onclick="gradeEval(${i},'pass')">Pass</button>
+        <button class="grade-btn fail ${x.grade === 'fail' ? 'on' : ''}" onclick="gradeEval(${i},'fail')">Fail</button>`;
+  if (!evalRubric) return `<div style="white-space:nowrap">${quick}</div>`;
+  const sc = (x.rubric && x.rubric.scores) || {};
+  const rows = evalRubric.dimensions.map(d => `<div class="rub-row"><span class="rub-name" title="${esc(d.help)}">${esc(d.name)}${d.critical ? ' *' : ''}</span>${
+    [0, 1, 2, 'na'].map(v => `<button class="rub-btn v${v} ${sc[d.id] === v ? 'on' : ''}" title="${esc(v === 'na' ? 'Not applicable' : d.levels[v])}" onclick="rateDim(${i},'${d.id}',${v === 'na' ? "'na'" : v})">${v === 'na' ? 'N/A' : v}</button>`).join('')}</div>`).join('');
+  const r = x.rubric;
+  const sum = r && r.max ? `${r.total}/${r.max} (${pctTxt(r.pct)})${r.complete ? '' : ' · finish all 5 for a verdict'}${r.criticalZero ? ' · <b style="color:var(--err)">critical 0</b>' : ''}` : 'Not scored yet';
+  return `${rows}<div class="rub-sum">${sum}</div><div style="white-space:nowrap"><span class="pol-hint">Verdict: </span>${quick}</div>
+    <input class="rub-note" placeholder="Why? (optional note)" value="${esc(x.note || '')}" onchange="noteEval(${i}, this.value)">`;
+}
+
+function saveGrade(i, payload) {
+  const x = evalRun.results[i];
+  evalSaveChain = evalSaveChain.then(async () => {
+    try {
+      const d = await insights('?action=grade', { method: 'POST', body: JSON.stringify({ runId: evalRun.runId, queryId: x.queryId, repeat: x.repeat || 1, ...payload }) });
+      evalRun.summary = d.summary;
+    } catch (e) { showToast('Not saved: ' + e.message); }
+  });
+  // When saves settle, refresh the KPIs (skip while typing a note so focus isn't lost).
+  const mine = evalSaveChain;
+  mine.then(() => { if (mine !== evalSaveChain) return; loadEvalRuns(); if (!document.activeElement || !document.activeElement.classList.contains('rub-note')) renderEvalRun(); });
+}
+
+function rateDim(i, dim, v) {
+  const x = evalRun.results[i];
+  const scores = { ...((x.rubric && x.rubric.scores) || {}) };
+  if (scores[dim] === v) delete scores[dim]; else scores[dim] = v;
+  x.rubric = Object.keys(scores).length ? scoreRubricLocal(scores) : null;
+  if (x.rubric && x.rubric.verdict) x.grade = x.rubric.verdict;
+  else if (!x.rubric) x.grade = null;
+  renderEvalRun();
+  saveGrade(i, { rubric: Object.keys(scores).length ? scores : null });
+}
+
+function noteEval(i, note) {
+  evalRun.results[i].note = note;
+  saveGrade(i, { note });
+}
+
+function nextUngraded() {
+  const row = document.querySelector('#evalDetail tr[data-graded="0"]');
+  if (row) { row.scrollIntoView({ behavior: 'smooth', block: 'start' }); row.style.outline = '2px solid var(--accent)'; setTimeout(() => row.style.outline = '', 1500); }
+}
+
+// "See all" from an eval answer: the same search the Stylist pointed at, on the run's index, 24 per page.
+async function evalSeeAll(btn, i, page) {
+  const x = evalRun.results[i];
+  btn.disabled = true; btn.textContent = 'Loading…';
+  try {
+    const res = await fetch('/api/stylist?browse=1', { method: 'POST', headers: { Authorization: `Bearer ${password}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ browse: x.browse, page, index: evalRun.index }) });
+    const d = await readJsonOrError(res);
+    if (d.error) throw new Error(d.error);
+    const shown = new Set((x.products || []).map(p => p.id));
+    const cards = d.products.map(p => `<a class="ev-prod" href="${esc(p.productUrl || '#')}" target="_blank" rel="noopener" ${shown.has(p.id) ? 'style="border-color:var(--ok);border-width:2px"' : ''}>
+        ${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : '<div class="ev-noimg">no photo</div>'}
+        <span class="ev-name">${esc(p.name)}</span><span class="ev-meta">${esc(p.brandName)} · ₹${p.price}${shown.has(p.id) ? ' · <b style="color:var(--ok)">picked</b>' : ''}</span></a>`).join('');
+    const head = page === 0 ? `<div class="pol-hint" style="margin-top:8px">All ${d.total} matches, best keyword match first (green = one the Stylist picked). Ranks ${page * 24 + 1}–${page * 24 + d.products.length}:</div>` : `<div class="pol-hint" style="margin-top:8px">Ranks ${page * 24 + 1}–${page * 24 + d.products.length}:</div>`;
+    const more = d.hasMore ? `<button class="btn-test" style="padding:5px 12px;margin-top:6px" onclick="evalSeeAll(this, ${i}, ${page + 1})">Load more</button>` : '';
+    const target = btn.parentElement.classList.contains('ev-seeall') ? btn.parentElement : btn;
+    target.outerHTML = `${head}<div class="ev-prods">${cards}</div>${more}`;
+  } catch (e) { btn.disabled = false; btn.textContent = 'Try again'; showToast(e.message); }
+}
+
+function relLine(x) {
+  const v = evalRun.relevance && evalRun.relevance.per && evalRun.relevance.per[`${x.queryId}#${x.repeat || 1}`];
+  if (!v) return '';
+  return `<div class="pol-hint" style="margin-top:4px">vs relevance labels: found <b>${v.foundGreat}</b> of ${Math.min(v.greatInPool, v.k)} possible great picks (${v.greatInPool} great in pool)
+    · recall ${pctTxt(v.recall)} · precision ${pctTxt(v.precision)} · nDCG ${v.ndcg ?? '—'}${v.unlabelled ? ` · <span style="color:var(--warn)">${v.unlabelled} shown product(s) not labelled yet: run Update in Relevance labels</span>` : ''}</div>`;
+}
+
+function renderEvalRun() {
+  const r = evalRun, s = r.summary || {};
+  const rs = r.relevance && r.relevance.summary;
+  const checks = Object.entries(s.byCheck || {}).map(([k, v]) => `<span class="chk ${v.pass === v.total ? 'ok' : 'bad'}">${k} ${v.pass}/${v.total}</span>`).join('');
+  const isGraded = x => !!x.grade || !!(x.rubric && x.rubric.complete);
+  const nGraded = (r.results || []).filter(isGraded).length, nTotal = (r.results || []).length;
+  const rows = (r.results || []).map((x, i) => {
+    if (evalHideGraded && isGraded(x)) return '';
+    const ch = Object.entries(x.checks || {}).map(([k, c]) => `<span class="chk ${c.pass ? 'ok' : 'bad'}" title="${esc(c.detail || '')}">${c.pass ? '✓' : '✗'} ${k}</span>`).join('');
+    const prods = (x.products || []).map(p => `<a class="ev-prod" href="${esc(p.productUrl || '#')}" target="_blank" rel="noopener" title="${esc(p.name)} — open on the brand's site">
+        ${p.image ? `<img src="${esc(p.image)}" alt="" loading="lazy">` : '<div class="ev-noimg">no photo</div>'}
+        <span class="ev-name">${esc(p.name)}</span>${x.reasons && x.reasons[p.id] ? `<span class="ev-why">${esc(x.reasons[p.id])}</span>` : ''}<span class="ev-meta">${esc(p.brandName)} · ₹${p.price}${p.discountPct ? ` · ${p.discountPct}% off` : ''}${p.gender && p.gender !== 'unknown' ? ` · ${esc(p.gender)}` : ''}</span></a>`).join('');
+    const convo = (x.turns || []).length > 2 ? `<div class="pol-hint" style="margin-top:4px">${(x.turns || []).slice(1, -1).map(t => `${t.role === 'user' ? '👤' : '🤖'} ${esc(t.content)}`).join('<br>')}</div>` : '';
+    return `<tr id="evrow-${i}" data-graded="${isGraded(x) ? 1 : 0}"><td><b>${esc(x.queryId)}</b>${isGraded(x) ? '<br><span style="color:var(--ok)">✓ graded</span>' : ''}${r.runs > 1 ? `<br><span class="pol-hint">run ${x.repeat}</span>` : ''}</td>
+      <td style="max-width:520px"><b>${esc(x.query)}</b>${critHtml(evalCriteria && evalCriteria[x.queryId])}${convo}<div style="margin-top:6px">${esc(x.answer || x.error || '')}</div>
+        ${(x.caveats || []).length ? `<div class="pol-hint" style="color:var(--warn)">⚠ ${esc(x.caveats.join(' | '))}</div>` : ''}
+        ${relLine(x)}
+        ${prods ? `<div class="ev-prods">${prods}</div>${x.totalMatches ? `<div class="ev-seeall" style="margin-top:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="btn-test" style="padding:5px 12px" onclick="evalSeeAll(this, ${i}, 0)">See all ${x.totalMatches} matches</button><span class="pol-hint">pool for “${esc((x.browse && x.browse.query) || '')}” · showed ${(x.products || []).length}</span></div>` : ''}` : `<div class="pol-hint" style="margin-top:6px">No products shown</div>`}
+        <div class="pol-hint" style="margin-top:6px">${esc(toolChain(x.trace && x.trace.steps))} · ${fmtS(x.trace && x.trace.latencyMs)} · ₹${x.trace ? x.trace.costINR : 0}</div></td>
+      <td>${ch}</td>
+      <td style="min-width:270px">${gradeCell(x, i)}</td></tr>`;
+  }).join('');
+  document.getElementById('evalDetail').innerHTML = `
+    <div class="panel-title" style="font-size:18px;margin-bottom:8px">${r.system === 'C' ? 'Agent' : 'Baseline'} run · ${new Date(r.createdAt).toLocaleString('en-IN')}${r.label ? ' · ' + esc(r.label) : ''} · ${esc(r.index)}${r.model ? ' · ' + esc(r.model) : ''}</div>
+    <div class="kpis">${[kpi(pctTxt(s.codeCheckPassRate), 'auto checks pass'), kpi(s.graded ? pctTxt(s.humanPassRate) : '—', `your grades (${s.graded || 0})`),
+      kpi(r.runs > 1 ? pctTxt(s.consistency) : '—', 'consistent 3/3'), kpi(s.latencySec ? s.latencySec.p50 + 's' : '—', 'median time'),
+      kpi(s.latencySec ? s.latencySec.p90 + 's' : '—', 'p90 time'), kpi(s.costINR ? '₹' + s.costINR.p50 : '—', 'median cost'),
+      kpi(s.costINR ? '₹' + s.costINR.total : '—', 'run cost'),
+      kpi(s.costINR && s.costINR.perPass != null ? '₹' + s.costINR.perPass : '—', `₹ per good answer (${s.costINR ? s.costINR.perPassBasis || '' : ''})`),
+      kpi(s.costUSD ? '$' + s.costUSD.total : '—', 'run cost (USD)'),
+      kpi(s.tokens ? Math.round((s.tokens.in + s.tokens.cacheRead + s.tokens.cacheWrite) / 1000) + 'k / ' + Math.round(s.tokens.out / 1000) + 'k' : '—', 'tokens in / out'),
+      kpi(s.searches != null ? s.searches : '—', 'Algolia searches'), kpi(pctTxt(s.within2ToolCalls), '≤2 tool calls'),
+      kpi(s.rubric ? pctTxt(s.rubric.meanPct) : '—', `rubric score (${s.rubric ? s.rubric.scored : 0} scored)`),
+      kpi(rs ? pctTxt(rs.recall) : '—', `recall@k (${rs ? rs.scored : 0} vs labels)`),
+      kpi(rs ? pctTxt(rs.precision) : '—', 'precision (shown that fit)'),
+      kpi(rs && rs.ndcg != null ? rs.ndcg : '—', 'nDCG (ranking, 0–1)'),
+      kpi(pctTxt(s.routeAgreement), 'right first tool'), kpi(pctTxt(s.relaxedRate), 'filter relaxed')].join('')}</div>
+    <div style="margin-bottom:10px">${checks}</div>
+    ${s.rubric && evalRubric ? `<div style="margin-bottom:10px">${evalRubric.dimensions.map(d => { const v = s.rubric.byDimension[d.id]; return `<span class="chk ${v == null ? '' : v >= 1.5 ? 'ok' : v < 1 ? 'bad' : ''}">${esc(d.name)} ${v == null ? '—' : v + '/2'}</span>`; }).join('')}</div>` : ''}
+    ${rubricGuide()}
+    <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:0 0 10px;font-size:13px">
+      <b>Graded ${nGraded} / ${nTotal}</b> <span class="pol-hint">· saved automatically after every click; come back any time</span>
+      ${nGraded < nTotal ? `<button class="btn-test" style="padding:5px 12px" onclick="nextUngraded()">Next ungraded ↓</button>` : '<span style="color:var(--ok)">✓ All graded</span>'}
+      <label style="cursor:pointer"><input type="checkbox" ${evalHideGraded ? 'checked' : ''} onchange="evalHideGraded=this.checked; renderEvalRun()"> Hide graded</label>
+    </div>
+    <div class="ins-scroll"><table class="ins-table"><tr><th>ID</th><th>Question → answer</th><th>Auto checks</th><th>Your grade (rubric)</th></tr>${rows}</table></div>
+    <div style="margin-top:8px"><button class="btn-test" style="padding:7px 14px" onclick="exportEvalCsv()">Export CSV</button></div>`;
+}
+
+async function gradeEval(i, grade) {
+  const x = evalRun.results[i];
+  const next = x.grade === grade ? null : grade;
+  x.grade = next; renderEvalRun();
+  saveGrade(i, { grade: next });
+}
+
+function exportEvalCsv() {
+  const q = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
+  const rows = [['id', 'repeat', 'query', 'answer', 'products', 'checks_failed', 'grade', 'seconds', 'cost_inr', 'tokens_in', 'tokens_out', 'cache_read', 'cache_write', 'llm_calls', 'tool_calls', ...(evalRubric ? evalRubric.dimensions.map(d => 'rubric_' + d.id) : []), 'rubric_pct', 'note']]
+    .concat(evalRun.results.map(x => [x.queryId, x.repeat, x.query, x.answer || x.error, (x.products || []).map(p => `${p.name} (${p.brandName} ₹${p.price})`).join('; '),
+      Object.entries(x.checks || {}).filter(([, c]) => !c.pass).map(([k, c]) => `${k}: ${c.detail}`).join('; '), x.grade || '',
+      x.trace ? (x.trace.latencyMs / 1000).toFixed(1) : '', x.trace ? x.trace.costINR : '', ...['in', 'out', 'cacheRead', 'cacheWrite'].map(k => x.trace && x.trace.tokens ? x.trace.tokens[k] : ''), x.trace ? x.trace.llmCalls : '', x.trace ? x.trace.steps.filter(s => s.tool !== 'respond').length : '',
+      ...(evalRubric ? evalRubric.dimensions.map(d => x.rubric && x.rubric.scores[d.id] != null ? x.rubric.scores[d.id] : '') : []), x.rubric ? x.rubric.pct : '', x.note || '']));
+  const blob = new Blob([rows.map(r => r.map(q).join(',')).join('\n')], { type: 'text/csv' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `stylist-eval-${evalRun.runId}.csv`; a.click();
+}
+
+// ── ADMIN TABS ────────────────────────────────────────────
+function setAdminTab(tab) {
+  document.querySelectorAll('[data-tab]').forEach(p => { p.hidden = p.dataset.tab !== tab; });
+  document.querySelectorAll('[data-tabbtn]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tabbtn === tab)));
+  // Hide a column with nothing to show, and let the other one take the full width.
+  const cols = [...document.querySelectorAll('.admin-col')];
+  cols.forEach(c => { c.style.display = [...c.querySelectorAll(':scope > [data-tab]')].some(p => !p.hidden) ? 'flex' : 'none'; });
+  document.getElementById('adminContainer').classList.toggle('single', cols.filter(c => c.style.display !== 'none').length < 2);
+  try { localStorage.setItem('adminTab', tab); } catch {}
+}
+(function initAdminTab() {
+  let tab = 'insights';
+  try { tab = localStorage.getItem('adminTab') || tab; } catch {}
+  setAdminTab(['insights', 'stylist', 'brands'].includes(tab) ? tab : 'insights');
+})();
+
+function renderCatalogResult(data) {
+  const out = document.getElementById('catalogOut');
+  out.style.display = 'block';
+  if (data.error) { out.textContent = 'Error: ' + data.error; return; }
+  if (data.brands) {
+    const lines = [`${data.total} in-stock products (was ${data.previous}) in ${data.seconds}s · ${data.soldOutSkipped} sold out skipped · ${data.removed} removed`,
+      'Departments: ' + Object.entries(data.departments).map(([k, v]) => `${k} ${v}`).join(' · '), ''];
+    for (const [id, b] of Object.entries(data.brands)) {
+      lines.push(b.source === 'shopify'
+        ? `✓ ${b.name}: ${b.count}${b.soldOut ? ` (+${b.soldOut} sold out)` : ''}${b.hasPolicy ? '' : ' · no policy yet'}`
+        : `⚠ ${b.name}: store failed — kept ${b.count} previous records`);
+    }
+    if (!data.policiesLoaded) lines.push('', 'policies.json not found — policy fields not attached yet (step 1.4).');
+    out.textContent = lines.join('\n');
+  } else if (data.indices) {
+    out.textContent = data.indices.length
+      ? data.indices.map(i => `${i.name}: ${i.records} records · updated ${new Date(i.updatedAt).toLocaleString()}`).join('\n')
+      : 'No catalog index yet — run a sync.';
+  } else {
+    out.textContent = `Frozen: ${data.indexName} (${data.records} records)` +
+      (data.replaced && data.replaced.length ? `\nReplaced older copy: ${data.replaced.join(', ')}` : '');
+  }
+}
+
+async function readJsonOrError(res) {
+  const text = await res.text();
+  try { return JSON.parse(text); }
+  catch { return { error: `HTTP ${res.status}: ${text.replace(/\s+/g, ' ').slice(0, 300)}` }; }
+}
+
+async function runSearchTest() {
+  const params = new URLSearchParams({ query: document.getElementById('stQuery').value.trim() });
+  const max = document.getElementById('stMax').value, size = document.getElementById('stSize').value.trim();
+  const dept = document.getElementById('stDept').value;
+  if (max) params.set('maxPrice', max);
+  if (size) params.set('size', size);
+  if (dept) params.set('departments', dept);
+  if (document.getElementById('stReturnable').checked) params.set('returnableOnly', '1');
+  const out = document.getElementById('catalogOut');
+  out.style.display = 'block'; out.textContent = 'Searching…';
+  try {
+    const res = await fetch(`/api/search?${params}`, { headers: { Authorization: `Bearer ${password}` } });
+    const data = await readJsonOrError(res);
+    if (data.error) throw new Error(data.error);
+    const step = data.trace.steps[0] || {};
+    out.textContent = [`${data.totalHits} matches · ${step.ms} ms${data.relaxed ? ` · relaxed: ${data.relaxed}` : ''}`, '',
+      ...data.results.map(r => `₹${r.price}${r.discountPct ? ` (-${r.discountPct}%)` : ''}  ${r.name} — ${r.brandName}${r.sizesAvailable.length ? `  [${r.sizesAvailable.slice(0, 6).join(' ')}]` : ''}`)
+    ].join('\n');
+  } catch (e) { out.textContent = 'Error: ' + e.message; }
+}
+
+async function catalogStatus() {
+  try {
+    const res = await fetch('/api/catalog', { headers: { Authorization: `Bearer ${password}` } });
+    renderCatalogResult(await readJsonOrError(res));
+  } catch (e) { renderCatalogResult({ error: e.message }); }
+}
+
+async function catalogAction(action) {
+  const btn = document.getElementById(action === 'sync' ? 'catalogSyncBtn' : 'catalogFreezeBtn');
+  const label = btn.textContent;
+  btn.textContent = action === 'sync' ? 'Syncing… (1–2 min)' : 'Freezing…'; btn.disabled = true;
+  try {
+    const res = await fetch(`/api/catalog?action=${action}`, { method: 'POST', headers: { Authorization: `Bearer ${password}` } });
+    const data = await readJsonOrError(res);
+    renderCatalogResult(data);
+    showToast(data.error ? 'Error: ' + data.error : (action === 'sync' ? `✓ ${data.total} products synced` : `✓ Frozen ${data.indexName}`));
+  } catch (e) { renderCatalogResult({ error: e.message }); }
+  btn.textContent = label; btn.disabled = false;
 }
 
 function renderBrandList() {

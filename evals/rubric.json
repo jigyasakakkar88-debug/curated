@@ -1,0 +1,61 @@
+{
+  "_note": "Human grading rubric for Stylist eval answers. Score each dimension 0 / 1 / 2, or N/A when it doesn't apply (e.g. product fit on a decline). The verdict is derived: Pass when no critical dimension scores 0 and the total is at least passPct of the applicable maximum. Use the question's must / must-not lines as the answer key.",
+  "passPct": 0.7,
+  "dimensions": [
+    {
+      "id": "understood",
+      "name": "Understood the ask",
+      "critical": false,
+      "help": "Did it read the intent and pick the right move: search, check policy, ask one question, or decline?",
+      "levels": {
+        "2": "Right intent and right move; picked up occasion, budget, who it's for, Hinglish/typos",
+        "1": "Mostly right, but missed or misread one part of the ask",
+        "0": "Wrong move (searched when it should decline or ask) or misread the request"
+      }
+    },
+    {
+      "id": "constraints",
+      "name": "Respected constraints",
+      "critical": true,
+      "help": "Price, size, gender, returns, brand exclusions: kept, or clearly flagged when relaxed.",
+      "levels": {
+        "2": "Every hard limit kept, or any relaxation stated plainly (\"₹400 over budget\")",
+        "1": "A minor slip, or a relaxation that was only vaguely flagged",
+        "0": "Broke a limit silently (over budget, wrong gender, non-returnable when asked)"
+      }
+    },
+    {
+      "id": "fit",
+      "name": "Product fit",
+      "critical": false,
+      "help": "Would you actually show these pieces to a friend for this ask? N/A if no products were expected.",
+      "levels": {
+        "2": "Strong picks for the occasion, fabric and style; at least 3 good options",
+        "1": "Some good picks mixed with weak or generic ones",
+        "0": "Mostly irrelevant (wrong category, wrong occasion, accessories for clothing)"
+      }
+    },
+    {
+      "id": "grounded",
+      "name": "Accurate & grounded",
+      "critical": true,
+      "help": "Only claims the tools support: real products, real prices, policy lines quoted correctly, no invented facts.",
+      "levels": {
+        "2": "Everything checks out; uncertainty is admitted (\"not clearly stated\")",
+        "1": "A small overstatement or imprecise detail, nothing misleading",
+        "0": "Invented a product, price, policy or fact, or stated something false"
+      }
+    },
+    {
+      "id": "helpful",
+      "name": "Helpful & clear",
+      "critical": false,
+      "help": "Concise, warm, explains why the picks fit, gives a useful next step.",
+      "levels": {
+        "2": "Short, clear, explains the why; you'd be happy if a shopper saw it",
+        "1": "Fine but generic, too long, or missing the why",
+        "0": "Confusing, rambling, or unhelpful tone"
+      }
+    }
+  ]
+}

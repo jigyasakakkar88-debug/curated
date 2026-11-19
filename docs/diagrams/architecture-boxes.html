@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curated Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f7f5f1; --panel:#fff; --ink:#1f1d1a; --muted:#6b645b; --line:#4a453f; --grp:#efebe4;
+  --fe:#2563eb; --fe-bg:#e1ecff;
+  --be:#059669; --be-bg:#dbf5e9;
+  --db:#c27803; --db-bg:#fff1cc;
+  --ex:#d4582f; --ex-bg:#fde5d8;
+  --host:#64748b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16151a; --panel:#1f1e24; --ink:#ece9e4; --muted:#a39d94; --line:#c9c3ba; --grp:#26252c;
+    --fe:#7aa7ff; --fe-bg:#1c2a48; --be:#34d399; --be-bg:#123528; --db:#fbbf24; --db-bg:#3d2f10;
+    --ex:#ff9a72; --ex-bg:#43251a; --host:#a5b4c8;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16151a; --panel:#1f1e24; --ink:#ece9e4; --muted:#a39d94; --line:#c9c3ba; --grp:#26252c;
+  --fe:#7aa7ff; --fe-bg:#1c2a48; --be:#34d399; --be-bg:#123528; --db:#fbbf24; --db-bg:#3d2f10;
+  --ex:#ff9a72; --ex-bg:#43251a; --host:#a5b4c8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.45}
+main{max-width:1200px;margin:0 auto;padding:28px 16px 44px}
+h1{font-size:26px;margin:0 0 4px}
+.lede{color:var(--muted);margin:0 0 16px;max-width:820px}
+.wrap{background:var(--panel);border-radius:16px;padding:12px;overflow-x:auto;box-shadow:0 1px 3px #0000001a}
+svg{display:block;width:100%;min-width:880px;height:auto}
+svg text{fill:var(--ink);font-family:Inter,system-ui,sans-serif}
+.h{font-size:15px;font-weight:700}.s{font-size:11.5px;fill:var(--muted)}.c{font-size:12.5px;font-weight:600}
+.m{font-family:'JetBrains Mono',monospace;font-size:11.5px}
+.lab{font-size:11px;font-weight:600}
+.grpt{font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.fe{fill:var(--fe-bg);stroke:var(--fe)}.be{fill:var(--be-bg);stroke:var(--be)}.db{fill:var(--db-bg);stroke:var(--db)}.ex{fill:var(--ex-bg);stroke:var(--ex)}
+rect.box{stroke-width:2}
+.grp{fill:var(--grp)}
+.host{fill:none;stroke:var(--host);stroke-width:2;stroke-dasharray:8 6}
+.future{stroke-dasharray:7 5}
+.ar{stroke:var(--line);stroke-width:1.8;fill:none}
+.ar.d{stroke-dasharray:6 5}
+.hint{display:none;font-size:13px;color:var(--muted);margin:6px 2px 0}
+@media (max-width:900px){.hint{display:block}}
+.key{display:flex;flex-wrap:wrap;gap:8px 18px;margin:14px 2px 0;font-size:13px}
+.key i{display:inline-block;width:14px;height:14px;border-radius:4px;border:2px solid;margin-right:6px;vertical-align:-2px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:18px}
+.card{background:var(--panel);border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px #0000001a}
+.card h3{font-size:15px;margin:0 0 8px}.card ul{margin:0;padding-left:18px}.card li{font-size:13.5px;margin:4px 0}
+.api{background:var(--panel);border-radius:14px;padding:16px 18px;box-shadow:0 1px 3px #0000001a;margin-top:18px}
+.api h3{font-size:15px;margin:0 0 4px}.api p.sub{font-size:13px;color:var(--muted);margin:0 0 10px}
+.api table{border-collapse:collapse;width:100%;font-size:13.5px}
+.api td{padding:6px 8px;border-top:1px solid var(--grp);vertical-align:top}
+.api td.v{white-space:nowrap;width:1%}
+.api code{font-family:'JetBrains Mono',monospace;font-size:12px}
+.vb{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:1px 6px;border-radius:5px;margin-right:4px}
+.vget{background:var(--fe-bg);color:var(--fe)}.vpost{background:var(--be-bg);color:var(--be)}
+</style>
+</head>
+<body>
+<main>
+<h1>Curated: frontend, backend, data, external services</h1>
+<p class="lede">The browser only talks to the backend. The backend is the brain: it reads and writes the data stores and calls outside services. All API keys stay in the backend.</p>
+
+<div class="wrap">
+<svg viewBox="0 0 1200 740" role="img" aria-label="Architecture box diagram of Curated">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+
+<!-- FRONTEND -->
+<text class="grpt" x="30" y="40" style="fill:var(--fe)">1 · Frontend</text>
+<rect class="box fe" x="30" y="56" width="220" height="420" rx="12"/>
+<text class="h" x="46" y="84">Browser</text>
+<text class="s" x="46" y="102">HTML · CSS · JavaScript</text>
+<rect x="44" y="120" width="192" height="88" rx="8" fill="var(--panel)" stroke="var(--fe)"/>
+<text class="c" x="56" y="142">index.html (shoppers)</text>
+<text class="s" x="56" y="160">product feed · search box</text>
+<text class="s" x="56" y="176">Stylist chat · "See all"</text>
+<text class="s" x="56" y="192">product pop-up</text>
+<rect x="44" y="222" width="192" height="72" rx="8" fill="var(--panel)" stroke="var(--fe)"/>
+<text class="c" x="56" y="244">admin.html (you)</text>
+<text class="s" x="56" y="262">evals · traces · labels</text>
+<text class="s" x="56" y="278">catalog · policies · brands</text>
+<rect x="44" y="308" width="192" height="58" rx="8" fill="var(--panel)" stroke="var(--fe)"/>
+<text class="c" x="56" y="330">localStorage</text>
+<text class="s" x="56" y="348">wishlist · last 6 chat turns</text>
+<text class="s" x="46" y="404">No secrets here: the browser</text>
+<text class="s" x="46" y="420">never sees an API key.</text>
+
+<!-- VERCEL HOSTING -->
+<rect class="host" x="300" y="56" width="400" height="560" rx="16"/>
+<text class="grpt" x="318" y="44" style="fill:var(--host)">Vercel: hosting (runs both)</text>
+
+<rect class="box fe" x="320" y="76" width="360" height="62" rx="10"/>
+<text class="c" x="336" y="100">Static files: the frontend pages</text>
+<text class="s" x="336" y="120">Vercel CDN sends index.html / admin.html to browsers</text>
+
+<text class="grpt" x="320" y="168" style="fill:var(--be)">2 · Backend: the brain</text>
+<rect class="box be" x="320" y="180" width="360" height="416" rx="12"/>
+<text class="h" x="336" y="206">Serverless functions (Node.js)</text>
+<text class="s" x="336" y="224">REST API, JSON over HTTPS · code in api/ and lib/</text>
+<rect x="334" y="240" width="332" height="128" rx="8" fill="var(--panel)" stroke="var(--be)"/>
+<text class="m" x="346" y="262" style="font-weight:700">POST /api/stylist</text><text class="s" x="490" y="262">(+ ?browse, ?feedback)</text>
+<text class="s" x="346" y="282">rate limit → agent loop (Claude + 5 tools)</text>
+<text class="s" x="346" y="300">→ guardrail: only real products → answer</text>
+<text class="s" x="346" y="320">system prompt · tools · trace · evals</text>
+<text class="s" x="346" y="338">(lib/agent.js, tools.js, prompt.js …)</text>
+<text class="s" x="346" y="356">+ "See all" · thumbs feedback</text>
+<rect x="334" y="380" width="332" height="122" rx="8" fill="var(--panel)" stroke="var(--be)"/>
+<text class="m" x="346" y="402">GET      /api/products</text><text class="s" x="520" y="402">shop feed</text>
+<text class="m" x="346" y="422">GET+POST /api/catalog</text><text class="s" x="520" y="422">status · sync to Algolia</text>
+<text class="m" x="346" y="442">GET+POST /api/policies</text><text class="s" x="520" y="442">view · fetch/extract</text>
+<text class="m" x="346" y="462">GET+POST /api/insights</text><text class="s" x="520" y="462">view · run/grade</text>
+<text class="m" x="346" y="482">POST     /api/discover</text><text class="s" x="520" y="482">run Brand Scout</text>
+<rect x="334" y="514" width="332" height="68" rx="8" fill="var(--panel)" stroke="var(--be)"/>
+<text class="c" x="346" y="536">Vercel Cron (scheduler)</text>
+<text class="s" x="346" y="554">catalog sync daily 1:30 UTC</text>
+<text class="s" x="346" y="570">brand check every Monday</text>
+
+<!-- arrows frontend <-> backend -->
+<path class="ar" d="M300 107 L252 150" marker-end="url(#ah)"/>
+<text class="lab" x="258" y="118">pages</text>
+<path class="ar" d="M250 260 L318 300" marker-end="url(#ah)"/>
+<path class="ar d" d="M318 318 L250 280" marker-end="url(#ah)"/>
+<text class="lab" x="256" y="244">REST</text>
+<text class="lab" x="256" y="340">JSON</text>
+
+<!-- DATA STORES -->
+<text class="grpt" x="760" y="40" style="fill:var(--db)">3 · Data stores (databases)</text>
+<rect class="grp" x="760" y="56" width="410" height="318" rx="14"/>
+<rect class="box db" x="778" y="72" width="374" height="92" rx="10"/>
+<text class="h" x="794" y="98">GitHub repo: JSON files</text>
+<text class="s" x="794" y="116">brands · policies · settings · eval questions</text>
+<text class="s" x="794" y="132">observability branch: traces · eval runs · labels</text>
+<text class="s" x="794" y="150">read/write via GitHub API · full history free</text>
+<rect class="box db" x="778" y="176" width="374" height="84" rx="10"/>
+<text class="h" x="794" y="202">Algolia: product search index</text>
+<text class="s" x="794" y="220">~17,700 in-stock products · labels · policy fields</text>
+<text class="s" x="794" y="236">keyword + typo-tolerance + filters, in ms</text>
+<text class="s" x="794" y="252">synced nightly from Shopify</text>
+<rect class="box db future" x="778" y="272" width="374" height="86" rx="10"/>
+<text class="h" x="794" y="298">Vector database <tspan class="s" style="font-weight:600">(later, optional)</tspan></text>
+<text class="s" x="794" y="316">product meanings as vectors → semantic search</text>
+<text class="s" x="794" y="332">"understated for work" finds "minimal, everyday"</text>
+<text class="s" x="794" y="348">Algolia NeuralSearch · Pinecone · pgvector</text>
+
+<!-- EXTERNAL SERVICES -->
+<text class="grpt" x="760" y="408" style="fill:var(--ex)">4 · External services</text>
+<rect class="grp" x="760" y="420" width="410" height="196" rx="14"/>
+<rect class="box ex" x="778" y="436" width="180" height="78" rx="10"/>
+<text class="c" x="792" y="458">Claude Sonnet 5.5</text>
+<text class="s" x="792" y="476">Anthropic API</text>
+<text class="s" x="792" y="492">the Stylist's brain</text>
+<rect class="box ex" x="972" y="436" width="180" height="78" rx="10"/>
+<text class="c" x="986" y="458">Claude Haiku 4.5</text>
+<text class="s" x="986" y="476">Anthropic API</text>
+<text class="s" x="986" y="492">policies · grading</text>
+<rect class="box ex" x="778" y="524" width="180" height="78" rx="10"/>
+<text class="c" x="792" y="546">23 Shopify stores</text>
+<text class="s" x="792" y="564">/products.json</text>
+<text class="s" x="792" y="580">policy pages</text>
+<rect class="box ex" x="972" y="524" width="180" height="78" rx="10"/>
+<text class="c" x="986" y="546">SerpAPI</text>
+<text class="s" x="986" y="564">Google search</text>
+<text class="s" x="986" y="580">Brand Scout</text>
+
+<!-- backend -> stores / services -->
+<path class="ar" d="M680 300 L776 118" marker-end="url(#ah)"/>
+<path class="ar" d="M680 300 L776 218" marker-end="url(#ah)"/>
+<path class="ar d" d="M680 300 L776 315" marker-end="url(#ah)"/>
+<text class="lab" x="700" y="196" transform="rotate(-50 700 196)">read / write</text>
+<path class="ar" d="M680 440 L776 475" marker-end="url(#ah)"/>
+<path class="ar" d="M680 440 L776 563" marker-end="url(#ah)"/>
+<text class="lab" x="700" y="430">REST APIs</text>
+
+<!-- GITHUB AS CODE -->
+<rect class="box" x="300" y="652" width="400" height="66" rx="12" style="fill:var(--grp);stroke:var(--host)"/>
+<text class="h" x="318" y="678">GitHub repo: the code (a dev tool)</text>
+<text class="s" x="318" y="698">every saved change → Vercel builds a new preview automatically</text>
+<path class="ar" d="M500 652 L500 620" marker-end="url(#ah)"/>
+<text class="lab" x="510" y="642">deploys</text>
+<text class="s" x="760" y="676">Same GitHub, two jobs: it stores the code (bottom)</text>
+<text class="s" x="760" y="694">and doubles as the database for small JSON data (top right).</text>
+</svg>
+</div>
+<p class="hint">Scroll the diagram sideways on a phone.</p>
+
+<div class="key">
+  <span><i style="background:var(--fe-bg);border-color:var(--fe)"></i>Frontend</span>
+  <span><i style="background:var(--be-bg);border-color:var(--be)"></i>Backend</span>
+  <span><i style="background:var(--db-bg);border-color:var(--db)"></i>Data stores</span>
+  <span><i style="background:var(--ex-bg);border-color:var(--ex)"></i>External services</span>
+  <span><i style="background:transparent;border-color:var(--host);border-style:dashed"></i>Hosting / dev tools</span>
+</div>
+
+<div class="api">
+  <h3>API cheat sheet: what each request does</h3>
+  <p class="sub"><span class="vb vget">GET</span> = "give me something": only reads, changes nothing, safe to repeat. <span class="vb vpost">POST</span> = "act on this": changes data, costs money or does work. Rule of thumb: judge by the effect on <i>your</i> system, not by what the backend fetches behind the scenes.</p>
+  <table>
+    <tr><td class="v"><span class="vb vpost">POST</span></td><td><code>/api/stylist</code></td><td>Sends the shopper's question and chat; the backend runs Claude with the tools and returns the answer and products (costs ₹ and logs a trace).</td></tr>
+    <tr><td class="v"><span class="vb vpost">POST</span></td><td><code>/api/stylist?browse=1</code></td><td>"See all matches": the next page of products for the same search (keyword search only, no AI cost).</td></tr>
+    <tr><td class="v"><span class="vb vpost">POST</span></td><td><code>/api/stylist?feedback=1</code></td><td>Saves a 👍/👎 on an answer.</td></tr>
+    <tr><td class="v"><span class="vb vget">GET</span></td><td><code>/api/products</code></td><td>The shop page asks for the full product feed to display.</td></tr>
+    <tr><td class="v"><span class="vb vget">GET</span></td><td><code>/api/catalog</code></td><td>Shows the Algolia index status (how many products, when last synced).</td></tr>
+    <tr><td class="v"><span class="vb vpost">POST</span></td><td><code>/api/catalog</code></td><td>Sync: pulls every brand's products from Shopify and updates Algolia; or Freeze: saves a fixed copy for evals.</td></tr>
+    <tr><td class="v"><span class="vb vget">GET</span></td><td><code>/api/policies</code></td><td>Shows the brand policies already stored in <code>policies.json</code>.</td></tr>
+    <tr><td class="v"><span class="vb vpost">POST</span></td><td><code>/api/policies</code></td><td>Fetch the brands' policy pages, have Haiku extract the facts, or save your edits (rewrites <code>policies.json</code>).</td></tr>
+    <tr><td class="v"><span class="vb vget">GET</span></td><td><code>/api/insights</code></td><td>Shows traces and KPIs, eval runs, one run's answers, the test questions or the relevance labels.</td></tr>
+    <tr><td class="v"><span class="vb vpost">POST</span></td><td><code>/api/insights</code></td><td>Starts or continues an eval run, saves a grade, or builds and saves relevance labels.</td></tr>
+    <tr><td class="v"><span class="vb vpost">POST</span></td><td><code>/api/discover</code></td><td>Starts a Brand Scout run: Claude searches the web for new brands to suggest.</td></tr>
+    <tr><td class="v"><span class="vb vget">GET</span></td><td><code>/api/recommendations</code></td><td>Shows Brand Scout's suggestions waiting for your decision.</td></tr>
+    <tr><td class="v"><span class="vb vpost">POST</span></td><td><code>/api/recommendations</code></td><td>Accept a suggestion (adds the brand to <code>brands.json</code>) or reject it.</td></tr>
+  </table>
+</div>
+
+<div class="cards">
+  <div class="card">
+    <h3>Say it in one breath</h3>
+    <ul><li>"A static frontend calls a serverless REST backend on Vercel. The backend runs a Claude agent with tools, searches products in Algolia, keeps small config and eval data as JSON in GitHub, and pulls catalogs from Shopify."</li></ul>
+  </div>
+  <div class="card">
+    <h3>Why JSON in GitHub is enough (for now)</h3>
+    <ul>
+      <li><b>Small</b>: 23 brands, a few hundred KB of policies</li>
+      <li><b>Changes rarely</b>, with <b>one writer</b> (the admin)</li>
+      <li><b>Simple reads</b>: load the whole file</li>
+      <li>Free version history of every change</li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>When to switch</h3>
+    <ul>
+      <li><b>User accounts, synced wishlists, orders, many writers</b> → Postgres</li>
+      <li><b>Search by meaning</b> → a vector index (Algolia NeuralSearch, Pinecone or pgvector)</li>
+      <li><b>High-volume traces and metrics</b> → an analytics store</li>
+    </ul>
+  </div>
+</div>
+</main>
+</body>
+</html>

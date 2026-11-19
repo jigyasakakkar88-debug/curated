@@ -1,0 +1,4 @@
+{
+  "_note": "Fixed inputs for evals. The wishlist is picked at the start of each run from the eval index: one saree from each listed brand (in-stock), so S38 always has a saved saree from a brand that does and one that doesn't take returns.",
+  "wishlist": { "query": "saree", "brandIds": ["tjori-com", "dressfolk-com", "okhai-org"] }
+}

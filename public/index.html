@@ -276,6 +276,78 @@ footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-
   .brand-bar,.breadcrumb { padding-left:20px; padding-right:20px; }
   .error-banner { margin-left:20px; margin-right:20px; }
 }
+
+/* ── STYLIST ─────────────────────────────────────────────── */
+.ask-bar { background:var(--card); border-bottom:1px solid var(--border); padding:18px 48px; display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1.3fr); gap:16px; align-items:center; }
+.search-box { position:relative; }
+.search-box input { width:100%; padding:12px 34px 12px 38px; border:1px solid var(--border); background:var(--paper); font-family:'Jost',sans-serif; font-size:14px; outline:none; -webkit-appearance:none; }
+.search-box input:focus { border-color:var(--accent); }
+.search-box svg { position:absolute; left:13px; top:50%; transform:translateY(-50%); width:15px; height:15px; color:var(--muted); pointer-events:none; }
+.search-box button { position:absolute; right:6px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--muted); font-size:14px; cursor:pointer; padding:4px 8px; display:none; }
+.search-box.has-text button { display:block; }
+.search-box input::-webkit-search-cancel-button { display:none; }
+.ask-bar-label { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:300; white-space:nowrap; color:var(--muted); }
+.ask-bar-label em { color:var(--accent); font-style:italic; }
+.ask-bar form { display:flex; gap:0; min-width:0; }
+.ask-bar form input { flex:1; padding:12px 16px; border:1px solid var(--border); border-right:none; background:var(--paper); font-family:'Jost',sans-serif; font-size:14px; outline:none; min-width:0; }
+.ask-bar form input:focus { border-color:var(--accent); }
+.ask-bar form button, .sty-send { padding:0 22px; background:var(--ink); color:var(--paper); border:none; font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.ask-bar form button:hover, .sty-send:hover { background:var(--accent); }
+.ask-fab { position:fixed; right:24px; bottom:24px; z-index:1500; background:var(--ink); color:var(--paper); border:none; padding:14px 20px; font-family:'Jost',sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; box-shadow:0 12px 30px rgba(26,23,20,0.25); opacity:0; transform:translateY(12px); pointer-events:none; transition:all 0.25s; }
+.ask-fab.show { opacity:1; transform:none; pointer-events:all; }
+.sty-overlay { position:fixed; inset:0; background:rgba(26,23,20,0.35); z-index:1900; opacity:0; pointer-events:none; transition:opacity 0.25s; }
+.sty-overlay.open { opacity:1; pointer-events:all; }
+.sty-drawer { position:fixed; top:0; right:0; bottom:0; width:440px; max-width:100%; background:var(--paper); z-index:2000; display:flex; flex-direction:column; transform:translateX(100%); transition:transform 0.3s ease; visibility:hidden; }
+.sty-drawer.open { transform:none; visibility:visible; box-shadow:-20px 0 60px rgba(26,23,20,0.15); }
+.sty-head { background:var(--ink); color:var(--paper); padding:16px 20px; display:flex; align-items:center; gap:12px; }
+.sty-title { font-family:'Cormorant Garamond',serif; font-size:24px; font-weight:300; flex:1; }
+.sty-title em { color:var(--accent); font-style:normal; }
+.sty-head button { background:none; border:1px solid #444; color:#bbb; padding:6px 12px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; cursor:pointer; }
+.sty-head button:hover { border-color:var(--paper); color:var(--paper); }
+.sty-thread { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:18px; }
+.sty-empty { font-size:13px; color:var(--muted); line-height:1.7; }
+.sty-empty button { display:block; margin:8px 0 0; background:var(--card); border:1px solid var(--border); padding:8px 12px; font-family:'Jost',sans-serif; font-size:13px; color:var(--ink); cursor:pointer; text-align:left; width:100%; }
+.sty-empty button:hover { border-color:var(--accent); }
+.sty-msg-user { align-self:flex-end; max-width:85%; background:var(--ink); color:var(--paper); padding:10px 14px; font-size:14px; line-height:1.5; }
+.sty-msg-ai { font-size:14px; line-height:1.65; }
+.sty-caveat { font-family:'DM Mono',monospace; font-size:10px; color:var(--muted); margin-top:8px; line-height:1.6; }
+.sty-quote { border-left:2px solid var(--accent); padding:4px 10px; margin-top:8px; font-size:12px; color:#5c544c; font-style:italic; }
+.sty-quote span { font-style:normal; font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); display:block; margin-top:2px; }
+.sty-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:2px; margin-top:12px; }
+.sty-grid .card:hover { transform:none; box-shadow:none; }
+.sty-grid .card-name { font-size:12px; }
+.sty-pick { display:flex; flex-direction:column; background:var(--card); }
+.sty-why { font-size:11px; line-height:1.4; color:var(--ink); padding:6px 8px 9px; border-top:1px solid var(--border); font-style:italic; }
+.sty-more { display:block; width:100%; margin-top:10px; padding:11px; background:none; border:1px solid var(--ink); color:var(--ink); font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.sty-more:hover { background:var(--ink); color:var(--paper); }
+.sty-more:disabled { opacity:.5; cursor:default; }
+.sty-browse-title { margin-top:16px; font-family:'DM Mono',monospace; font-size:10px; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
+.sty-rate { margin-top:10px; display:flex; gap:6px; align-items:center; font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); }
+.sty-rate button { background:none; border:1px solid var(--border); padding:3px 8px; cursor:pointer; font-size:12px; }
+.sty-rate button.on { border-color:var(--accent); background:var(--warm); }
+.sty-loading { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); }
+.sty-loading::after { content:''; animation:dots 1.4s infinite; }
+@keyframes dots { 0%{content:''} 33%{content:'.'} 66%{content:'..'} 100%{content:'...'} }
+.sty-error { font-size:13px; color:var(--sale-red); }
+.sty-error button { margin-left:8px; background:none; border:1px solid var(--sale-red); color:var(--sale-red); padding:3px 10px; cursor:pointer; font-size:11px; }
+.sty-compose { border-top:1px solid var(--border); background:var(--card); padding:12px; }
+.sty-chip { display:none; align-items:center; gap:8px; font-family:'DM Mono',monospace; font-size:10px; background:var(--warm); padding:6px 10px; margin-bottom:8px; }
+.sty-chip.show { display:flex; }
+.sty-chip span { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.sty-chip button { background:none; border:none; cursor:pointer; color:var(--muted); }
+.sty-compose form { display:flex; }
+.sty-compose textarea { flex:1; resize:none; height:46px; padding:12px; border:1px solid var(--border); border-right:none; background:var(--paper); font-family:'Jost',sans-serif; font-size:14px; outline:none; }
+.sty-compose textarea:focus { border-color:var(--accent); }
+.sty-note { font-family:'DM Mono',monospace; font-size:9px; color:var(--muted); margin-top:6px; }
+body.sty-open .toast { bottom:auto; top:76px; }
+.modal-ask { display:block; width:100%; margin-top:10px; padding:12px; background:none; border:1px solid var(--ink); color:var(--ink); font-family:'Jost',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.modal-ask:hover { background:var(--ink); color:var(--paper); }
+@media(max-width:768px){
+  .ask-bar { padding:14px 16px; grid-template-columns:1fr; gap:8px; }
+  .ask-bar-label { font-size:17px; }
+  .sty-drawer { width:100%; }
+  .ask-fab { right:16px; bottom:16px; }
+}
 </style>
 </head>
 <body>
@@ -405,6 +477,20 @@ footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-
 <!-- TICKER -->
 <div class="ticker"><div class="ticker-track" id="tickerTrack">Loading sale items…&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Loading sale items…</div></div>
 
+<!-- STYLIST ASK BAR -->
+<div class="ask-bar" id="askBar">
+  <div class="search-box" id="searchBox">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input id="searchInput" type="search" autocomplete="off" placeholder="Search products, brands, fabrics…" oninput="onSearchInput(this.value)">
+    <button onclick="clearSearch()" aria-label="Clear search">✕</button>
+  </div>
+  <div class="ask-bar-label">or ask the <em>Stylist</em></div>
+  <form onsubmit="event.preventDefault(); styOpen(document.getElementById('askInput').value)">
+    <input id="askInput" maxlength="500" autocomplete="off" placeholder="Cotton kurta under ₹3,000">
+    <button type="submit">Ask</button>
+  </form>
+</div>
+
 <!-- STATS -->
 <div class="stats">
   <div class="stat"><div class="stat-n" id="sTotal">—</div><div class="stat-l">Items Tracked</div></div>
@@ -455,10 +541,31 @@ footer { text-align:center; padding:24px; font-family:'DM Mono',monospace; font-
       <div class="modal-tags" id="mTags"></div>
       <div class="modal-sizes" id="mSizes"></div>
       <a class="modal-cta" id="mCta" href="#" target="_blank" rel="noopener">View on Brand Site →</a>
+      <button class="modal-ask" onclick="styAskAboutModal()">✦ Ask about this piece</button>
       <div class="modal-footer" id="mFooter"></div>
     </div>
   </div>
 </div>
+
+<!-- STYLIST DRAWER -->
+<button class="ask-fab" id="askFab" onclick="styOpen()">✦ Ask the Stylist</button>
+<div class="sty-overlay" id="styOverlay" onclick="styClose()"></div>
+<aside class="sty-drawer" id="styDrawer" aria-label="Stylist">
+  <div class="sty-head">
+    <div class="sty-title">Stylist<em>.</em></div>
+    <button onclick="styNewChat()">New chat</button>
+    <button onclick="styClose()" aria-label="Close">✕</button>
+  </div>
+  <div class="sty-thread" id="styThread"></div>
+  <div class="sty-compose">
+    <div class="sty-chip" id="styChip"><span id="styChipText"></span><button onclick="stySetAnchor(null)" aria-label="Remove">✕</button></div>
+    <form onsubmit="event.preventDefault(); stySend()">
+      <textarea id="styInput" maxlength="500" placeholder="Ask about outfits, occasions, sizes or returns" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();stySend()}"></textarea>
+      <button class="sty-send" type="submit">Send</button>
+    </form>
+    <div class="sty-note">Answers come from live products and brand policies. Check details on the brand's site before buying.</div>
+  </div>
+</aside>
 
 <script>
 // ── Category taxonomy ─────────────────────────────────────
@@ -545,7 +652,9 @@ function updateBreadcrumb() {
 
 function updateSectionTitle() {
   const el = document.getElementById('allTitle');
-  if (navSubcat) {
+  if (searchQuery) {
+    el.innerHTML = `Results for <em>“${esc(searchQuery)}”</em>`;
+  } else if (navSubcat) {
     el.innerHTML = `<em>${navSubcat}</em>`;
   } else if (navFilter === 'women') {
     el.innerHTML = `Women's <em>Wear</em>`;
@@ -556,6 +665,59 @@ function updateSectionTitle() {
   } else {
     el.innerHTML = `Full <em>Selection</em>`;
   }
+}
+
+// ── SEARCH ────────────────────────────────────────────────
+// Instant keyword search over the loaded feed: every word must match name, brand, category or tags.
+// Combines with brand chips, menu filters and sort. Free: no server or Algolia calls.
+let searchQuery = '';
+let searchTimer = null;
+const SEARCH_SYNONYMS = [
+  ['saree', 'sari'], ['kurta', 'kurti'], ['dupatta', 'stole'], ['coord', 'co-ord', 'co ord'],
+  ['lehenga', 'lehnga'], ['trouser', 'pant'], ['tee', 't-shirt', 'tshirt'], ['jewellery', 'jewelry'],
+];
+
+function onSearchInput(v) {
+  document.getElementById('searchBox').classList.toggle('has-text', !!v);
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    searchQuery = v.trim().slice(0, 80);
+    updateSectionTitle();
+    render();
+  }, 150);
+}
+
+function clearSearch() {
+  const input = document.getElementById('searchInput');
+  input.value = '';
+  onSearchInput('');
+  input.focus();
+}
+
+function searchTerms() {
+  if (!searchQuery) return [];
+  return searchQuery.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, ' ').split(/\s+/).filter(Boolean).map(w => {
+    const base = w.length > 3 ? w.replace(/(es|s)$/, '') : w;           // kurtas → kurta, sarees → saree
+    const group = SEARCH_SYNONYMS.find(g => g.some(x => x === w || x === base));
+    return group ? group : [base];
+  });
+}
+
+// Name matches count most, then category, then tags and brand.
+function searchScore(p, terms) {
+  const name = p.name.toLowerCase(), cat = (p.category || '').toLowerCase();
+  let score = 0;
+  for (const alts of terms) {
+    if (alts.some(a => name.includes(a))) score += 3;
+    else if (alts.some(a => cat.includes(a))) score += 2;
+    else score += 1;
+  }
+  return score;
+}
+
+function matchesSearch(p, terms) {
+  const hay = p._hay || (p._hay = [p.name, p.brandName, p.category, ...(p.tags || [])].join(' ').toLowerCase());
+  return terms.every(alts => alts.some(a => hay.includes(a)));
 }
 
 // ── FILTERING ─────────────────────────────────────────────
@@ -595,14 +757,21 @@ function matchesNav(p) {
 }
 
 function getFiltered() {
+  const terms = searchTerms();
   let list = products.filter(p => {
     if (brandFilter !== 'all' && p.brandId !== brandFilter) return false;
+    if (terms.length && !matchesSearch(p, terms)) return false;
     return matchesNav(p);
   });
 
   if (sort === 'price-asc')  list.sort((a,b) => ep(a) - ep(b));
   if (sort === 'price-desc') list.sort((a,b) => ep(b) - ep(a));
   if (sort === 'newest')     list.sort((a,b) => new Date(b.publishedAt||0) - new Date(a.publishedAt||0));
+  // While searching with the default sort, best match first (newest breaks ties).
+  if (terms.length && sort === 'newest') {
+    const score = new Map(list.map(p => [p, searchScore(p, terms)]));
+    list.sort((a, b) => score.get(b) - score.get(a));
+  }
   if (sort === 'discount')   list.sort((a,b) => b.discountPct - a.discountPct);
   if (sort === 'az')         list.sort((a,b) => a.name.localeCompare(b.name));
 
@@ -612,9 +781,36 @@ function getFiltered() {
 function ep(p) { return p.isSale && p.price ? p.price : (p.price || 9999); }
 
 // ── RENDER ────────────────────────────────────────────────
+// Draw cards in batches: the first batch now, more as the end of the grid scrolls into view.
+// Filtering, sorting and counts still use the full product list; only drawing is batched.
+const GRID_BATCH = 60;
+const gridQueue = {};                 // gridId → items not yet drawn
+const gridObserver = new IntersectionObserver(entries => {
+  for (const e of entries) if (e.isIntersecting) drawMore(e.target.dataset.grid);
+}, { rootMargin: '1200px 0px' });
+
+function renderGrid(id, items) {
+  const el = document.getElementById(id);
+  gridQueue[id] = items.slice(GRID_BATCH);
+  el.innerHTML = items.slice(0, GRID_BATCH).map((p, i) => card(p, Math.min(i, 12) * 25)).join('');
+  let sentinel = document.getElementById(id + 'More');
+  if (!sentinel) {
+    sentinel = document.createElement('div');
+    sentinel.id = id + 'More'; sentinel.dataset.grid = id; sentinel.style.height = '1px';
+    el.after(sentinel);
+    gridObserver.observe(sentinel);
+  }
+}
+
+function drawMore(id) {
+  const queue = gridQueue[id];
+  if (!queue || !queue.length) return;
+  document.getElementById(id).insertAdjacentHTML('beforeend', queue.splice(0, GRID_BATCH).map(p => card(p, 0)).join(''));
+}
+
 function render() {
   const list = getFiltered();
-  const showSections = (navFilter === 'all');
+  const showSections = (navFilter === 'all' && !searchQuery);
 
   const newItems  = showSections ? list.filter(p => p.isNew)  : [];
   const saleItems = showSections ? list.filter(p => p.isSale) : [];
@@ -627,8 +823,8 @@ function render() {
   document.getElementById('saleMeta').textContent = `${saleItems.length} items`;
   document.getElementById('allMeta').textContent  = `${restItems.length} items`;
 
-  document.getElementById('newGrid').innerHTML  = newItems.map((p,i)  => card(p, i*25)).join('');
-  document.getElementById('saleGrid').innerHTML = saleItems.map((p,i) => card(p, i*25)).join('');
+  renderGrid('newGrid', newItems);
+  renderGrid('saleGrid', saleItems);
 
   if (restItems.length === 0) {
     document.getElementById('allGrid').innerHTML = `
@@ -638,11 +834,13 @@ function render() {
           ? 'Click ♡ on any product to save it here.'
           : navSubcat
           ? `No products matched "${navSubcat}" — the brands may not carry this category yet, or try browsing All.`
+          : searchQuery
+          ? `Nothing matched every word. <a href="#" onclick="event.preventDefault(); styOpen('${esc(searchQuery).replace(/'/g, '&#39;')}')">Ask the Stylist about “${esc(searchQuery)}”</a>`
           : 'Try a different filter or refresh the feed.'
         }</p>
       </div>`;
   } else {
-    document.getElementById('allGrid').innerHTML = restItems.map((p,i) => card(p, i*20)).join('');
+    renderGrid('allGrid', restItems);
   }
 }
 
@@ -678,8 +876,9 @@ function card(p, delay = 0) {
 
 // ── MODAL ─────────────────────────────────────────────────
 function openModal(id) {
-  const p = products.find(x => x.id === id);
+  const p = products.find(x => x.id === id) || styProducts.get(id);
   if (!p) return;
+  currentModalId = id;
 
   const imgHtml = p.image
     ? `<img src="${p.image}" alt="${esc(p.name)}" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:block">`
@@ -702,7 +901,7 @@ function openModal(id) {
     ? `<div class="modal-sizes-label">Available sizes</div><div class="modal-sizes-grid">${sizes.map(s=>`<span class="size-pill">${esc(s)}</span>`).join('')}</div>`
     : '';
 
-  document.getElementById('mCta').href = p.productUrl || p.brandUrl;
+  document.getElementById('mCta').href = p.productUrl || (p.brandUrl || '#');
   document.getElementById('mFooter').innerHTML = `
     Brand: ${esc(p.brandName)}<br>
     Category: ${esc(p.category||'Clothing')}<br>
@@ -727,6 +926,7 @@ function toggleWish(e, id) {
   else                  { wishlist.add(id);    showToast('♥ Saved to your collection'); }
   localStorage.setItem('wishlist', JSON.stringify([...wishlist]));
   render();
+  styRefreshCards();
 }
 
 // ── BRAND CHIPS ───────────────────────────────────────────
@@ -825,6 +1025,194 @@ function timeAgo(d) {
 
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeModal(); });
 loadProducts();
+
+// ── STYLIST ───────────────────────────────────────────────
+const STY_EXAMPLES = [
+  'Something for a mehendi in Jaipur in May',
+  'Which brands offer 14-day returns?',
+  'Cotton kurta under ₹3,000',
+  'Linen co-ord for a beach holiday',
+  'A silk saree I can return',
+  'What goes with a red festive kurta?',
+];
+const styProducts = new Map();     // id → card data for products shown by the Stylist
+const styReasons = new Map();      // id → the Stylist's one-line reason for picking it
+const styBrowses = [];             // "See all" searches, referenced by index from the buttons
+let styHistory = [];               // [{role, content}] — last 6 turns are sent
+let styAnchor = null;              // product the next question is about
+let styBusy = false;
+let currentModalId = null;
+
+(function rotatePlaceholder() {
+  let i = 0;
+  const input = document.getElementById('askInput');
+  setInterval(() => { if (document.activeElement !== input && !input.value) { i = (i + 1) % STY_EXAMPLES.length; input.placeholder = STY_EXAMPLES[i]; } }, 3500);
+})();
+
+// Floating button once the ask bar scrolls out of view.
+new IntersectionObserver(([e]) => {
+  document.getElementById('askFab').classList.toggle('show', !e.isIntersecting && !document.getElementById('styDrawer').classList.contains('open'));
+}).observe(document.getElementById('askBar'));
+
+function styOpen(question) {
+  document.getElementById('styDrawer').classList.add('open');
+  document.getElementById('styOverlay').classList.add('open');
+  document.body.classList.add('sty-open');
+  document.getElementById('askFab').classList.remove('show');
+  if (!styHistory.length && !document.querySelector('#styThread .sty-msg-ai, #styThread .sty-msg-user')) styRenderEmpty();
+  const q = (question || '').trim();
+  if (q) { document.getElementById('askInput').value = ''; stySend(q); }
+  else setTimeout(() => document.getElementById('styInput').focus(), 300);
+}
+
+function styClose() {
+  document.getElementById('styDrawer').classList.remove('open');
+  document.getElementById('styOverlay').classList.remove('open');
+  document.body.classList.remove('sty-open');
+  const bar = document.getElementById('askBar').getBoundingClientRect();
+  document.getElementById('askFab').classList.toggle('show', bar.bottom < 0 || bar.top > innerHeight);
+}
+
+function styNewChat() {
+  styHistory = []; stySetAnchor(null); styRenderEmpty();
+}
+
+function styRenderEmpty() {
+  document.getElementById('styThread').innerHTML = `<div class="sty-empty">
+    Ask me to find pieces for an occasion, a budget or a size, or about a brand's returns and shipping. Try:
+    ${STY_EXAMPLES.slice(0, 4).map(q => `<button onclick="stySend(this.textContent)">${esc(q)}</button>`).join('')}
+  </div>`;
+}
+
+function stySetAnchor(p) {
+  styAnchor = p ? p.id : null;
+  document.getElementById('styChip').classList.toggle('show', !!p);
+  document.getElementById('styChipText').textContent = p ? `About: ${p.name} — ${p.brandName}` : '';
+}
+
+function styAskAboutModal() {
+  const p = products.find(x => x.id === currentModalId) || styProducts.get(currentModalId);
+  closeModal();
+  if (styHistory.length) styNewChat();
+  stySetAnchor(p || null);
+  styOpen();
+  document.getElementById('styInput').placeholder = 'e.g. Is this returnable? What would go with it?';
+}
+
+async function stySend(text) {
+  const input = document.getElementById('styInput');
+  const q = (text ?? input.value).trim();
+  if (!q || styBusy) return;
+  if (q.length > 500) { showToast('Please keep it under 500 characters'); return; }
+  input.value = '';
+  const thread = document.getElementById('styThread');
+  thread.querySelector('.sty-empty')?.remove();
+  thread.insertAdjacentHTML('beforeend', `<div class="sty-msg-user">${esc(q)}</div>`);
+  styHistory.push({ role: 'user', content: q });
+  await styRequest();
+}
+
+async function styRequest() {
+  const thread = document.getElementById('styThread');
+  const brandCount = document.getElementById('sBrands').textContent;
+  const pending = document.createElement('div');
+  pending.className = 'sty-loading';
+  pending.textContent = `Looking through ${/\d/.test(brandCount) ? brandCount + ' brands' : 'the brands'} (usually 5–15s)`;
+  thread.appendChild(pending);
+  thread.scrollTop = thread.scrollHeight;
+  styBusy = true;
+  let wishlistIds = [];
+  try { wishlistIds = JSON.parse(localStorage.getItem('wishlist') || '[]'); } catch {}
+  try {
+    const res = await fetch('/api/stylist', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: styHistory.slice(-6), wishlistIds, anchorId: styAnchor || undefined }),
+    });
+    let d; try { d = await res.json(); } catch { d = { error: `Something went wrong (${res.status}).` }; }
+    if (!res.ok || d.error) throw new Error(d.error || `Something went wrong (${res.status}).`);
+    styHistory.push({ role: 'assistant', content: d.answer });
+    (d.products || []).forEach(p => styProducts.set(p.id, p));
+    pending.outerHTML = styAnswerHtml(d);
+  } catch (e) {
+    styHistory.pop();   // let the user retry the same question
+    const lastQ = thread.querySelectorAll('.sty-msg-user');
+    const q = lastQ.length ? lastQ[lastQ.length - 1].textContent : '';
+    pending.outerHTML = `<div class="sty-error">${esc(e.message || 'Something went wrong.')}<button onclick="styRetry(this, ${JSON.stringify(q).replace(/"/g, '&quot;')})">Retry</button></div>`;
+  }
+  styBusy = false;
+  thread.scrollTop = thread.scrollHeight;
+}
+
+function styRetry(btn, q) {
+  btn.parentElement.previousElementSibling?.remove();   // the failed question bubble
+  btn.parentElement.remove();
+  stySend(q);
+}
+
+function styAnswerHtml(d) {
+  const quotes = (d.policy_quotes || []).map(q => {
+    const brand = q.brandName || (brands.find(b => b.id === q.brandId) || {}).name || q.brandId;
+    return `<div class="sty-quote">“${esc(q.quote)}”<span>${esc(brand)} policy</span></div>`;
+  }).join('');
+  const caveats = (d.caveats || []).map(c => `<div class="sty-caveat">· ${esc(c)}</div>`).join('');
+  const ids = (d.products || []).map(p => p.id);
+  Object.entries(d.reasons || {}).forEach(([id, why]) => styReasons.set(id, why));
+  const cards = ids.length ? `<div class="sty-grid" data-ids="${esc(ids.join(','))}">${ids.map((id, i) => styPick(styProducts.get(id), i * 40)).join('')}</div>` : '';
+  let more = '';
+  if (d.browse && d.totalMatches && d.totalMatches > ids.length) {
+    styBrowses.push(d.browse);
+    more = `<button class="sty-more" onclick="styBrowse(this, ${styBrowses.length - 1}, 0)">See all ${d.totalMatches} matches</button>`;
+  }
+  return `<div class="sty-msg-ai">
+    <div>${esc(d.answer).replace(/\n/g, '<br>')}</div>${quotes}${caveats}${cards}${more}
+    <div class="sty-rate" data-trace="${esc(d.traceId || '')}">Helpful?
+      <button onclick="styRate(this,'up')" aria-label="Helpful">👍</button><button onclick="styRate(this,'down')" aria-label="Not helpful">👎</button>
+    </div></div>`;
+}
+
+function styPick(p, delay) {
+  const why = styReasons.get(p.id);
+  return why ? `<div class="sty-pick">${card(p, delay)}<div class="sty-why">${esc(why)}</div></div>` : card(p, delay);
+}
+
+function styRefreshCards() {
+  document.querySelectorAll('.sty-grid').forEach(g => {
+    g.innerHTML = g.dataset.ids.split(',').map(id => styProducts.get(id)).filter(Boolean).map(p => styPick(p, 0)).join('');
+  });
+}
+
+// "See all N matches": the same search the Stylist used, plain relevance order, 24 per page. No AI cost.
+async function styBrowse(btn, n, page) {
+  btn.disabled = true; btn.textContent = 'Loading…';
+  try {
+    const res = await fetch('/api/stylist?browse=1', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ browse: styBrowses[n], page }) });
+    const d = await res.json();
+    if (!res.ok || d.error) throw new Error(d.error || 'Something went wrong.');
+    d.products.forEach(p => styProducts.set(p.id, p));
+    const ids = d.products.map(p => p.id);
+    const grid = `<div class="sty-grid" data-ids="${esc(ids.join(','))}">${d.products.map(p => card(p, 0)).join('')}</div>`;
+    const next = d.hasMore ? `<button class="sty-more" onclick="styBrowse(this, ${n}, ${page + 1})">Load more</button>` : '';
+    const title = page === 0 ? `<div class="sty-browse-title">All ${d.total} matches · best match first</div>` : '';
+    btn.outerHTML = `${title}${grid}${next}`;
+  } catch (e) {
+    btn.disabled = false; btn.textContent = 'Try again';
+    showToast(e.message);
+  }
+}
+
+async function styRate(btn, rating) {
+  const box = btn.parentElement;
+  if (box.dataset.rated) return;
+  box.dataset.rated = rating;
+  btn.classList.add('on');
+  try {
+    await fetch('/api/stylist?feedback=1', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ traceId: box.dataset.trace, rating }) });
+  } catch {}
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('styDrawer').classList.contains('open')) styClose(); });
 </script>
 </body>
 </html>

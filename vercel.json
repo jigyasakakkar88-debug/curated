@@ -1,7 +1,11 @@
 {
   "version": 2,
   "functions": {
-    "api/discover.js": { "maxDuration": 300 }
+    "api/discover.js": { "maxDuration": 300 },
+    "api/catalog.js":  { "maxDuration": 300 },
+    "api/policies.js": { "maxDuration": 300 },
+    "api/stylist.js":  { "maxDuration": 120 },
+    "api/insights.js": { "maxDuration": 300 }
   },
   "routes": [
     { "src": "/api/discover",         "dest": "/api/discover" },
@@ -12,10 +16,15 @@
     { "src": "/admin.html", "dest": "/public/admin.html" },
     { "src": "^/$", "dest": "/public/index.html" }
   ],
+  "git": { "deploymentEnabled": { "observability": false } },
   "crons": [
     {
       "path": "/api/refresh",
       "schedule": "0 6 * * 1"
+    },
+    {
+      "path": "/api/catalog",
+      "schedule": "30 1 * * *"
     }
   ]
 }

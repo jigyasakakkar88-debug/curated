@@ -159,9 +159,7 @@ async function fetchBrand(brand) {
         id:             `${brand.id}-${product.id}`,
         brandId:         brand.id,
         brandName:       brand.name,
-        brandUrl:        brand.url,
         name:            product.title,
-        handle:          product.handle,
         productUrl:      `${baseUrl}/products/${product.handle}`,
         image,
         price,
@@ -170,7 +168,6 @@ async function fetchBrand(brand) {
         tags:            Array.isArray(product.tags) ? product.tags.slice(0, 5) : (product.tags ? product.tags.split(", ").slice(0, 5) : []),
         publishedAt:     product.published_at,
         availableSizes:  (product.variants || []).filter(v => v.available).map(v => v.title).filter(t => t !== "Default Title").slice(0, 8),
-        totalVariants:   (product.variants || []).length,
       });
     }
 
