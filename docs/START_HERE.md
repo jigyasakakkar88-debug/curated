@@ -1,6 +1,6 @@
 # Start here: Curated Stylist, where we are
 
-*Last updated: 31 Oct 2026. Read this when you feel lost; it's kept short on purpose.*
+*Last updated: 19 Nov 2026. Read this when you feel lost; it's kept short on purpose.*
 
 ---
 
@@ -11,9 +11,9 @@
 
 | What | Where |
 |---|---|
-| Live site (old version, nothing new is live yet) | https://curated-xi.vercel.app |
-| **Latest preview (all the new work)** | https://curated-1jjxaybfx-jigyasakakkar88-debugs-projects.vercel.app (add `/admin.html` for the admin panel) |
-| Code branch | `claude/repository-settings-nx8ju4`, 40 changes ahead of `main` (the live site) |
+| **Live site (Stylist launched 19 Nov)** | https://curated-xi.vercel.app (admin: `/admin.html`) |
+| Code branch | `claude/repository-settings-nx8ju4`, merged into `main` (live) on 19 Nov |
+| **Known issue (19 Nov)** | Algolia free-plan operations quota exceeded: product search fails until it resets or the plan is upgraded. The sync now writes only changed products to stop this recurring |
 | Eval results and traces | the `observability` branch (never deployed) |
 | System design diagram | https://claude.ai/artifact/PmFeAWu6LQyHmQCGtMYcjZ |
 | Box diagram: frontend / backend / data / external services | https://claude.ai/artifact/UxWWGWSw9hwPi9hr6jMMty |
